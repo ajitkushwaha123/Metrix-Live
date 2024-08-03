@@ -620,7 +620,7 @@ export async function bulkUploader(file){
     };
 
     const  response  = await axios.post(
-      "${API_URL}/bulkupload/upload",
+      `${API_URL}/bulkupload/upload`,
       formData,
       config
     );
