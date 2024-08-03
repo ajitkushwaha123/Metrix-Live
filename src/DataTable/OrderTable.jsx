@@ -140,11 +140,11 @@ export default function OrderTable() {
       console.log("productImage", productImage);
 
       const firstProductName = productName[0];
-      const totalProducts = productName.length;
+      const totalProduct = productName.length;
       const orderDate = new Date(order.createdAt);
       return {
         id: order._id,
-        totalProducts: totalProducts,
+        totalProducts: totalProduct,
         name: firstProductName,
         productImages: productImage,
         avatar: firstImage,
