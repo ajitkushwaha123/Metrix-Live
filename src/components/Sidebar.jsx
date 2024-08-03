@@ -22,7 +22,7 @@ const Sidebar = () => {
     {
       title: 'Dashboard',
       icon: <MdDashboardCustomize />,
-      link: '/',
+      link: '/dashboard',
     },
     {
       title: 'Orders',

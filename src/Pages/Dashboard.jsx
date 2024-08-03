@@ -127,8 +127,8 @@ const Dashboard = () => {
                   icon={<BsFolder2Open />}
                   title1={"All Products"}
                   title2={"Published"}
-                  stat1={totalProduct}
-                  stat2={totalPublished}
+                  stat1={totalProduct || "0"}
+                  stat2={totalPublished || "0"}
                   padY={"10"}
                   txtColor={"white"}
                   dropdown={false}

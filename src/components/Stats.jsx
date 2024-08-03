@@ -57,17 +57,17 @@ const Stats = ({
   const renderSales = () => {
     switch (selected) {
       case "today":
-        return sale && <p>{sales.dailySales.totalSales}</p>;
+        return sale && <p>{sales.dailySales.totalSales || 0}</p>;
       case "yesterday":
-        return sale && <p>{sales.yesterdaySales.totalSales}</p>;
+        return sale && <p>{sales.yesterdaySales.totalSales || 0}</p>;
       case "weekly":
-        return sale && <p>{sales.weeklySales.totalSales}</p>;
+        return sale && <p>{sales.weeklySales.totalSales || 0}</p>;
       case "monthly":
-        return sale && <p>{sales.monthlySales.totalSales}</p>;
+        return sale && <p>{sales.monthlySales.totalSales || 0}</p>;
       case "yearly":
-        return sale && <p>{sales.yearlySales.totalSales}</p>;
+        return sale && <p>{sales.yearlySales.totalSales || 0}</p>;
       case "total":
-        return sale && <p>{sales.totalSales.totalSales}</p>;
+        return sale && <p>{sales.totalSales.totalSales || 0}</p>;
       default:
         return null;
     }
@@ -122,17 +122,17 @@ const Stats = ({
   const renderOrders = () => {
     switch (selected) {
       case "today":
-        return sale && <p>{sales.dailySales.totalOrders}</p>;
+        return sale && <p>{sales.dailySales.totalOrders || 0}</p>;
       case "yesterday":
-        return sale && <p>{sales.yesterdaySales.totalOrders}</p>;
+        return sale && <p>{sales.yesterdaySales.totalOrders || 0}</p>;
       case "weekly":
-        return sale && <p>{sales.weeklySales.totalOrders}</p>;
+        return sale && <p>{sales.weeklySales.totalOrders || 0}</p>;
       case "monthly":
-        return sale && <p>{sales.monthlySales.totalOrders}</p>;
+        return sale && <p>{sales.monthlySales.totalOrders || 0}</p>;
       case "yearly":
-        return sale && <p>{sales.yearlySales.totalOrders}</p>;
+        return sale && <p>{sales.yearlySales.totalOrders || 0}</p>;
       case "total":
-        return sale && <p>{sales.totalSales.totalOrders}</p>;
+        return sale && <p>{sales.totalSales.totalOrders || 0}</p>;
       default:
         return null;
     }
@@ -141,17 +141,17 @@ const Stats = ({
   const pendingOrders = () => {
     switch (selected) {
       case "today":
-        return orderStatus && <p>{sales.dailySales.totalPending}</p>;
+        return orderStatus && <p>{sales.dailySales.totalPending || 0}</p>;
       case "yesterday":
-        return orderStatus && <p>{sales.yesterdaySales.totalPending}</p>;
+        return orderStatus && <p>{sales.yesterdaySales.totalPending || 0}</p>;
       case "weekly":
-        return orderStatus && <p>{sales.weeklySales.totalPending}</p>;
+        return orderStatus && <p>{sales.weeklySales.totalPending || 0}</p>;
       case "monthly":
-        return orderStatus && <p>{sales.monthlySales.totalPending}</p>;
+        return orderStatus && <p>{sales.monthlySales.totalPending || 0}</p>;
       case "yearly":
-        return orderStatus && <p>{sales.yearlySales.totalPending}</p>;
+        return orderStatus && <p>{sales.yearlySales.totalPending || 0}</p>;
       case "total":
-        return orderStatus && <p>{sales.totalSales.totalPending}</p>;
+        return orderStatus && <p>{sales.totalSales.totalPending || 0}</p>;
       default:
         return null;
     }
@@ -160,17 +160,17 @@ const Stats = ({
   const completedOrders = () => {
     switch (selected) {
       case "today":
-        return orderStatus && <p>{sales.dailySales.totalCompleted}</p>;
+        return orderStatus && <p>{sales.dailySales.totalCompleted || 0}</p>;
       case "yesterday":
-        return orderStatus && <p>{sales.yesterdaySales.totalCompleted}</p>;
+        return orderStatus && <p>{sales.yesterdaySales.totalCompleted || 0}</p>;
       case "weekly":
-        return orderStatus && <p>{sales.weeklySales.totalCompleted}</p>;
+        return orderStatus && <p>{sales.weeklySales.totalCompleted || 0}</p>;
       case "monthly":
-        return orderStatus && <p>{sales.monthlySales.totalCompleted}</p>;
+        return orderStatus && <p>{sales.monthlySales.totalCompleted || 0}</p>;
       case "yearly":
-        return orderStatus && <p>{sales.yearlySales.totalCompleted}</p>;
+        return orderStatus && <p>{sales.yearlySales.totalCompleted || 0}</p>;
       case "total":
-        return orderStatus && <p>{sales.totalSales.totalCompleted}</p>;
+        return orderStatus && <p>{sales.totalSales.totalCompleted || 0}</p>;
       default:
         return null;
     }
@@ -179,17 +179,17 @@ const Stats = ({
    const cancelledOrders = () => {
      switch (selected) {
        case "today":
-         return sale && <p>{sales.dailySales.totalCancelled}</p>;
+         return sale && <p>{sales.dailySales.totalCancelled || 0}</p>;
        case "yesterday":
-         return sale && <p>{sales.yesterdaySales.totalCancelled}</p>;
+         return sale && <p>{sales.yesterdaySales.totalCancelled || 0}</p>;
        case "weekly":
-         return sale && <p>{sales.weeklySales.totalCancelled}</p>;
+         return sale && <p>{sales.weeklySales.totalCancelled || 0}</p>;
        case "monthly":
-         return sale && <p>{sales.monthlySales.totalCancelled}</p>;
+         return sale && <p>{sales.monthlySales.totalCancelled || 0}</p>;
        case "yearly":
-         return sale && <p>{sales.yearlySales.totalCancelled}</p>;
+         return sale && <p>{sales.yearlySales.totalCancelled || 0}</p>;
        case "total":
-         return sale && <p>{sales.totalSales.totalCancelled}</p>;
+         return sale && <p>{sales.totalSales.totalCancelled || 0}</p>;
        default:
          return null;
      }
@@ -198,17 +198,17 @@ const Stats = ({
   const inProgress = () => {
     switch (selected) {
       case "today":
-        return orderStatus && <p>{sales.dailySales.totalProgress}</p>;
+        return orderStatus && <p>{sales.dailySales.totalProgress || 0}</p>;
       case "yesterday":
-        return orderStatus && <p>{sales.yesterdaySales.totalProgress}</p>;
+        return orderStatus && <p>{sales.yesterdaySales.totalProgress || 0}</p>;
       case "weekly":
-        return orderStatus && <p>{sales.weeklySales.totalProgress}</p>;
+        return orderStatus && <p>{sales.weeklySales.totalProgress || 0}</p>;
       case "monthly":
-        return orderStatus && <p>{sales.monthlySales.totalProgress}</p>;
+        return orderStatus && <p>{sales.monthlySales.totalProgress || 0}</p>;
       case "yearly":
-        return orderStatus && <p>{sales.yearlySales.totalProgress}</p>;
+        return orderStatus && <p>{sales.yearlySales.totalProgress || 0}</p>;
       case "total":
-        return orderStatus && <p>{sales.totalSales.totalProgress}</p>;
+        return orderStatus && <p>{sales.totalSales.totalProgress || 0}</p>;
       default:
         return null;
     }
@@ -237,7 +237,7 @@ const Stats = ({
     <>
       {isLoading && 
       <Skeleton height={140}/>
-      
+      // <div></div>
       }
       {!isLoading && (
         <div
@@ -366,7 +366,7 @@ const Stats = ({
             </div>
           </div>
         </div>
-      )}
+       )} 
     </>
   );
 };

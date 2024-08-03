@@ -40,7 +40,8 @@ function App() {
 
         <div className="w-[100%]">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route  path='/' element={<Login />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/order" element={<Order />} />
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/inventory/new-product" element={<NewInventory />} />

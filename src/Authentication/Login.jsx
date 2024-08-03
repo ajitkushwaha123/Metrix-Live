@@ -39,7 +39,7 @@ const Login = () => {
           let { token } = res.data.data;
          // console.log('token:', res.data.data.token);
           localStorage.setItem('token', token);
-          navigate('/login');
+          navigate('/dashboard');
         } catch (error) {
           console.error('Error extracting token:', error);
         }
