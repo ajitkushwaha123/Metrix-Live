@@ -144,13 +144,12 @@ export default function OrderTable() {
       const orderDate = new Date(order.createdAt);
       return {
         id: order._id,
-        totalProducts: totalProduct,
         name: firstProductName,
         productImages: productImage,
         avatar: firstImage,
         total: order.price,
         phone: order.phone,
-        totalProducts: totalProducts,
+        totalProducts: totalProduct,
         status: order.orderStatus,
         newCustomer: order.newCustomer,
         customerName: order.customerName,
