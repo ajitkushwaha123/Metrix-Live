@@ -60,8 +60,8 @@ const Login = () => {
             <p className="pb-[40px] pt-[5px]">Login to your account</p>
           </div>
 
-          <div className="w-[full] flex flex-col justify-center items-center">
-            <div className="flex px-[15px]  rounded-lg text-[18px] justify-center items-center bg-[#EFF1F9] h-[52px]">
+          <div className="flex  flex-col justify-center items-center">
+            <div className="flex min-w-[200px] max-w-[340px] px-[15px]  rounded-lg text-[18px] justify-center items-center bg-[#EFF1F9] h-[52px]">
               <IoMailOutline />
               <input
                 {...formik.getFieldProps("username")}
@@ -71,7 +71,7 @@ const Login = () => {
               />
             </div>
 
-            <div className="flex px-[15px] rounded-lg my-[20px] text-[18px] justify-center items-center bg-[#EFF1F9] h-[52px]">
+            <div className="flex min-w-[200px] max-w-[340px] px-[15px] rounded-lg my-[20px] text-[18px] justify-center items-center bg-[#EFF1F9] h-[52px]">
               <IoKeyOutline />
               <input
                 {...formik.getFieldProps("password")}
