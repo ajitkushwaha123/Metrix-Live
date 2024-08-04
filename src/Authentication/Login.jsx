@@ -51,7 +51,7 @@ const Login = () => {
     <div className="w-full font-poppins flex justify-center items-center">
       <Toaster position="top-center" reverseOrder="false"></Toaster>
       <form onSubmit={formik.handleSubmit}>
-        <div className="md:px-[40px] my-[30px] p-[20px] md:py-[40px] bg-white rounded-xl ">
+        <div className="md:px-[40px] max-w-[300px] md:max-w-auto my-[30px] p-[20px] md:py-[40px] bg-white rounded-xl ">
           <div className="flex justify-center items-center flex-col">
             <img width={"60px"} src={metrix} />
             <h3 className="pt-[15px] font-semibold text-[20px]">
