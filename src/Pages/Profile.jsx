@@ -51,14 +51,14 @@ const Profile = () => {
     return <h1 className="text-xl text-red-500">{serverError.message}</h1>;
 
   return (
-    <div className="font-poppins overflow-y-hidden py-[20px] flex items-center justify-center">
+    <div className="font-poppin py-[20px] flex items-center justify-center">
       <form
         onSubmit={formik.handleSubmit}
         className="mx-[20px] bg-white sm:w-[400px] rounded-md p-[20px]"
       >
         <Toaster position="top-center" reverseOrder="false"></Toaster>
         <div className="">
-          <div className="rounded-xl w-full flex items-center flex-col justify-center">
+          <div className="rounded-xl w-[100%] flex items-center flex-col justify-center">
             <div className="w-[150px] md:w-[240px] md:h-[240px] h-[150px]">
               <label htmlFor="profile">
                 <img
@@ -71,7 +71,7 @@ const Profile = () => {
                   }
                 />
                 <input
-                  className="opacity-0"
+                  className="hidden"
                   onChange={onUpload}
                   type="file"
                   id="profile"

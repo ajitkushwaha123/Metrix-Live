@@ -5,9 +5,9 @@ import Profile from './Profile'
 
 const Settings = () => {
   return (
-    <div>
+    <div className='w-[100%] overflow-y-hidden'>
       <BreadCrum title={"Settings"} back={"/"}/>
-      <Profile />
+      <div className='overflow-y-hidden w-[100%]'><Profile /></div>
     </div>
   )
 }
