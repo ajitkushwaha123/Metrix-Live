@@ -55,7 +55,7 @@ const Login = () => {
           <div className="flex justify-center items-center flex-col">
             <img width={"60px"} src={metrix} />
             <h3 className="pt-[15px] font-semibold text-[20px]">
-              Welcome back!
+              Phir Agya Tu ... 😉 !
             </h3>
             <p className="pb-[40px] pt-[5px]">Login to your account</p>
           </div>
