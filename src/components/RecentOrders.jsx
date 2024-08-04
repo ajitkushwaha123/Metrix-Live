@@ -84,7 +84,7 @@ const RecentOrders = () => {
               </div>
             )}
             {totalOrders > 0 && (
-              <div className=" min-h-[600px]">
+              <div className="max-h-[600px]">
                 {orders.map((order, index) => (
                   <div
                     key={index}

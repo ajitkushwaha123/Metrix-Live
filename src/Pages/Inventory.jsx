@@ -41,7 +41,6 @@ const Inventory = () => {
 
   return (
     <div>
-      <Navbar title={"Inventory"} />
       <BreadCrum title={"Inventory"} back={"/"} />
       <div className="flex justify-between items-center px-[15px] md:px-[30px] py-[10px]">
         <h3 className="font-normal pt-[10px] text-[20px] font-poppins">

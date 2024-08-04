@@ -28,6 +28,7 @@ import Customer from './Pages/Customers/Customer'
 import NewCustomer from './Pages/Customers/AddCustomer'
 import UpdateCustomer from './Pages/Customers/UpdateCustomer'
 import ViewCustomer from './Pages/Customers/ViewCustomer'
+import Navbar from './components/Navbar'
 
 function App() {
 
@@ -39,32 +40,45 @@ function App() {
         </div>
 
         <div className="w-[100%]">
-          <Routes>
-            <Route  path='/' element={<Login />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/order" element={<Order />} />
-            <Route path="/inventory" element={<Inventory />} />
-            <Route path="/inventory/new-product" element={<NewInventory />} />
-            <Route path="/profile" element={<Settings />} />
-            <Route path="/conversations" element={<Conversations />} />
-            <Route path="/customer" element={<Customer />} />
-            <Route path="/support" element={<Support />} />
-            <Route path="/gift" element={<Gift />} />
-            <Route path="/logout" element={<Logout />} />
-            <Route path="/singleproduct/:id" element={<SingleProduct />} />
-            <Route path="add-category" element={<AddCategory />} />
-            <Route path="/category" element={<Category />} />
-            <Route path="/category/:id" element={<DetailCategory />} />
-            <Route path="/category/edit/:id" element={<UpdateCategory />} />
-            <Route path='/gemini' element={<ImageGenerator />} />
-            <Route path='/prod' element={<Prod />} />
-            <Route path='/inventory/update-product/:id' element={<UpdateProduct />} />
-            <Route path='/inventory/view/:id' element={<ViewProduct />} />
-            <Route path='/order-view/:id' element={<ViewOrder />} />
-            <Route path='/customer/edit/:id' element={<UpdateCustomer />} />
-            <Route path="/customer/view/:id" element={<ViewCustomer /> } />
-            {/* <Route path="/add-customer" element={<NewCustomer />} /> */}
-          </Routes>
+          <div>
+            <div>
+              <Navbar />
+            </div>
+            <div>
+              <Routes>
+                <Route path="/" element={<Login />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/order" element={<Order />} />
+                <Route path="/inventory" element={<Inventory />} />
+                <Route
+                  path="/inventory/new-product"
+                  element={<NewInventory />}
+                />
+                <Route path="/profile" element={<Settings />} />
+                <Route path="/conversations" element={<Conversations />} />
+                <Route path="/customer" element={<Customer />} />
+                <Route path="/support" element={<Support />} />
+                <Route path="/gift" element={<Gift />} />
+                <Route path="/logout" element={<Logout />} />
+                <Route path="/singleproduct/:id" element={<SingleProduct />} />
+                <Route path="add-category" element={<AddCategory />} />
+                <Route path="/category" element={<Category />} />
+                <Route path="/category/:id" element={<DetailCategory />} />
+                <Route path="/category/edit/:id" element={<UpdateCategory />} />
+                <Route path="/gemini" element={<ImageGenerator />} />
+                <Route path="/prod" element={<Prod />} />
+                <Route
+                  path="/inventory/update-product/:id"
+                  element={<UpdateProduct />}
+                />
+                <Route path="/inventory/view/:id" element={<ViewProduct />} />
+                <Route path="/order-view/:id" element={<ViewOrder />} />
+                <Route path="/customer/edit/:id" element={<UpdateCustomer />} />
+                <Route path="/customer/view/:id" element={<ViewCustomer />} />
+                {/* <Route path="/add-customer" element={<NewCustomer />} /> */}
+              </Routes>
+            </div>
+          </div>
 
           <Routes>
             <Route path="/login" element={<Login />} />

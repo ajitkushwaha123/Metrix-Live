@@ -6,7 +6,6 @@ import Profile from './Profile'
 const Settings = () => {
   return (
     <div>
-      <Navbar title={"Settings"} />
       <BreadCrum title={"Settings"} back={"/"}/>
       <Profile />
     </div>

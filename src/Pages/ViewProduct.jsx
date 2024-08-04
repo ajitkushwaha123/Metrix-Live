@@ -29,7 +29,6 @@ const ViewProduct = () => {
 
   return (
     <div>
-      <Navbar title={"Inventory"} />
       <BreadCrum title={"Inventory"} back={"/"} />
 
       <div className="px-[40px]">

@@ -58,7 +58,6 @@ const Dashboard = () => {
 
   return (
     <div className="w-full overflow-x-hidden">
-      <Navbar title="Dashboard" />
       <BreadCrum />
 
       <div className="px-[20px] md:px-[40px] flex flex-col md:flex-row">
@@ -68,12 +67,12 @@ const Dashboard = () => {
             icon={<AiOutlinePieChart />}
             title1={"Sales"}
             title2={"Orders"}
-            stat1={"$0.00"}
-            stat1per={"0.00%"}
+            stat1={"0"}
+            stat1per={"0"}
             stat2={"0"}
             // stat2per={"0.00%"}
             title3={"Cancelled"}
-            stat3={"4"}
+            stat3={"0"}
             // stat3per={"0.00%"}
             present={"1"}
           />
@@ -101,11 +100,11 @@ const Dashboard = () => {
             title1={"In Progress"}
             title2={"Pending"}
             title3={"Completed"}
-            stat1={"$0.00"}
+            stat1={"0"}
             // stat1per={"0.00%"}
-            stat2={"$0.00"}
+            stat2={"0"}
             // stat2per={"0.00%"}
-            stat3={"$0.00"}
+            stat3={"0"}
             // stat3per={"0.00%"}
             present={"1"}
           />
@@ -141,8 +140,8 @@ const Dashboard = () => {
                   icon={<BsCart3 />}
                   title1={"Abandoned Cart"}
                   title2={"Customers"}
-                  stat1={"20%"}
-                  stat2={"30"}
+                  stat1={"0"}
+                  stat2={"0"}
                   padY={"9"}
                 />
               </div>

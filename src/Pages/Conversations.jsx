@@ -5,7 +5,6 @@ import BreadCrum from '../components/BreadCrum'
 const Conversations = () => {
   return (
     <div>
-      <Navbar title={"Conversations"} />
       <BreadCrum title={"Conversations"} back={"/"} />
     </div>
   )

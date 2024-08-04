@@ -16,7 +16,6 @@ const Order = () => {
 
   return (
     <div>
-      <Navbar title={"Order"}/>
       <BreadCrum title={"Order"} back={"/"} />
       <div className='flex justify-between  items-center px-[20px] py-[10px]'>
         <h3 className='font-normal pt-[10px] md:text-[20px] text-[17px] font-poppins'>Order Summary</h3>

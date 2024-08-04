@@ -109,7 +109,6 @@ const ViewOrder = () => {
 
   return (
     <div>
-      <Navbar title={"Inventory"} />
       <BreadCrum title={"Inventory"} back={"/"} />
 
       <div className="px-[40px] md:px-[40px]">

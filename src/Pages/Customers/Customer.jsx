@@ -37,7 +37,6 @@ const Customer = () => {
 
   return (
     <div>
-      <Navbar title={"Customer"} />
       <BreadCrum title={"Customer"} back={"/"} />
       <div className="flex justify-between items-center px-[20px] md:px-[30px] py-[10px]">
         <h3 className="font-normal pt-[10px] text-[20px] font-poppins">

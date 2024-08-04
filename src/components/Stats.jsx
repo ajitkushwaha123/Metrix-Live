@@ -235,10 +235,53 @@ const Stats = ({
 
   return (
     <>
-      {isLoading && 
-      <Skeleton height={140}/>
-      // <div></div>
-      }
+      {isLoading && (
+        <div
+          className={`font-poppins h-${height} text-${txtColor} flex justify-center flex-col pb-[19px] bg-${bgColor} rounded-xl`}
+        >
+          <div>
+            <div className={`flex justify-between py-5 px-5`}>
+              <p className="bg-secondary text-[24px] text-primary p-2 rounded-lg">
+                {icon}
+              </p>
+            </div>
+
+            <div className="flex px-5">
+              <div className="w-[50%]">
+                <p className={`text-txtPrimary text-start text-${txtColor}`}>
+                  {title1}
+                </p>
+                <div className="flex">
+                  <p
+                    className={`flex text-txtGreen text-${txtColor} ml-[10px]`}
+                  >
+                    <Skeleton width={30} />
+                  </p>
+                </div>
+              </div>
+              <div className="w-[50%]">
+                <p className={`text-txtPrimary text-start text-${txtColor}`}>
+                  {title2}
+                </p>
+                <div className="flex">
+                  <Skeleton width={30} />
+                </div>
+              </div>
+
+              {present == 1 && (
+                <div className="w-[50%]">
+                  <p className={`text-txtPrimary text-${txtColor} text-start`}>
+                    {title3}
+                  </p>
+                  <div className="flex">
+                    <Skeleton width={30} />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
       {!isLoading && (
         <div
           className={`font-poppins h-${height} text-${txtColor} flex justify-center flex-col pb-[19px] bg-${bgColor} rounded-xl`}
@@ -366,7 +409,7 @@ const Stats = ({
             </div>
           </div>
         </div>
-       )} 
+      )}
     </>
   );
 };

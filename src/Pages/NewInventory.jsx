@@ -7,7 +7,6 @@ const NewInventory = () => {
   const { name } = useProductContext();
   return (
     <div className="font-poppins">
-      <Navbar title={"NewInventory"} />
       <BreadCrum title={"NewInventory"} back={"/"} title2={"Add Product"} />
 
       <div className="mx-[12px] px-[30px]">

@@ -10,14 +10,6 @@ const DetailCategory = () => {
     let params = useParams();
     console.log(params.id);
 
-    const token = localStorage.getItem("token");
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data", // Required for FormData
-      },
-    };
-
     const getCategory = async (id) => {
       setIsLoading(true);
        try{
