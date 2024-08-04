@@ -51,7 +51,7 @@ const Profile = () => {
     return <h1 className="text-xl text-red-500">{serverError.message}</h1>;
 
   return (
-    <div className="font-poppins py-[20px] flex items-center justify-center">
+    <div className="font-poppins overflow-y-hidden py-[20px] flex items-center justify-center">
       <form
         onSubmit={formik.handleSubmit}
         className="mx-[20px] bg-white sm:w-[400px] rounded-md p-[20px]"
