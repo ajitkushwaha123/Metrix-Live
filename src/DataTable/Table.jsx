@@ -384,7 +384,7 @@ const reloadFunction = () => {
     }
     {!loading && 
        <Table
-      className="overflow-x-scroll md:overflow-x-hidden"
+      className="overflow-x-scroll chalaja md:overflow-x-hidden"
       isCompact
       removeWrapper
       aria-label="Example table with custom cells, pagination and sorting"

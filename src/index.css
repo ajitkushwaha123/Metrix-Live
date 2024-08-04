@@ -28,6 +28,10 @@ body
   width: 5px;
 }
 
+.chalaja::-webkit-scrollbar {
+    display: none;
+}
+
 .custom-sidebar::-webkit-scrollbar{
   width: hidden;
 }

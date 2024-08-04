@@ -113,7 +113,7 @@ const ChartPie = () => {
       <div className="flex justify-between px-7 py-4">
         <div className="flex justify-center items-center">
           <p className="text-[18px] font-poppins text-medium mr-[15px]">
-            Marketing
+            Order Type
           </p>
           <button className="bg-secondary flex justify-center items-center px-[6px] py-[1px] rounded-xl">
             <Dropdown backdrop="blur">
@@ -171,12 +171,12 @@ const ChartPie = () => {
         <li className="mr-[12px] flex justify-center text-center text-primary">HomeDelivery</li>
       </div>
 
-      {isLoading && (
+      {/* {isLoading && (
         <div className="pt-[12px]">
           <Skeleton height={190} />
         </div>
-      )}
-      {!isLoading && (
+      )} */}
+      {/* {!isLoading && ( */}
         <div className="mx-auto flex justify-center items-center">
           <ResponsiveContainer width="100%" height={400}>
             <PieChart>
@@ -204,7 +204,7 @@ const ChartPie = () => {
             </PieChart>
           </ResponsiveContainer>
         </div>
-      )}
+      {/* )} */}
     </div>
   );
 };

@@ -483,7 +483,7 @@ export default function ViewCustomerTable() {
 
   return (
     <Table
-      className="overflow-x-scroll"
+      className="overflow-x-scroll chalaja"
       isCompact
       removeWrapper
       aria-label="Example table with custom cells, pagination and sorting"

@@ -79,7 +79,7 @@ const Customer = () => {
       </div>
 
       <div className="px-[20px] md:px-[30px] py-[30px]">
-        <div className="bg-white py-[40px] px-[20px] md:px-[40px]">
+        <div className="bg-white md:py-[40px] pt-[20px] px-[20px] md:px-[40px]">
           <CustomerTable />
         </div>
       </div>

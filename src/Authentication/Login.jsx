@@ -18,8 +18,8 @@ const Login = () => {
 
   const formik = useFormik({
     initialValues: {
-      username: '123456',
-      password: '123456',
+      username: 'akash12345',
+      password: '@Jit12345',
     },
     validate: loginValidate,
     validateOnBlur: false,

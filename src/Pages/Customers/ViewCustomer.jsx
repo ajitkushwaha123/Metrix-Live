@@ -45,10 +45,9 @@ const ViewCustomer = () => {
 
   return (
     <div>
-      <Navbar title={"Inventory"} />
       <BreadCrum title={"Inventory"} back={"/"} />
 
-      <div className="px-[40px]">
+      <div className="px-[20px] md:px-[40px]">
         <div className="flex justify-between items-center">
           <div className="flex">
             <p className="mr-[30px] font-medium">
@@ -168,7 +167,7 @@ const ViewCustomer = () => {
           </div>
         </div>
 
-        <div className="bg-white p-12">
+        <div className="bg-white px-4 pt-8 md:p-12">
           <ViewCustomerTable />
         </div>
       </div>

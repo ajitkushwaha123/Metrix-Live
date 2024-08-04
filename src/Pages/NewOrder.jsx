@@ -242,7 +242,7 @@ const formik = useFormik({
             id="crud-modal"
             tabIndex="-1"
             aria-hidden="true"
-            className="custom-sidebar fixed shadow-lg shadow-indigo-500/40 backdrop-blur-sm bg-indigo-500/10 font-poppins top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full overflow-y-auto overflow-x-hidden"
+            className="custom-sidebar fixed shadow-lg shadow-indigo-500/40 backdrop-blur-sm bg-indigo-500/10 font-poppins top-0 right-0 left-0 z-50 flex justify-center items-center customer-image custom-sidebar chalaja w-full h-full overflow-y-auto overflow-x-hidden"
           >
             <div className="relative pb-[10px] my-[40px] p-4 max-h-full">
               {/* Modal content */}
@@ -504,7 +504,12 @@ const formik = useFormik({
                       >
                         Cancel
                       </button>
-                      <button onClick={() => {formik.handleSubmit}} className="bg-primary px-[10px] py-[5px] text-white rounded-md">
+                      <button
+                        onClick={() => {
+                          formik.handleSubmit;
+                        }}
+                        className="bg-primary px-[10px] py-[5px] text-white rounded-md"
+                      >
                         Add Order
                       </button>
                     </div>
@@ -747,7 +752,7 @@ const formik = useFormik({
                   {!checkout && (
                     <div className="md:ml-[40px] w-[100%] md:w-[50%]">
                       <div>
-                        <div className="overflow-y-scroll max-h-[500px]">
+                        <div className="chalaja custom-image sidebar-image overflow-y-scroll max-h-[500px]">
                           <h1 className="text-primary text-start">
                             Product Search
                           </h1>
@@ -814,7 +819,7 @@ const formik = useFormik({
                           </div>
 
                           {cart === false && (
-                            <div>
+                            <div className="pb-[60px] chalaja custom-image custom-sidebar">
                               {products.length > 0 ? (
                                 products.map((product) => (
                                   <div key={product._id}>

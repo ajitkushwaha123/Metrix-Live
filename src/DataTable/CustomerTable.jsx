@@ -430,7 +430,7 @@ export default function InvTable() {
         </div>
       )}
       {!loading && (
-        <Table className="overflow-x-scroll"
+        <Table className="overflow-x-scroll chalaja"
           isCompact
           removeWrapper
           aria-label="Example table with custom cells, pagination and sorting"

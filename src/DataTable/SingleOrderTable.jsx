@@ -453,7 +453,7 @@ export default function SingleOrderTable() {
       {!isLoading && (
         <Table
           isCompact
-          className="overflow-x-scroll"
+          className="overflow-x-scroll chalaja"
           removeWrapper
           aria-label="Example table with custom cells, pagination and sorting"
           bottomContent={bottomContent}

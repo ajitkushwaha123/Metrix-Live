@@ -123,7 +123,7 @@ const AddProduct = () => {
         )}
         {!loading && (
           <div className="">
-            <div className="flex px-[20px] md:px-[40px] py-[20px] justify-between items-center">
+            <div className="flex md:px-[40px] py-[20px] justify-between items-center">
               <p className="text-[22px] font-medium">Add New Product</p>
             </div>
             <form className="flex flex-col justify-center rounded-xl w-[full] items-center">
@@ -193,7 +193,7 @@ const AddProduct = () => {
                   {/* Show Category */}
 
                   <div className="pt-[3px] flex justify-center items-center pb-[20px]">
-                    <div className="min-w-[250px]">
+                    <div className="min-w-[290px]">
                       <Select
                         items={category}
                         placeholder="Select a Category"
@@ -272,25 +272,6 @@ const AddProduct = () => {
                       }
                     />
                   </div>
-
-                  {/* <div className="mb-[20px] ">
-                    <Input
-                      {...formik.getFieldProps("discountPrice")}
-                      type="number"
-                      placeholder="Discount Price"
-                      labelPlacement="outside"
-                      radius="sm"
-                      size="lg"
-                      startContent={
-                        <div className="pointer-events-none flex items-center">
-                          <span className="text-default-400 w-[full] text-medium">
-                            $
-                          </span>
-                        </div>
-                      }
-                    />
-                  </div> */}
-
                   <div className=" mb-[20px]">
                     <Input
                       {...formik.getFieldProps("stock")}
@@ -308,31 +289,6 @@ const AddProduct = () => {
                       }
                     />
                   </div>
-
-                  {/* <div className="hidden md:block flex-row flex justify-center items-center">
-                    <div>
-                      <button
-                        onClick={(e) => {
-                          handleDraft(e);
-                        }}
-                        className="bg-black mx-[15px] rounded-lg flex justify-center items-center text-white px-6 text-[18px] py-2"
-                      >
-                        <MdOutlineArrowDropDown className="mr-[15px]" />
-                        Draft
-                      </button>
-                    </div>
-
-                    <div>
-                      <button
-                        onClick={(e) => {
-                          handlePublished(e);
-                        }}
-                        className="bg-primary rounded-lg flex justify-center items-center text-white px-6 text-[18px] py-2"
-                      >
-                        Publish
-                      </button>
-                    </div>
-                  </div> */}
                 </div>
 
                 <div className="flex hidden md:block justify-center items-center flex-col">

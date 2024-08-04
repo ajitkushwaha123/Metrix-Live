@@ -15,6 +15,8 @@ import { TfiHeadphoneAlt } from "react-icons/tfi";
 import { FiLogOut } from "react-icons/fi";
 import { GoGift } from "react-icons/go";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { RxHamburgerMenu } from "react-icons/rx";
+
 
 
 const navLinks = [
@@ -55,6 +57,7 @@ const Navbar = ({title}) => {
   const navigate = useNavigate();
   function userLogout() {
     localStorage.removeItem("token");
+    setToggle(!toggle)
     navigate("/login");
   }
 
@@ -71,7 +74,7 @@ const Navbar = ({title}) => {
     <>
       <div className="w-[100%] font-poppins h-[70px] border-b-2 border-secondary bg-[white] flex justify-between items-center sm:px-[40px]">
         <div className="flex justify-between items-center">
-          <PiHamburger
+          <RxHamburgerMenu
             onClick={(e) => {
               handleNav(e);
             }}
@@ -119,7 +122,9 @@ const Navbar = ({title}) => {
                   className={`font-poppins flex justify-center items-center font-medium cursor-pointer text-[16px] ${
                     active === nav.title ? "text-primary" : "text-dimBlue"
                   }  mb-4`}
-                  onClick={() => setActive(nav.title)}
+                  onClick={() => {
+                    setActive(nav.title), setToggle(!toggle);
+                  }}
                 >
                   <p className="mr-[10px]">{nav.icon}</p>{" "}
                   <NavLink to={`${nav.link}`}>{nav.title}</NavLink>

@@ -17,6 +17,7 @@ import { capitalize } from "../DataTable/utils";
 import SingleOrderTable from "../DataTable/SingleOrderTable";
 import { useFormik } from "formik";
 import toast, { Toaster } from "react-hot-toast";
+import Skeleton from "react-loading-skeleton";
 
 const ViewOrder = () => {
   const { id } = useParams();
@@ -33,12 +34,27 @@ const ViewOrder = () => {
   const [orderedStatus, setOrderedStatus] = useState("pending");
   const [cancelled , setCancelled] = useState(orderedStatus);
   const [completed , setCompleted] = useState(orderedStatus);
+  const [orderDate , setOrderDate] = useState("");
 
   const fetchProduct = async () => {
     try {
       console.log("Fetching product with id:", id);
       const product = await getSingleOrders(`orders/find/${id}`);
       console.log("Fetched product:", product);
+
+      // Format the date
+      const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      };
+      const formattedDate = new Date(product.createdAt).toLocaleDateString(
+        "en-US",
+        options
+      );
+
       setCustomerName(product.customerName);
       setPhone(product.phone);
       setPaymentType(product.paymentType);
@@ -47,10 +63,12 @@ const ViewOrder = () => {
       setOrderNote(product.orderNote);
       setQuantity(product.quantity);
       setOrderType(product.orderType);
+      setOrderDate(formattedDate);
     } catch (error) {
       console.error("Error fetching product:", error);
     }
   };
+
 
   const updateOrder = async (id, orderStatus) => {
     try {
@@ -111,18 +129,18 @@ const ViewOrder = () => {
     <div>
       <BreadCrum title={"Inventory"} back={"/"} />
 
-      <div className="px-[40px] md:px-[40px]">
+      <div className="px-[20px] md:px-[40px]">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="flex">
             <p className="mr-[30px] font-medium">
-              Order Number :
+              Order :
               <span className="text-slate-500 ml-[10px]">#2806</span>
             </p>
             <p className="mr-[30px] text-[18px] text-slate-500">
               <span className="font-medium text-black text-[18px]">
                 Dated :
               </span>
-              12/07/23
+              {orderDate}
             </p>
           </div>
 
@@ -158,7 +176,7 @@ const ViewOrder = () => {
                     <CiUser />
                   </p>
                   <div className="text-start text-slate-500">
-                    <h2 className="text-black">{customerName}</h2>
+                    <h2 className="text-black">{customerName || <Skeleton width={80}/>}</h2>
                     <h3>
                       Customer since :
                       <span className="font-medium text-black"> 12/07/23</span>
@@ -178,7 +196,7 @@ const ViewOrder = () => {
                   <div className="w-[50%]">
                     <h2 className="text-slate-400">
                       Phone : <br />{" "}
-                      <span className="text-black"> {phone} </span>
+                      <span className="text-black"> {phone || <Skeleton width={100}/>} </span>
                     </h2>
                   </div>
 
@@ -186,7 +204,7 @@ const ViewOrder = () => {
                     <h2 className="text-slate-400">
                       Total amount :
                       <br />
-                      <span className="text-black"> $ {price} </span>
+                      <span className="text-black"> $ {price || <Skeleton width={50}/>}  </span>
                     </h2>
                   </div>
                   {/* <h2 className="text-slate-400">
@@ -212,7 +230,7 @@ const ViewOrder = () => {
                     <h2 className="text-slate-400">
                       Quantity : <br />
                       <span className="text-black text-medium text-[17px] px-[3px]">
-                        {quantity}
+                        {quantity || <Skeleton width={20}/>}
                       </span>
                     </h2>
                   </div>
@@ -243,14 +261,14 @@ const ViewOrder = () => {
                   <div className="w-[50%]">
                     <h2 className="text-slate-400">
                       Payment Method : <br />
-                      <span className="text-black"> {paymentType} </span>
+                      <span className="text-black"> {paymentType || <Skeleton width={60}/>} </span>
                     </h2>
                   </div>
                   <div className="w-[50%]">
                     <h2 className="text-slate-400">
                       Order Type :
                       <br />
-                      <span className="text-black"> {orderType} </span>
+                      <span className="text-black"> {orderType || <Skeleton width={80}/>} </span>
                     </h2>
                   </div>
                 </div>
@@ -259,7 +277,7 @@ const ViewOrder = () => {
           </div>
         </div>
 
-        <div className="bg-white p-12">
+        <div className="bg-white pt-8 mb-8 px-4">
           <SingleOrderTable />
         </div>
       </div>

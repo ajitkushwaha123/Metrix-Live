@@ -9,7 +9,7 @@ const NewInventory = () => {
     <div className="font-poppins">
       <BreadCrum title={"NewInventory"} back={"/"} title2={"Add Product"} />
 
-      <div className="mx-[12px] px-[30px]">
+      <div className="mx-[12px] px-[10px] md:px-[30px]">
         <AddProduct />
       </div>
 

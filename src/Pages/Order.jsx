@@ -19,7 +19,7 @@ const Order = () => {
       <BreadCrum title={"Order"} back={"/"} />
       <div className='flex justify-between  items-center px-[20px] py-[10px]'>
         <h3 className='font-normal pt-[10px] md:text-[20px] text-[17px] font-poppins'>Order Summary</h3>
-        <NavLink to={""}><button className='bg-primary rounded-lg flex justify-center items-center text-white px-3 md:px-6 text-[15px] md:text-[18px] py-2'><TiPlus className='mr-[8px] md:mr-[15px]'/>Create Order</button></NavLink>
+        <NewOrder />
       </div>
 
 
@@ -60,8 +60,8 @@ const Order = () => {
         </div>
       </div>
 
-      <div className='px-[30px] pb-[20px] md:py-[30px]'>
-        <div className='bg-white rounded-xl overflow-x-scroll py-[40px] px-[40px]'>
+      <div className='px-[20px] md:px-[30px] pb-[20px] md:py-[30px]'>
+        <div className='bg-white chalaja rounded-xl overflow-x-scroll px-4 py-8 md:py-[40px] md:px-[40px]'>
           <OrderTable />
         </div>
       </div>
