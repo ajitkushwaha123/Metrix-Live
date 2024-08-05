@@ -54,7 +54,7 @@ const Profile = () => {
     <div className="font-poppin py-[20px] flex items-center justify-center">
       <form
         onSubmit={formik.handleSubmit}
-        className="mx-[20px] bg-white sm:w-[400px] rounded-md p-[20px]"
+        className="max-w-[380px] bg-white mx-[20px] rouned-xl py-[20px] shadow-lg w-[100%] px-[20px]"
       >
         <Toaster position="top-center" reverseOrder="false"></Toaster>
         <div className="">
@@ -78,57 +78,83 @@ const Profile = () => {
                 />
               </label>
             </div>
-            <div className="flex rounded-lg px-[15px] mb-[20px] text-[18px] justify-center items-center bg-[#EFF1F9] h-[52px]">
-              <IoKeyOutline />
+
+            <div className=" w-full sm:col-span-1">
+              <label
+                htmlFor="name"
+                className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Name
+              </label>
               <input
+                type="text"
                 {...formik.getFieldProps("name")}
-                className=" ml-[10px] h-[36px] outline-none bg-[#EFF1F9]"
-                placeholder="Name"
-                type="name"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                placeholder="Enter Name"
               />
             </div>
 
-            <div className="flex rounded-lg px-[15px] text-[18px] justify-center items-center bg-[#EFF1F9]  h-[52px]">
-              <IoMailOutline />
+            <div className=" w-full sm:col-span-1 mt-[15px]">
+              <label
+                htmlFor="email"
+                className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Email
+              </label>
               <input
+                type="text"
                 {...formik.getFieldProps("email")}
-                className=" ml-[10px] h-[36px] outline-none bg-[#EFF1F9]"
-                placeholder="Email Address"
-                type="email"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                placeholder="Enter Email"
               />
             </div>
 
-            <div className="flex rounded-lg px-[15px] my-[20px] text-[18px] justify-center items-center bg-[#EFF1F9]  h-[52px]">
-              <IoKeyOutline />
+            <div className=" w-full sm:col-span-1 mt-[15px]">
+              <label
+                htmlFor="phone"
+                className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Phone
+              </label>
               <input
+                type="text"
                 {...formik.getFieldProps("phone")}
-                className=" ml-[10px] h-[36px] outline-none bg-[#EFF1F9]"
-                placeholder="Phone Number"
-                type="phone"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                placeholder="Enter Phone"
               />
             </div>
 
-            <div className="flex rounded-lg px-[15px] text-[18px] justify-center items-center bg-[#EFF1F9]  h-[52px]">
-              <IoMailOutline />
+            <div className=" w-full sm:col-span-1 mt-[15px]">
+              <label
+                htmlFor="address"
+                className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Address
+              </label>
               <input
+                type="text"
                 {...formik.getFieldProps("address")}
-                className=" ml-[10px] h-[36px] outline-none bg-[#EFF1F9]"
-                placeholder="Address"
-                type="address"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                placeholder="Enter Address"
               />
             </div>
 
-            <div className="flex rounded-lg px-[15px] my-[20px] text-[18px] justify-center items-center bg-[#EFF1F9]  h-[52px]">
-              <IoKeyOutline />
+            <div className=" w-full sm:col-span-1 mt-[15px]">
+              <label
+                htmlFor="city"
+                className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                City
+              </label>
               <input
-                {...formik.getFieldProps("address")}
-                className=" ml-[10px] h-[36px] outline-none bg-[#EFF1F9]"
-                placeholder="City"
-                type="city"
+                type="text"
+                {...formik.getFieldProps("city")}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                placeholder="Enter City"
               />
             </div>
 
-            <button className="bg-primary mb-[20px] rounded-lg text-white px-6 text-[18px] py-2">
+            <button className="bg-primary mt-[20px]  rounded-lg text-white px-6 text-[18px] py-2">
               Update
             </button>
           </div>

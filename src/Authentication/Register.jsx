@@ -37,42 +37,91 @@ const Register = () => {
   })
 
   return (
-    <div className='w-full font-poppins flex justify-center items-center'>
-    <Toaster position='top-center' reverseOrder='false'></Toaster>
-    <form onSubmit={formik.handleSubmit}>
-      <div className='py-[20px] px-[20px] md:px-[30px] my-[30px] md:py-[40px] bg-white rounded-xl '>
-         <div className='flex justify-center items-center flex-col'>
-            <img width={"60px"} src={metrix}/>
-            <h3 className='pt-[15px] font-semibold text-[20px]'>Welcome back!</h3>
-            <p className='pb-[40px] pt-[5px]'>Register to your account</p>
-         </div>
-
-         <div className='w-full flex flex-col justify-center items-center'>
-            <div className='flex px-[15px] md:px-[20px] rounded-lg text-[18px] mb-[20px] justify-center items-center bg-[#EFF1F9] h-[52px]'> 
-              <CiUser />
-              <input {...formik.getFieldProps('username')} className='ml-[10px] h-[36px] outline-none bg-[#EFF1F9]' placeholder='Full Name' type='text'/>
-            </div>
-
-            <div className='flex px-[15px] md:px-[20px] rounded-lg text-[18px] justify-center items-center bg-[#EFF1F9] h-[52px]'> 
-              <IoMailOutline />
-              <input {...formik.getFieldProps('email')} className='ml-[10px] h-[36px] outline-none bg-[#EFF1F9]' placeholder='Email Address' type='email'/>
-            </div>
-
-            <div className='flex px-[15px] md:px-[20px] rounded-lg my-[20px] text-[18px] justify-center items-center bg-[#EFF1F9] h-[52px]'> 
-              <CiLock />
-              <input {...formik.getFieldProps('password')} className='ml-[10px] h-[36px] outline-none bg-[#EFF1F9]' placeholder='Password' type='password'/>
-            </div>
-         </div>
-
-         <NavLink to={'/forget-password'}><p className='text-primary flex justify-end items-center px-[10px]'>Recover Password</p></NavLink>
-          <div className='flex justify-center items-center flex-col'>
-              <p className='py-[15px]'>Already have an account ? <NavLink to={'/login'}><span className='text-primary'> Login </span></NavLink>  </p>
-              <button type="submit" className='bg-primary px-[20px] py-2 mt-[20px] rounded-md text-white text-[18px]'>Register</button>
+    <div className="w-full font-poppins flex justify-center items-center">
+      <Toaster position="top-center" reverseOrder="false"></Toaster>
+      <form
+        className="max-w-[400px] w-[100%] px-[20px]"
+        onSubmit={formik.handleSubmit}
+      >
+        <div className="py-[20px] px-[20px] md:px-[30px] my-[30px] md:py-[20px] bg-white rounded-xl ">
+          <div className="flex justify-center items-center flex-col">
+            <img width={"60px"} src={metrix} />
+            <h3 className="pt-[15px] font-semibold text-[20px]">
+              Welcome back!
+            </h3>
+            <p className="pb-[40px] pt-[5px]">Register to your account</p>
           </div>
-      </div>
+
+          <div className="w-full flex flex-col justify-center items-center">
+            <div className="col-span-2 w-full sm:col-span-1">
+              <label
+                htmlFor="username"
+                className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Username
+              </label>
+              <input
+                type="text"
+                {...formik.getFieldProps("username")}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                placeholder="Enter Username"
+              />
+            </div>
+
+            <div className="col-span-2 w-full sm:col-span-1">
+              <label
+                htmlFor="email"
+                className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Email
+              </label>
+              <input
+                type="text"
+                {...formik.getFieldProps("email")}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                placeholder="Enter Email"
+              />
+            </div>
+
+            <div className="col-span-2 w-full mt-[15px] sm:col-span-1">
+              <label
+                htmlFor="password"
+                className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                {...formik.getFieldProps("password")}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                placeholder="Enter Password"
+              />
+            </div>
+          </div>
+
+          <NavLink to={"/forget-password"}>
+            <p className="text-primary flex justify-end items-center px-[10px]">
+              Recover Password
+            </p>
+          </NavLink>
+          <div className="flex justify-center items-center flex-col">
+            <p className="py-[15px]">
+              Already have an account ?{" "}
+              <NavLink to={"/login"}>
+                <span className="text-primary"> Login </span>
+              </NavLink>{" "}
+            </p>
+            <button
+              type="submit"
+              className="bg-primary px-[20px] py-2 mt-[20px] rounded-md text-white text-[18px]"
+            >
+              Register
+            </button>
+          </div>
+        </div>
       </form>
     </div>
-  )
+  );
 }
 
 export default Register
