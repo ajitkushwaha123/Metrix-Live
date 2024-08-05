@@ -53,7 +53,7 @@ const Login = () => {
     <div className="w-full font-poppins flex justify-center items-center">
       <Toaster position="top-center" reverseOrder="false"></Toaster>
       <form
-        className="max-w-[380px] w-[100%] px-[20px]"
+        className="max-w-[380px] shadow-lg w-[100%] px-[20px]"
         onSubmit={formik.handleSubmit}
       >
         <div className="md:px-[40px] my-[30px] px-[15px] py-[20px] md:py-[20px] bg-white rounded-xl ">

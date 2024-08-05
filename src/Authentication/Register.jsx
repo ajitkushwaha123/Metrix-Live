@@ -40,7 +40,7 @@ const Register = () => {
     <div className="w-full font-poppins flex justify-center items-center">
       <Toaster position="top-center" reverseOrder="false"></Toaster>
       <form
-        className="max-w-[400px] w-[100%] px-[20px]"
+        className="max-w-[400px] w-[100%] shadow-lg px-[20px]"
         onSubmit={formik.handleSubmit}
       >
         <div className="py-[20px] px-[20px] md:px-[30px] my-[30px] md:py-[20px] bg-white rounded-xl ">
