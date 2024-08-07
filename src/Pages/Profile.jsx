@@ -10,10 +10,12 @@ import { useAuthStore } from "../store/store";
 import { updateUser } from "../helper/helper";
 import useFetch from "../hooks/fetch.hooks";
 import convertToBase64 from "../helper/convert";
+import { Button } from "@nextui-org/react";
 
 const Profile = () => {
   const [file, setFile] = useState();
   const [{ isLoading, apiData, serverError }] = useFetch();
+  const [loading , setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -29,8 +31,10 @@ const Profile = () => {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
+      setLoading(false);
       values = await Object.assign(values, { profile: file || "" });
       let updatePromise = updateUser(values);
+      setLoading(false);
       toast.promise(updatePromise, {
         loading: "Updating...",
         success: <b>Update Successfully... !</b>,
@@ -154,9 +158,25 @@ const Profile = () => {
               />
             </div>
 
-            <button className="bg-primary mt-[20px]  rounded-lg text-white px-6 text-[18px] py-2">
-              Update
-            </button>
+            {!loading && (
+              <button
+                onClick={() => {
+                  setLoading(true), formik.handleSubmit();
+                }}
+
+                type="submit"
+                className="bg-primary mt-[20px] rounded-lg text-white px-6 text-[18px] py-2"
+              >
+                Update
+              </button>
+            )}
+            {loading && (
+              <div className="mt-[20px]">
+                <Button color="primary" isLoading>
+                  Loading
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </form>

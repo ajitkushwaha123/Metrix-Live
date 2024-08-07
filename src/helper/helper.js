@@ -974,3 +974,55 @@ export async function deleteCategory(id , imageUrl){
     return Promise.reject(err);
   }
 }
+
+export async function getOrderTable(){
+   const token = localStorage.getItem("token");
+   const config = {
+     headers: {
+       Authorization: `Bearer ${token}`,
+     },
+   };
+
+   try{
+      const {data} = await axios.get(
+        `http://localhost:8000/api/orderTable`,
+        config
+      );
+
+      console.log("responsee" , data);
+      return Promise.resolve(data)
+   }
+   catch(err){
+    console.log("Error Fetching Table Details");
+    return Promise.reject(err);
+   }
+} 
+
+export async function postOrderTable(values) {
+  const token = localStorage.getItem("token");
+
+  console.log("Values:", values);
+  console.log("Token:", token);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  try {
+    const res = await axios.put(
+      `http://localhost:8000/api/orderTable`,
+      values,
+      config
+    );
+    console.log("Response:", res);
+
+    return Promise.resolve(res);
+  } catch (err) {
+    console.log("Error Creating Tables:", err);
+    return Promise.reject(err);
+  }
+}
+

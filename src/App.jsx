@@ -30,6 +30,8 @@ import UpdateCustomer from './Pages/Customers/UpdateCustomer'
 import ViewCustomer from './Pages/Customers/ViewCustomer'
 import Navbar from './components/Navbar'
 import TableBooking from './components/TableBooking'
+import Menu from './components/Menu'
+
 
 function App() {
 
@@ -52,6 +54,7 @@ function App() {
                 <Route path="/order" element={<Order />} />
                 <Route path="/inventory" element={<Inventory />} />
                 <Route path="table-booking" element={<TableBooking />} />
+                <Route path='/menu' element={<Menu />} />
                 <Route
                   path="/inventory/new-product"
                   element={<NewInventory />}

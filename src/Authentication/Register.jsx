@@ -7,12 +7,27 @@ import { CiUser } from "react-icons/ci";
 import { NavLink, useNavigate } from 'react-router-dom';
 import  {toast ,Toaster} from 'react-hot-toast';
 import { useFormik } from 'formik';
-import { registerValidate  } from '../helper/validate';
-import { registerUser } from '../helper/helper';
+import { registerValidate , loginValidate } from '../helper/validate';
+import { postOrderTable, registerUser , verifyPassword } from '../helper/helper';
+import { Button } from "@nextui-org/react";
 
 const Register = () => {
+  const [loading , setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const tables = {
+      table: {
+        id: 1,
+        title: "Ground",
+        tables:  1,
+      },
+  };
+
+  const postTable = async (tables) => {
+    const res = await postOrderTable(tables);
+    console.log("snehuuuuu", res);
+  };
+  
 
   const formik = useFormik({
     initialValues : {
@@ -24,6 +39,7 @@ const Register = () => {
     validateOnBlur : false,
     validateOnChange : false,
     onSubmit : async values => {
+        setLoading(true);
         values = await Object.assign(values);
         let registerPromise = registerUser(values);
         toast.promise(registerPromise , {
@@ -32,7 +48,27 @@ const Register = () => {
           error : <b>Could not Register... !</b>
         });
 
-        registerPromise.then(function(){navigate('/login')});
+        console.log("values:", values);
+
+        let loginPromise = verifyPassword({
+          username: values.username,
+          password: values.password,
+        });
+
+        loginPromise.then((res) => {
+          try {
+            let { token } = res.data.data;
+            console.log('token:', token);
+            localStorage.setItem("token", token);
+
+            postTable(tables);
+            navigate("/dashboard");
+            setLoading(false);
+          } catch (error) {
+            console.error("Error extracting token:", error);
+            setLoading(false);
+          }
+        });
     }
   })
 
@@ -106,17 +142,29 @@ const Register = () => {
           </NavLink>
           <div className="flex justify-center items-center flex-col">
             <p className="py-[15px]">
-              Already have an account ?{" "}
+              Already have an account ?
               <NavLink to={"/login"}>
                 <span className="text-primary"> Login </span>
-              </NavLink>{" "}
+              </NavLink>
             </p>
-            <button
-              type="submit"
-              className="bg-primary px-[20px] py-2 mt-[20px] rounded-md text-white text-[18px]"
-            >
-              Register
-            </button>
+            {!loading && (
+              <div>
+                <button
+                  onClick={() => {
+                    setLoading(true), formik.handleSubmit();
+                  }}
+                  type="submit"
+                  className="bg-primary px-[20px] py-2 rounded-md text-white text-[18px]"
+                >
+                  Register
+                </button>
+              </div>
+            )}
+            {loading && (
+              <Button color="primary" isLoading>
+                Loading
+              </Button>
+            )}
           </div>
         </div>
       </form>

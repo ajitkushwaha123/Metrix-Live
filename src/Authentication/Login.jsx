@@ -1,16 +1,17 @@
-import React from "react";
+import React , {useState} from "react";
 import { metrix } from "../assets";
 import { IoMailOutline, IoKeyOutline } from "react-icons/io5";
 import { NavLink, useNavigate } from "react-router-dom";
+import { verifyPassword } from "../helper/helper";
 import { useFormik } from "formik";
 import { loginValidate } from "../helper/validate";
 import { toast, Toaster } from "react-hot-toast";
 import { useAuthStore } from "../store/store";
-import { verifyPassword } from "../helper/helper";
-import useFetch from "../hooks/fetch.hooks";
+import { Button } from "@nextui-org/react";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [loading , setLoading] = useState(false);
 
   const setUsername = useAuthStore((state) => state.setUsername);
   //const [{isLoading , apiData , serverError}] = useFetch(`/user/${username}`)
@@ -24,6 +25,7 @@ const Login = () => {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
+      setLoading(true);
       setUsername(values.username);
       console.log(values.username);
       let loginPromise = verifyPassword({
@@ -41,9 +43,11 @@ const Login = () => {
           let { token } = res.data.data;
           // console.log('token:', res.data.data.token);
           localStorage.setItem("token", token);
+          setLoading(false);
           navigate("/dashboard");
         } catch (error) {
           console.error("Error extracting token:", error);
+          setLoading(false);
         }
       });
     },
@@ -109,12 +113,24 @@ const Login = () => {
                 <span className="text-primary"> Sign Up </span>
               </NavLink>
             </p>
-            <button
-              type="submit"
-              className="bg-primary px-[20px] py-2 mt-[20px] rounded-md text-white text-[18px]"
-            >
-              Login
-            </button>
+            {!loading && (
+              <button
+                onClick={() => {
+                  setLoading(true), formik.handleSubmit();
+                }}
+                type="submit"
+                className="bg-primary px-[20px] py-2 mt-[20px] rounded-md text-white text-[18px]"
+              >
+                Login
+              </button>
+            )}
+            {loading && (
+              <div className="mt-[20px]">
+                <Button color="primary" isLoading>
+                  Loading
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </form>
