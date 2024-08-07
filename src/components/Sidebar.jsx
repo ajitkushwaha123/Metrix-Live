@@ -9,6 +9,7 @@ import { IoSettingsOutline } from 'react-icons/io5';
 import { TfiHeadphoneAlt } from 'react-icons/tfi';
 import { FiLogOut } from 'react-icons/fi';
 import { GoGift } from 'react-icons/go';
+import { MdOutlineTableBar } from "react-icons/md";
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
@@ -44,7 +45,13 @@ const Sidebar = () => {
       icon: <IoSettingsOutline />,
       link: '/profile',
     },
+    {
+      title : "Table Booking",
+      icon : <MdOutlineTableBar />,
+      link : '/table-booking'
+    }
   ];
+
 
   const [isActive, setIsActive] = useState(null); 
   const location = useLocation();

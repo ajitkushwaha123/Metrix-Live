@@ -29,6 +29,7 @@ import NewCustomer from './Pages/Customers/AddCustomer'
 import UpdateCustomer from './Pages/Customers/UpdateCustomer'
 import ViewCustomer from './Pages/Customers/ViewCustomer'
 import Navbar from './components/Navbar'
+import TableBooking from './components/TableBooking'
 
 function App() {
 
@@ -50,6 +51,7 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/order" element={<Order />} />
                 <Route path="/inventory" element={<Inventory />} />
+                <Route path="table-booking" element={<TableBooking />} />
                 <Route
                   path="/inventory/new-product"
                   element={<NewInventory />}
