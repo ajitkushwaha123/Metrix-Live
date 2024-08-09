@@ -1,76 +1,96 @@
-import React, { useEffect, useState } from 'react'
-import { metrix } from '../assets'
+import React, { useEffect, useState } from "react";
+import { metrix } from "../assets";
 import { IoMailOutline } from "react-icons/io5";
 import { IoKeyOutline } from "react-icons/io5";
 import { CiLock } from "react-icons/ci";
 import { CiUser } from "react-icons/ci";
-import { NavLink, useNavigate } from 'react-router-dom';
-import  {toast ,Toaster} from 'react-hot-toast';
-import { useFormik } from 'formik';
-import { registerValidate , loginValidate } from '../helper/validate';
-import { postOrderTable, registerUser , verifyPassword } from '../helper/helper';
+import { NavLink, useNavigate } from "react-router-dom";
+import { toast, Toaster } from "react-hot-toast";
+import { useFormik } from "formik";
+import { registerValidate, loginValidate } from "../helper/validate";
+import { postOrderTable, registerUser, verifyPassword } from "../helper/helper";
 import { Button } from "@nextui-org/react";
 
 const Register = () => {
-  const [loading , setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const tables = {
-      table: {
-        id: 1,
-        title: "Ground",
-        tables:  1,
-      },
+    table: {
+      id: 1,
+      title: "Ground",
+      tables: 1,
+    },
   };
 
   const postTable = async (tables) => {
     const res = await postOrderTable(tables);
     console.log("snehuuuuu", res);
   };
-  
 
   const formik = useFormik({
-    initialValues : {
-      username : '123456',
-      email : '123456@gmail.com',
-      password : '123456'
+    initialValues: {
+      username: "123456",
+      email: "123456@gmail.com",
+      password: "123456",
     },
-    validate : registerValidate,
-    validateOnBlur : false,
-    validateOnChange : false,
-    onSubmit : async values => {
-        setLoading(true);
-        values = await Object.assign(values);
-        let registerPromise = registerUser(values);
-        toast.promise(registerPromise , {
-          loading : 'Creating...',
-          success : <b>Register Successfully... !</b>,
-          error : <b>Could not Register... !</b>
+    validate: registerValidate,
+    validateOnBlur: false,
+    validateOnChange: false,
+    onSubmit: async (values) => {
+      setLoading(true);
+      values = await Object.assign(values);
+      let registerPromise = registerUser(values);
+      toast.promise(registerPromise, {
+        loading: "Creating...",
+        success: <b>Register Successfully... !</b>,
+        error: <b>Could not Register... !</b>,
+      });
+
+      setLoading(false);
+
+      registerPromise
+        .then((res) => {
+          let loginPromise = verifyPassword({
+            username: values.username,
+            password: values.password,
+          });
+
+          loginPromise.then((res) => {
+            try {
+              let { token } = res.data.data;
+              console.log("token:", token);
+              localStorage.setItem("token", token);
+
+              postTable(tables);
+              navigate("/dashboard");
+              setLoading(false);
+            } catch (error) {
+              console.error("Error extracting token:", error);
+              setLoading(false);
+            }
+          });
+        })
+        .catch((error) => {
+          let loginPromise = verifyPassword({
+            username: values.username,
+            password: values.password,
+          });
+
+          loginPromise.then((res) => {
+            try {
+              let { token } = res.data.data;
+              localStorage.setItem("token", token);
+              navigate("/dashboard");
+              setLoading(false);
+            } catch (error) {
+              console.error("Error extracting token:", error);
+              setLoading(false);
+            }
+          });
         });
-
-        console.log("values:", values);
-
-        let loginPromise = verifyPassword({
-          username: values.username,
-          password: values.password,
-        });
-
-        loginPromise.then((res) => {
-          try {
-            let { token } = res.data.data;
-            console.log('token:', token);
-            localStorage.setItem("token", token);
-
-            postTable(tables);
-            navigate("/dashboard");
-            setLoading(false);
-          } catch (error) {
-            console.error("Error extracting token:", error);
-            setLoading(false);
-          }
-        });
-    }
-  })
+    },
+  });
 
   return (
     <div className="w-full font-poppins flex justify-center items-center">
@@ -170,6 +190,6 @@ const Register = () => {
       </form>
     </div>
   );
-}
+};
 
-export default Register
+export default Register;

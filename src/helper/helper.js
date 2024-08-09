@@ -33,7 +33,7 @@ export async function getUser({ username }) {
   }
 }
 
-export async function getOrders(url) {
+export async function getOrders(url) { // /orders
   const { userId } = await getUsername();
   console.log("User ID:", userId);
   const token = localStorage.getItem("token");
@@ -763,7 +763,7 @@ export async function getProd() {
       },
     };
 
-    const { data } = await axios.get(`${API_URL}/products`, config);
+    const { data } = await axios.get(`${API_URL}/products/data`, config);
 
     const product = { data };
     console.log("product-detail:", product);
@@ -985,7 +985,7 @@ export async function getOrderTable(){
 
    try{
       const {data} = await axios.get(
-        `http://localhost:8000/api/orderTable`,
+        `${API_URL}/orderTable`,
         config
       );
 
@@ -1013,7 +1013,7 @@ export async function postOrderTable(values) {
 
   try {
     const res = await axios.put(
-      `http://localhost:8000/api/orderTable`,
+      `${API_URL}/orderTable`,
       values,
       config
     );
@@ -1022,6 +1022,32 @@ export async function postOrderTable(values) {
     return Promise.resolve(res);
   } catch (err) {
     console.log("Error Creating Tables:", err);
+    return Promise.reject(err);
+  }
+}
+
+export async function getProductByCategoryId(id){
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  console.log("id" , id);
+
+  try{
+    const response = await axios.get(
+      `${API_URL}/products/category/${id}`,
+      config
+    );
+
+    console.log("resp" , response);
+    return Promise.resolve(response);
+  }
+  catch(err){
+    console.log("Error Fetching Categroy");
     return Promise.reject(err);
   }
 }

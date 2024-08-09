@@ -2,11 +2,26 @@ import React, { useEffect, useState } from "react";
 import { getOrderTable, postOrderTable } from "../helper/helper";
 import { Button } from "@nextui-org/react";
 import { loader } from "../assets";
+import { NavLink } from "react-router-dom";
+import { getOrders } from "../helper/helper";
+import toast , {Toaster} from 'react-hot-toast'
 
 const TableBooking = () => {
   const [rows, setRows] = useState([{ id: 1, tables: 1, title: "Row 1" }]);
   const [loading , setLoading] = useState(false);
   const [isLoading , setIsLoading] = useState(false);
+  const [bookedPrice , setBookedPrice] = useState(0);
+  const [bookedTable , setBookedTable] = useState([]);
+
+  const fetchOrders = async () => {
+    try{
+      const res = await getOrders('/orders');
+      console.log("resp " , res.data.orders);
+      setBookedTable(res.data.orders)
+    }catch(err){
+      console.log(err)
+    }
+  }
 
   const postTable = async (table) => {
     setLoading(true)
@@ -14,6 +29,7 @@ const TableBooking = () => {
     try {
       const res = await postOrderTable({ table });
       console.log("Response from server:", res);
+      toast.success("Table saved successfully");
       setLoading(false)
     } catch (error) {
       console.error("Error posting table data:", error);
@@ -89,41 +105,38 @@ const TableBooking = () => {
   };
   
   useEffect(() => {
+    fetchOrders();
     fetchTable();
   }, []);
-
-  // useEffect(() => {
-  //   postTable(rows);
-  // }, [rows]);
-
+  
   return (
-    <div className="w-full px-[50px] py-[50px]">
+    <div className="w-full overflow-x-hidden md:px-[50px] p-[15px] md:py-[50px]">
+      <Toaster position="top-center" reverseOrder="false"></Toaster>
       {isLoading && (
         <div>
-          {" "}
-          <img src={loader} />{" "}
+          <img src={loader} />
         </div>
       )}
       {!isLoading && (
         <div>
-          <div className="flex justify-between">
+          <div className="flex sm:justify-between">
             <button
               onClick={handleAddRow}
-              className="bg-primary text-white rounded-md px-[15px] py-2"
+              className="bg-primary text-white rounded-md px-[10px] py-1 md:px-[15px] md:py-2"
             >
-              + Table Reservation
+              Book
             </button>
             <div className="flex justify-center items-center">
               <button
                 onClick={handleAddRow}
-                className="bg-primary ml-[20px] text-white rounded-md px-[15px] py-2"
+                className="bg-primary ml-[20px] text-white rounded-md md:px-[15px] px-[10px] py-1 md:py-2"
               >
                 + Add Row
               </button>
               {!loading && (
                 <button
                   onClick={handleSave}
-                  className="bg-success ml-[20px] text-white rounded-md px-[15px] py-2"
+                  className="bg-success ml-[20px] text-white rounded-md px-[10px] md:px-[15px] py-1 md:py-2"
                 >
                   Save
                 </button>
@@ -142,10 +155,10 @@ const TableBooking = () => {
             {rows.map((row) => (
               <div
                 key={row.id}
-                className="py-[20px] border-2 shadow-lg bg-white rounded-md my-[20px] px-[30px]"
+                className="py-[15px] border-2 shadow-lg bg-white rounded-md my-[20px] px-[10px] sm:px-[30px]"
               >
-                <div className="flex justify-between items-center">
-                  <h3 className="text-primary py-[15px] text-start">
+                <div className="sm:flex sm:justify-between items-center">
+                  <h3 className="text-primary py-[15px] sm:py-[15px] text-start">
                     <input
                       type="text"
                       value={row.title}
@@ -156,36 +169,56 @@ const TableBooking = () => {
                     />
                   </h3>
 
-                  <div className="flex justify-center items-center">
+                  <div className="flex sm:mx-[0px] justify-center items-center">
                     <button
                       onClick={(e) => handleAddTable(e, row.id)}
-                      className="bg-primary text-white rounded-md px-[15px] py-1"
+                      className="bg-primary flex justify-center items-center text-white rounded-md px-[5px] sm:px-[15px] py-1"
                     >
                       + Add Table
                     </button>
                     <button
                       onClick={() => handleDeleteTable(row.id)}
-                      className="bg-danger mx-[20px] text-white rounded-md px-[15px] py-1"
+                      className="bg-danger mx-[10px] sm:mx-[20px] text-white rounded-md px-[5px] md:px-[15px] py-1"
                     >
                       Delete Table
                     </button>
                     <button
                       onClick={() => handleDeleteRow(row.id)}
-                      className="bg-danger mx-[20px] text-white rounded-md px-[15px] py-1"
+                      className="bg-danger  sm:mx-[20px] text-white rounded-md px-[15px] py-1"
                     >
                       Delete Row
                     </button>
                   </div>
                 </div>
-                <div className="grid py-[30px] grid-cols-10 gap-4">
-                  {Array.from({ length: row.tables }, (_, i) => (
-                    <div
-                      key={i}
-                      className="bg-secondary mx-[10px] border-2 border-dashed border-slate-200 w-[80px] h-[80px] text-[20px] font-semibold flex justify-center items-center"
-                    >
-                      {i + 1}
-                    </div>
-                  ))}
+                <div className="grid px-[10px] py-[20px] md:py-[30px] grid-cols-4 sm:grid-cols-6 md:grid-cols-10 gap-4">
+                  {Array.from({ length: row.tables }, (_, i) => {
+                    let orderId ;
+                    const bookedItem = bookedTable.find(
+                      (item) => item.tableId === `${row.id}${i}`
+                    );
+
+                    return (
+                      <NavLink key={i} to={`/menu/${row.id}${i}`}>
+                        {bookedItem ? (
+                          <NavLink to={`/order-view/${bookedItem._id}`}>
+                            <div
+                              className={` bg-secondary border-2 border-dashed border-slate-200 w-[60px] sm:w-[80px] h-[60px] sm:h-[80px] text-[20px] font-semibold flex justify-center items-center`}
+                            >
+                              <button className="bg-success text-white px-[10px] py-1 rounded-xl">
+                                {bookedItem.price}
+                              </button>
+                            </div>
+                          </NavLink>
+                        ) : (
+                          <div
+                            className={` bg-secondary border-2 border-dashed border-slate-200 w-[60px] h-[60px] sm:w-[80px] sm:h-[80px] text-[20px] font-semibold flex justify-center items-center`}
+                          >
+                            {i + 1}
+                          </div>
+                        )}
+                      </NavLink>
+                    );
+                  })}
                 </div>
               </div>
             ))}

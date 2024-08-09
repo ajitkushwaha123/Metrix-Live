@@ -45,11 +45,11 @@ const navLinks = [
     icon: <IoSettingsOutline />,
     link: "/profile",
   },
-  // {
-  //   title: "Logout",
-  //   icon: <FiLogOut />,
-  //   link: "/logout",
-  // },
+  {
+    title: "Table Booking",
+    icon: <MdOutlineTableBar />,
+    link: "/table-booking",
+  },
 ];
 
 const Navbar = ({title}) => {

@@ -127,6 +127,8 @@ export default function OrderTable() {
         return product.product;
       });
 
+      console.log("Single Product:", singleproduct);
+
       const productName = singleproduct.map((product) => {
         return product.productName;
       });

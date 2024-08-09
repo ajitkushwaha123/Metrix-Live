@@ -54,7 +54,7 @@ function App() {
                 <Route path="/order" element={<Order />} />
                 <Route path="/inventory" element={<Inventory />} />
                 <Route path="table-booking" element={<TableBooking />} />
-                <Route path='/menu' element={<Menu />} />
+                <Route path='/menu/:id' element={<Menu />} />
                 <Route
                   path="/inventory/new-product"
                   element={<NewInventory />}

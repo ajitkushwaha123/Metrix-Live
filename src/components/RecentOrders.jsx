@@ -94,13 +94,16 @@ const RecentOrders = () => {
                       <div>
                         <img
                           className="w-[60px] rounded-md"
-                          src={firstImage[index]}
+                          src={
+                            firstImage[index] ||
+                            "https://i.pinimg.com/564x/64/5d/10/645d10f7bea8e8f41be409977fcd33a3.jpg"
+                          }
                           alt="Order item"
                         />
                       </div>
                       <div className="ml-[20px] flex flex-col text-start">
                         <div>
-                          <h2>{order.customerName}</h2>
+                          <h2>{order.products[0].product.productName}</h2>
                         </div>
                         <div>{order.price}</div>
                       </div>

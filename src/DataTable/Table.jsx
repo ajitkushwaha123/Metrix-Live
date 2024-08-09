@@ -1,4 +1,4 @@
-import React , {useState} from "react";
+import React , {useEffect, useState} from "react";
 import { useProductContext } from "../context/productContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -30,7 +30,7 @@ import {capitalize} from "./utils";
 import { NavLink, useParams } from "react-router-dom";
 import { loader } from "../assets";
 import BulkUpload from "../components/BulkUpload";
-import { deleteProducts } from "../helper/helper";
+import { deleteProducts, getProd } from "../helper/helper";
 
 const statusColorMap = {
   published: "success",
@@ -43,6 +43,7 @@ const INITIAL_VISIBLE_COLUMNS = ["name","category" , "price" , "role", "stock", 
 export default function InvTable() {
 
   const [loading , setLoading] = useState(false);
+  const [fetchedProducts, setFetchedProducts] = useState([]);
 
 const navigate = useNavigate();
 const handleDelete = async (id) => {  
@@ -58,10 +59,24 @@ const handleDelete = async (id) => {
 
 const { isLoading, products } = useProductContext();
 
+const fetchProducts = async () => {
+  try {
+    const res = await getProd();
+    console.log("res", res);
+    setFetchedProducts(res.data);
+  } catch (error) {
+    console.error("Error fetching products:", error);
+  }
+}
+
+useEffect(() => {
+  fetchProducts();
+})
+
 const users = [];
 console.log("chrrc" , products);
 
-products.forEach((product) => {
+fetchedProducts.forEach((product) => {
   const user = {
     id: product._id,
     name: product.productName,
