@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import { FaBell } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
-import useFetch from '../hooks/fetch.hooks';
+import useFetch from "../hooks/fetch.hooks";
 import { FaShop } from "react-icons/fa6";
-import{metrix} from '../assets/index';
+import { metrix } from "../assets/index";
 import { PiHamburger } from "react-icons/pi";
 import { MdDashboardCustomize } from "react-icons/md";
 import { BsHandbag } from "react-icons/bs";
@@ -16,8 +16,7 @@ import { FiLogOut } from "react-icons/fi";
 import { GoGift } from "react-icons/go";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
-
-
+import { MdOutlineTableBar } from "react-icons/md";
 
 const navLinks = [
   {
@@ -52,24 +51,23 @@ const navLinks = [
   },
 ];
 
-const Navbar = ({title}) => {
-
+const Navbar = ({ title }) => {
   const navigate = useNavigate();
   function userLogout() {
     localStorage.removeItem("token");
-    setToggle(!toggle)
+    setToggle(!toggle);
     navigate("/login");
   }
 
-   const [{isLoading , apiData , serverError}] = useFetch();
-   const [toggle , setToggle] = useState(false);
-   const [active, setActive] = useState("Home");
+  const [{ isLoading, apiData, serverError }] = useFetch();
+  const [toggle, setToggle] = useState(false);
+  const [active, setActive] = useState("Home");
 
-   const handleNav = (e) => {
-      e.preventDefault();
-      setToggle(!toggle);
-      console.log(toggle);
-   }
+  const handleNav = (e) => {
+    e.preventDefault();
+    setToggle(!toggle);
+    console.log(toggle);
+  };
   return (
     <>
       <div className="w-[100%] font-poppins h-[70px] border-b-2 border-secondary bg-[white] flex justify-between items-center sm:px-[40px]">
@@ -147,6 +145,6 @@ const Navbar = ({title}) => {
       )}
     </>
   );
-}
+};
 
-export default Navbar
+export default Navbar;

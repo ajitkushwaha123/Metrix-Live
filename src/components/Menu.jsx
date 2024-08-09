@@ -15,7 +15,7 @@ import { useFormik } from "formik";
 import toast, { Toaster } from "react-hot-toast";
 import { Button, Select, SelectItem, Avatar } from "@nextui-org/react";
 import { productImg } from "../assets";
-import { useParams , useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const Menu = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,8 +34,8 @@ const Menu = () => {
   const [newCustomer, setNewCustomer] = useState(false);
   const navigate = useNavigate();
 
-  const {id} = useParams();
-  console.log("ID", id);  
+  const { id } = useParams();
+  console.log("ID", id);
 
   const AddedProduct = [];
 
@@ -231,9 +231,9 @@ const Menu = () => {
   };
 
   return (
-    <div className="flex ml-[10px] h-screen my-[20px] text-[16px]">
+    <div className="flex ml-[15px] h-screen my-[20px] text-[16px]">
       <Toaster position="top-center" reverseOrder="false"></Toaster>
-      <div className="w-[20%] h-[90%] chalaja overflow-y-scroll">
+      <div className="w-[50%] md:w-[18%] h-[90%] chalaja overflow-y-scroll">
         <div className="h-[50px] cursor-pointer border-b-2 border-slate-200 bg-secondary flex justify-center items-center">
           Categories
         </div>
@@ -243,14 +243,14 @@ const Menu = () => {
             <div
               onClick={() => fetchProduct(item._id)}
               key={index}
-              className="h-[50px] cursor-pointer border-b-2 border-slate-200 bg-secondary flex justify-center items-center bg-white"
+              className="h-[50px] overflow-x-scroll chalaja cursor-pointer border-b-2 border-slate-200 bg-secondary flex justify-center items-center bg-white"
             >
               {item.name}
             </div>
           );
         })}
       </div>
-      <div className="w-[54%]">
+      <div className="w-[50%]">
         <div className="flex justify-center items-center">
           <div className="w-[50%] h-[50px] flex rounded-md bg-white items-center ml-[10px]">
             <CiSearch className="text-[20px] mx-[10px]" />
@@ -264,7 +264,7 @@ const Menu = () => {
 
         {!isLoading && (
           <div className="m-3 h-[80%] overflow-y-scroll chalaja rounded-md">
-            <div className="grid cursor-pointer grid-cols-4 gap-4">
+            <div className="grid cursor-pointer grid-cols-1 md:grid-cols-4 gap-4">
               {product.map((item, index) => {
                 return (
                   <div
@@ -289,7 +289,7 @@ const Menu = () => {
         )}
       </div>
 
-      <div className="w-[40%] relative">
+      <div className="w-[30%] hidden md:block relative">
         <div className="w-[100%] py-3 h-[50px] flex justify-center items-center">
           <button className="bg-primary w-[33%] mx-[5px] text-white px-[15px] py-3 rounded-md">
             Dine In
@@ -393,9 +393,7 @@ const Menu = () => {
                 </button>
               )}
               {cartProduct.length == 0 && (
-                <button
-                  className="bg-green-300 w-[28%] mx-[5px] text-white px-[15px] py-3 rounded-md"
-                >
+                <button className="bg-green-300 w-[28%] mx-[5px] text-white px-[15px] py-3 rounded-md">
                   Proceed
                 </button>
               )}
