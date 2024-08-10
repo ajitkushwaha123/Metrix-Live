@@ -194,7 +194,7 @@ const TableBooking = () => {
                   {Array.from({ length: row.tables }, (_, i) => {
                     let orderId ;
                     const bookedItem = bookedTable.find(
-                      (item) => item.tableId === `${row.id}${i}`
+                      (item) => item.tableId === `${row.id}${i}` && item.orderStatus !== "completed"
                     );
 
                     return (
