@@ -170,7 +170,7 @@ const Menu = () => {
       paymentType: "Cash",
       orderStatus: "pending",
       orderNote: "",
-      products: [], // Initialize with an empty array
+      products: [], 
       quantity: 0,
       customerImage:
         "https://d2u8k2ocievbld.cloudfront.net/memojis/female/1.png",

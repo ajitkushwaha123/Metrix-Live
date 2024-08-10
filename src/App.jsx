@@ -31,6 +31,7 @@ import ViewCustomer from './Pages/Customers/ViewCustomer'
 import Navbar from './components/Navbar'
 import TableBooking from './components/TableBooking'
 import Menu from './components/Menu'
+import UploadMenu from './Pages/UploadMenu/UploadMenu'
 
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
                 <Route path="/inventory" element={<Inventory />} />
                 <Route path="table-booking" element={<TableBooking />} />
                 <Route path='/menu/:id' element={<Menu />} />
+                <Route path='/upload-menu' element={ <UploadMenu />} />
                 <Route
                   path="/inventory/new-product"
                   element={<NewInventory />}

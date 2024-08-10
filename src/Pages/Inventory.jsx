@@ -42,16 +42,29 @@ const Inventory = () => {
   return (
     <div>
       <BreadCrum title={"Inventory"} back={"/"} />
-      <div className="flex justify-between items-center px-[15px] md:px-[30px] py-[10px]">
-        <h3 className="font-normal pt-[10px] text-[20px] font-poppins">
-          <span className='hidden md:block'>Inventory</span> Summary
+      <div className="flex justify-between items-center px-[15px] sm:px-[30px] py-[10px]">
+        <h3 className="font-normal flex justify-center items-center pt-[10px] text-[20px] font-poppins">
+          <span className="hidden sm:block mr-[12px]">Inventory</span> Summary
         </h3>
-        <NavLink to={"/inventory/new-product"}>
-          <button className="bg-primary rounded-lg flex justify-center items-center text-white px-6 text-[18px] py-2">
-            <TiPlus className="mr-[15px]" />
-            Add Product
-          </button>
-        </NavLink>
+        <div className='flex justify-center items-center'>
+          <NavLink
+            to={"/inventory/new-product"}
+          >
+            <button className="bg-primary rounded-lg flex justify-center items-center text-white px-2 sm:px-6 text-[13px] sm:text-[18px] py-1 sm:py-2">
+              <TiPlus className="mr-[7px] sm:mr-[15px]" />
+              Add Product
+            </button>
+          </NavLink>
+
+          <NavLink
+            to={"/upload-menu"}
+          >
+            <button className="bg-primary mx-[5px] md:mx-[15px] rounded-lg flex justify-center items-center text-white px-2 md:px-6 text-[13px] md:text-[18px] py-1 md:py-2">
+              <TiPlus className="mr-[7px] md:mr-[15px]" />
+               Bulk Edit
+            </button>
+          </NavLink>
+        </div>
       </div>
 
       {/* Stats */}

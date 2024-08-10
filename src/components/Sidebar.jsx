@@ -11,6 +11,8 @@ import { FiLogOut } from "react-icons/fi";
 import { GoGift } from "react-icons/go";
 import { MdOutlineTableBar } from "react-icons/md";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { CgMenuBoxed } from "react-icons/cg";
+
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -50,6 +52,11 @@ const Sidebar = () => {
       icon: <MdOutlineTableBar />,
       link: "/table-booking",
     },
+    {
+      title: "Upload Menu",
+      icon: <CgMenuBoxed />,
+      link: "/upload-menu",
+    },
   ];
 
   const [isActive, setIsActive] = useState(null);
@@ -71,7 +78,7 @@ const Sidebar = () => {
 
       <div className="flex flex-col justify-center items-center">
         {/* Navigation Links */}
-        <div className="overflow-y-scroll chalaja h-[500px] ">
+        <div className="overflow-y-scroll chalaja h-[340px] ">
           <ul
             className={`flex flex-col justify-center items-center font-poppins`}
           >

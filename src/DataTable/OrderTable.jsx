@@ -315,8 +315,7 @@ export default function OrderTable() {
                 </DropdownItem>
                 <DropdownItem>Edit</DropdownItem>
                 <DropdownItem onClick={() => deleteOrder(user.id)}>
-                  {" "}
-                  Delete{" "}
+                  Delete
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
