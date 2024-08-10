@@ -231,9 +231,9 @@ const Menu = () => {
   };
 
   return (
-    <div className="flex w-full bg-[#EEF0FA] px-[15px] md:px-[0px] md:ml-[15px] flex-col md:flex-row h-screen my-[20px] text-[16px]">
+    <div className="flex w-full bg-[#EEF0FA] px-[15px] md:px-[0px] md:ml-[15px] flex-col md:flex-row my-[20px] text-[16px]">
       <Toaster position="top-center" reverseOrder="false"></Toaster>
-      <div className="flex w-[100%] h-[100%] chalaja md:w-[80%]">
+      <div className="flex w-[100%] h-screen chalaja md:w-[80%]">
       <div className="w-[50%] md:w-[25%] h-[100%] chalaja overflow-y-scroll">
         <div className="h-[50px] cursor-pointer border-b-2 border-slate-200 bg-secondary flex justify-center items-center">
           Categories
@@ -291,8 +291,8 @@ const Menu = () => {
       </div>
       </div>
 
-      <div className="w-full my-[20px] md:my-[0px] mb-[40px] md:mb-[0px] md:w-[40%] h-[680px] md:block md:relative">
-        <div className="w-[100%] mt-[20px] md:my-[0px] py-3 h-[50px] flex justify-center items-center">
+      <div className="w-full md:mx-[15px] bg-white my-[20px] md:my-[0px] mb-[40px] md:mb-[0px] md:w-[40%] md:block md:relative">
+        <div className="w-[100%] px-[10px] mt-[20px] py-3 h-[50px] flex justify-center items-center">
           <button className="bg-primary w-[33%] mx-[5px] text-white px-[15px] py-3 rounded-md">
             Dine In
           </button>
@@ -305,7 +305,7 @@ const Menu = () => {
         </div>
 
         {!checkout && (
-          <div className="bg-white text-start h-[81%] p-4 m-3 rounded-md">
+          <div className="text-start p-4 m-3 rounded-md">
             <div className="flex justify-between items-center">
               <div className="w-[50%]">
                 <p>Product Name</p>
@@ -377,7 +377,7 @@ const Menu = () => {
                 })}
             </div>
 
-            <div className="w-[100%] md:absolute md:fixed left-0 right-0 md:bottom-20 py-3 h-[50px] flex justify-center items-center">
+            <div className="w-[100%] md:absolute md:fixed left-0 right-0 md:bottom-4 pt-3 h-[50px] flex justify-center items-center">
               <button className="bg-primary w-[33%] md:w-[28%] mx-[10px] text-white px-[15px] py-3 rounded-md">
                 {total}
               </button>
