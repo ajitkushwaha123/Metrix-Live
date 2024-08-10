@@ -231,9 +231,10 @@ const Menu = () => {
   };
 
   return (
-    <div className="flex ml-[15px] h-screen my-[20px] text-[16px]">
+    <div className="flex w-full bg-[#EEF0FA] px-[15px] md:px-[0px] md:ml-[15px] flex-col md:flex-row my-[20px] text-[16px]">
       <Toaster position="top-center" reverseOrder="false"></Toaster>
-      <div className="w-[50%] md:w-[18%] h-[90%] chalaja overflow-y-scroll">
+      <div className="flex w-[100%] h-screen chalaja md:w-[80%]">
+      <div className="w-[50%] md:w-[25%] h-[100%] chalaja overflow-y-scroll">
         <div className="h-[50px] cursor-pointer border-b-2 border-slate-200 bg-secondary flex justify-center items-center">
           Categories
         </div>
@@ -250,20 +251,20 @@ const Menu = () => {
           );
         })}
       </div>
-      <div className="w-[50%]">
+      <div className="w-[50%] h-[100%] md:w-[75%]">
         <div className="flex justify-center items-center">
           <div className="w-[50%] h-[50px] flex rounded-md bg-white items-center ml-[10px]">
             <CiSearch className="text-[20px] mx-[10px]" />
             <input type="text" className="w-[90%] outline-none py-2" />
           </div>
-          <div className="w-[50%] py-3 h-[50px] flex justify-center rounded-md bg-white items-center mx-[10px]">
+          <div className="w-[50%] py-3 h-[50px] flex justify-center rounded-md bg-white items-center ml-[10px]">
             <FaSearchengin className="text-[15px] mx-[10px]" />
             <input type="text" className="w-[100%] outline-none py-2" />
           </div>
         </div>
 
         {!isLoading && (
-          <div className="m-3 h-[80%] overflow-y-scroll chalaja rounded-md">
+          <div className="ml-3 my-3 h-[90%] overflow-y-scroll chalaja rounded-md">
             <div className="grid cursor-pointer grid-cols-1 md:grid-cols-4 gap-4">
               {product.map((item, index) => {
                 return (
@@ -288,9 +289,10 @@ const Menu = () => {
           </div>
         )}
       </div>
+      </div>
 
-      <div className="w-[30%] hidden md:block relative">
-        <div className="w-[100%] py-3 h-[50px] flex justify-center items-center">
+      <div className="w-full md:mx-[15px] bg-white my-[20px] md:my-[0px] mb-[40px] md:mb-[0px] md:w-[40%] md:block md:relative">
+        <div className="w-[100%] px-[10px] mt-[20px] py-3 h-[50px] flex justify-center items-center">
           <button className="bg-primary w-[33%] mx-[5px] text-white px-[15px] py-3 rounded-md">
             Dine In
           </button>
@@ -303,7 +305,7 @@ const Menu = () => {
         </div>
 
         {!checkout && (
-          <div className="bg-white text-start h-[82%] p-4 m-3 rounded-md">
+          <div className="text-start p-4 m-3 rounded-md">
             <div className="flex justify-between items-center">
               <div className="w-[50%]">
                 <p>Product Name</p>
@@ -313,7 +315,7 @@ const Menu = () => {
               <div className="w-[20%]">Amount</div>
             </div>
 
-            <div className="overflow-y-scroll chalaja h-[400px]">
+            <div className="overflow-y-scroll chalaja h-[430px]">
               {cartProduct.length == 0 && (
                 <div className="flex py-[40px] justify-center items-center flex-col">
                   <img width={"200px"} src={productImg} />
@@ -375,11 +377,11 @@ const Menu = () => {
                 })}
             </div>
 
-            <div className="w-[100%] absolute fixed left-0 right-0 bottom-16 py-3 h-[50px] flex justify-center items-center">
-              <button className="bg-primary w-[28%] mx-[5px] text-white px-[15px] py-3 rounded-md">
+            <div className="w-[100%] md:absolute md:fixed left-0 right-0 md:bottom-4 pt-3 h-[50px] flex justify-center items-center">
+              <button className="bg-primary w-[33%] md:w-[28%] mx-[10px] text-white px-[15px] py-3 rounded-md">
                 {total}
               </button>
-              <button className="bg-primary w-[28%] mx-[5px] text-white px-[15px] py-3 rounded-md">
+              <button className="bg-primary w-[33%] md:w-[28%] text-white px-[15px] py-3 rounded-md">
                 Delivery
               </button>
               {cartProduct.length > 0 && (
@@ -387,13 +389,13 @@ const Menu = () => {
                   onClick={() => {
                     setCheckout(true);
                   }}
-                  className="bg-success w-[28%] mx-[5px] text-white px-[15px] py-3 rounded-md"
+                  className="bg-success w-[33%] md:w-[28%] mx-[10px] text-white px-[15px] py-3 rounded-md"
                 >
                   Proceed
                 </button>
               )}
               {cartProduct.length == 0 && (
-                <button className="bg-green-300 w-[28%] mx-[5px] text-white px-[15px] py-3 rounded-md">
+                <button className="bg-green-300 w-[33%] md:w-[28%] ml-[10px] text-white px-[15px] py-3 rounded-md">
                   Proceed
                 </button>
               )}
@@ -616,7 +618,6 @@ const Menu = () => {
                     <option value="dineIn">Dine In</option>
                   </select>
                 </div>
-
                 <div className="col-span-2 sm:col-span-2">
                   <label
                     htmlFor="orderNote"
@@ -634,7 +635,6 @@ const Menu = () => {
                   />
                 </div>
               </div>
-
               <div className="flex justify-between items-center">
                 <button
                   onClick={() => {
@@ -878,22 +878,32 @@ const Menu = () => {
                       {...formik.getFieldProps("orderNote")}
                     />
                   </div>
-                </div>
 
-                <div className="flex justify-between items-center">
-                  <button className="bg-white border-2 border-primary px-[10px] py-[5px] font-medium rounded-md">
-                    Cancel
+                  <div className="flex w-[100%] col-span-2 justify-between items-center">
+                <button
+                  onClick={() => {
+                    setCheckout(false);
+                  }}
+                  className="bg-white border-2 border-primary px-[10px] py-[5px] font-medium rounded-md"
+                >
+                  Back
+                </button>
+                {!changeBtn && (
+                  <button
+                    onClick={() => {
+                      formik.handleSubmit;
+                    }}
+                    className="bg-primary px-[10px] py-[5px] text-white rounded-md"
+                  >
+                    Add Order
                   </button>
-
-                  {/* <button
-                      onClick={() => {
-                        formik.handleSubmit();
-                        setChangeBtn(true);
-                      }}
-                      className="bg-primary px-[10px] py-[5px] text-white rounded-md"
-                    >
-                      Add Order
-                    </button> */}
+                )}
+                {changeBtn && (
+                  <Button color="primary" isLoading>
+                    Loading
+                  </Button>
+                )}
+              </div>
                 </div>
               </div>
             )}
