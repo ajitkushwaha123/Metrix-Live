@@ -26,6 +26,7 @@ const Login = () => {
     validateOnChange: false,
     onSubmit: async (values) => {
       setLoading(true);
+      console.log(loading);
       setUsername(values.username);
       console.log(values.username);
       let loginPromise = verifyPassword({
@@ -41,13 +42,12 @@ const Login = () => {
       loginPromise.then((res) => {
         try {
           let { token } = res.data.data;
-          // console.log('token:', res.data.data.token);
           localStorage.setItem("token", token);
-          setLoading(false);
+          // setLoading(false);
           navigate("/dashboard");
         } catch (error) {
           console.error("Error extracting token:", error);
-          setLoading(false);
+        
         }
       });
     },
@@ -125,10 +125,8 @@ const Login = () => {
               </button>
             )}
             {loading && (
-              <div className="mt-[20px]">
-                <Button color="primary" isLoading>
-                  Loading
-                </Button>
+              <div className="mt-[20px] rounded-xl bg-primary">
+                <Button color="success" isLoading>Loading</Button>
               </div>
             )}
           </div>

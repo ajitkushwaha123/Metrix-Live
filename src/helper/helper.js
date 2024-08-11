@@ -1144,6 +1144,7 @@ export async function deleteAddon(id) {
 }
 
 export async function uploadTax(tax) {
+  console.log("tax", tax);
   const token = localStorage.getItem("token");
   console.log(token);
   const config = {
@@ -1211,6 +1212,7 @@ export async function deleteTax(id) {
 }
 
 export async function uploadDiscount(discount) {
+  console.log("discounts" , discount);
   const token = localStorage.getItem("token");
   console.log(token);
   const config = {
