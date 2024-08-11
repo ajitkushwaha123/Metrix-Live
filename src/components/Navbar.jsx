@@ -17,6 +17,7 @@ import { GoGift } from "react-icons/go";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { MdOutlineTableBar } from "react-icons/md";
+import { CgMenuBoxed } from "react-icons/cg";
 
 const navLinks = [
   {
@@ -48,6 +49,11 @@ const navLinks = [
     title: "Table Booking",
     icon: <MdOutlineTableBar />,
     link: "/table-booking",
+  },
+  {
+    title: "Upload Menu",
+    icon: <CgMenuBoxed />,
+    link: "/upload-menu",
   },
 ];
 
