@@ -344,8 +344,6 @@ const Invoice = ({ btnText = "Inovice" , orderId  = ""}) => {
                           Share this link via
                         </h6>
 
-                        <MyDocument />
-
                         <div class="flex justify-center items-center flex-wrap gap-4 mt-4">
                           <NavLink to={"https://wa.me/918178739633"}>
                             <button
