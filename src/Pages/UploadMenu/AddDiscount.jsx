@@ -103,34 +103,38 @@ const AddDiscount = () => {
 
   const submitHandler = async (e) => {
     console.log(" sid ", discount);
-    setIsLoading(true);
     e.preventDefault();
 
+    let flag = true;
     discount.map((item) => {
       if (
         item.name === "" ||
         item.couponValue === "" ||
         item.couponType === ""
       ) {
-        setIsLoading(false);
         toast.error("Please fill all the fields");
+        flag = false;
         return;
-      } else {
-        setIsLoading(true);
-
-        try {
-          const res = uploadDiscount(discount);
-          toast.success("Discount Added Successfully");
-          fetchedDiscount();
-          setIsLoading(false);
-          setLoading(false);
-        } catch (err) {
-          toast.error("Failed to Add Discount");
-          setIsLoading(false);
-          setLoading(false);
-        }
       }
     });
+
+    if(flag === false){
+      return;
+    }
+    else{
+      setIsLoading(true);
+      try {
+        const res = await uploadDiscount(discount);
+        toast.success("Discount Added Successfully");
+        fetchedDiscount();
+        setIsLoading(false);
+        setLoading(false);
+      } catch (err) {
+        toast.error("Failed to Add Discount");
+        setIsLoading(false);
+        setLoading(false);
+      }
+    }
   };
 
   const fetchedDiscount = async () => {

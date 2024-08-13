@@ -102,7 +102,7 @@ const Navbar = ({ title }) => {
             <img
               width={"40px"}
               height={"40px"}
-              className="rounded-full "
+              className="rounded-full w-[40px] h-[40px] object-cover"
               src={
                 apiData?.profile ||
                 "https://d2qp0siotla746.cloudfront.net/img/use-cases/profile-picture/template_3.jpg"

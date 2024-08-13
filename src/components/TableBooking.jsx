@@ -4,7 +4,9 @@ import { Button } from "@nextui-org/react";
 import { loader } from "../assets";
 import { NavLink } from "react-router-dom";
 import { getOrders } from "../helper/helper";
+import { TbFileInvoice } from "react-icons/tb";
 import toast , {Toaster} from 'react-hot-toast'
+import Invoice from "./Invoice";
 
 const TableBooking = () => {
   const [rows, setRows] = useState([{ id: 1, tables: 1, title: "Row 1" }]);
@@ -202,11 +204,18 @@ const TableBooking = () => {
                         {bookedItem ? (
                           <NavLink to={`/order-view/${bookedItem._id}`}>
                             <div
-                              className={` bg-secondary border-2 border-dashed border-slate-200 w-[60px] sm:w-[80px] h-[60px] sm:h-[80px] text-[20px] font-semibold flex justify-center items-center`}
+                              className={`relative flex flex-col bg-secondary relative border-2 border-dashed border-slate-200 w-[60px] sm:w-[80px] h-[60px] sm:h-[80px] text-[20px] font-semibold flex justify-center items-center`}
                             >
                               <button className="bg-success text-white px-[10px] py-1 rounded-xl">
                                 {bookedItem.price}
                               </button>
+                                <div className="text-white mb-[-20px] w-[30px] h-[30px] rounded-full bg-primary flex justify-center items-center">
+                                  <Invoice
+                                    btnText=""
+                                    orderId={bookedItem._id}
+                                    className="text-white mt-[6px] flex justify-center items-center bg-primary px-[10px]"
+                                  />
+                                </div>
                             </div>
                           </NavLink>
                         ) : (

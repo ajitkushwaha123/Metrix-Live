@@ -63,11 +63,11 @@ const Profile = () => {
         <Toaster position="top-center" reverseOrder="false"></Toaster>
         <div className="">
           <div className="rounded-xl w-[100%] flex items-center flex-col justify-center">
-            <div className="w-[150px] md:w-[240px] md:h-[240px] h-[150px]">
+            <div className="w-[150px] md:w-[170px] md:h-[170px] h-[150px]">
               <label htmlFor="profile">
                 <img
                   name="profile"
-                  className="rounded-full"
+                  className="rounded-full w-[150px] h-[150px] md:w-[170px] md:h-[170px] object-cover"
                   src={
                     file ||
                     apiData?.profile ||

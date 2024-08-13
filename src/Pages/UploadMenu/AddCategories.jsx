@@ -69,12 +69,17 @@ const AddCategories = () => {
     e.preventDefault();
 
     console.log(category);
+    setIsLoading(true);
 
     try {
       const res = await uploadCategory(category);
       toast.success("Category Added Successfully");
+      fetchCategory();
+      setIsLoading(false);
     } catch (err) {
       toast.error("Failed to Add Category");
+      console.log(err);
+      setIsLoading(false);
     }
   };
 

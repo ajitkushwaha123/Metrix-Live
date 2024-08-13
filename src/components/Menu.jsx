@@ -16,6 +16,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { Button, Select, SelectItem, Avatar } from "@nextui-org/react";
 import { productImg } from "../assets";
 import { useParams, useNavigate } from "react-router-dom";
+import Invoice from "./Invoice";
+// import NewOrder from "../Pages/NewOrder";
 
 const Menu = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -234,61 +236,61 @@ const Menu = () => {
     <div className="flex w-full bg-[#EEF0FA] px-[15px] md:px-[0px] md:ml-[15px] flex-col md:flex-row my-[20px] text-[16px]">
       <Toaster position="top-center" reverseOrder="false"></Toaster>
       <div className="flex w-[100%] h-screen chalaja md:w-[80%]">
-      <div className="w-[50%] md:w-[25%] h-[100%] chalaja overflow-y-scroll">
-        <div className="h-[50px] cursor-pointer border-b-2 border-slate-200 bg-secondary flex justify-center items-center">
-          Categories
-        </div>
+        <div className="w-[50%] md:w-[25%] h-[100%] chalaja overflow-y-scroll">
+          <div className="h-[50px] cursor-pointer border-b-2 border-slate-200 bg-secondary flex justify-center items-center">
+            Categories
+          </div>
 
-        {category.map((item, index) => {
-          return (
-            <div
-              onClick={() => fetchProduct(item._id)}
-              key={index}
-              className="h-[50px] overflow-x-scroll chalaja cursor-pointer border-b-2 border-slate-200 bg-secondary flex justify-center items-center bg-white"
-            >
-              {item.name}
+          {category.map((item, index) => {
+            return (
+              <div
+                onClick={() => fetchProduct(item._id)}
+                key={index}
+                className="h-[50px] overflow-x-scroll chalaja cursor-pointer border-b-2 border-slate-200 bg-secondary flex justify-center items-center bg-white"
+              >
+                {item.name}
+              </div>
+            );
+          })}
+        </div>
+        <div className="w-[50%] h-[100%] md:w-[75%]">
+          <div className="flex justify-center items-center">
+            <div className="w-[50%] h-[50px] flex rounded-md bg-white items-center ml-[10px]">
+              <CiSearch className="text-[20px] mx-[10px]" />
+              <input type="text" className="w-[90%] outline-none py-2" />
             </div>
-          );
-        })}
-      </div>
-      <div className="w-[50%] h-[100%] md:w-[75%]">
-        <div className="flex justify-center items-center">
-          <div className="w-[50%] h-[50px] flex rounded-md bg-white items-center ml-[10px]">
-            <CiSearch className="text-[20px] mx-[10px]" />
-            <input type="text" className="w-[90%] outline-none py-2" />
-          </div>
-          <div className="w-[50%] py-3 h-[50px] flex justify-center rounded-md bg-white items-center ml-[10px]">
-            <FaSearchengin className="text-[15px] mx-[10px]" />
-            <input type="text" className="w-[100%] outline-none py-2" />
-          </div>
-        </div>
-
-        {!isLoading && (
-          <div className="ml-3 my-3 h-[90%] overflow-y-scroll chalaja rounded-md">
-            <div className="grid cursor-pointer grid-cols-1 md:grid-cols-4 gap-4">
-              {product.map((item, index) => {
-                return (
-                  <div
-                    key={index}
-                    onClick={(e) => {
-                      handleProductClick(e, item);
-                    }}
-                    className="h-[80px] overflow-x-scroll chalaja flex justify-center items-center bg-white p-4 rounded-md text-start"
-                  >
-                    {item.productName}
-                  </div>
-                );
-              })}
+            <div className="w-[50%] py-3 h-[50px] flex justify-center rounded-md bg-white items-center ml-[10px]">
+              <FaSearchengin className="text-[15px] mx-[10px]" />
+              <input type="text" className="w-[100%] outline-none py-2" />
             </div>
           </div>
-        )}
 
-        {isLoading && (
-          <div className="m-3 h-[80%] flex rounded-md">
-            <img src="https://i.pinimg.com/originals/ae/51/e1/ae51e1395e87cc72c6021df5445cc5f8.gif" />
-          </div>
-        )}
-      </div>
+          {!isLoading && (
+            <div className="ml-3 my-3 h-[90%] overflow-y-scroll chalaja rounded-md">
+              <div className="grid cursor-pointer grid-cols-1 md:grid-cols-4 gap-4">
+                {product.map((item, index) => {
+                  return (
+                    <div
+                      key={index}
+                      onClick={(e) => {
+                        handleProductClick(e, item);
+                      }}
+                      className="h-[80px] overflow-x-scroll chalaja flex justify-center items-center bg-white p-4 rounded-md text-start"
+                    >
+                      {item.productName}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {isLoading && (
+            <div className="m-3 h-[80%] flex rounded-md">
+              <img src="https://i.pinimg.com/originals/ae/51/e1/ae51e1395e87cc72c6021df5445cc5f8.gif" />
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="w-full md:mx-[15px] bg-white my-[20px] md:my-[0px] mb-[40px] md:mb-[0px] md:w-[40%] md:block md:relative">
@@ -381,9 +383,13 @@ const Menu = () => {
               <button className="bg-primary w-[33%] md:w-[28%] mx-[10px] text-white px-[15px] py-3 rounded-md">
                 {total}
               </button>
-              <button className="bg-primary w-[33%] md:w-[28%] text-white px-[15px] py-3 rounded-md">
-                Delivery
-              </button>
+
+                <button
+                  className="w-[33%] md:w-[28%] text-white px-[15px] rounded-md py-3 inline-flex items-center gap-x-2 text-md flex justify-center items-center font-medium rounded-lg border border-transparent bg-primary text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                >
+                  <Invoice />
+                </button>
+
               {cartProduct.length > 0 && (
                 <button
                   onClick={() => {
@@ -880,30 +886,30 @@ const Menu = () => {
                   </div>
 
                   <div className="flex w-[100%] col-span-2 justify-between items-center">
-                <button
-                  onClick={() => {
-                    setCheckout(false);
-                  }}
-                  className="bg-white border-2 border-primary px-[10px] py-[5px] font-medium rounded-md"
-                >
-                  Back
-                </button>
-                {!changeBtn && (
-                  <button
-                    onClick={() => {
-                      formik.handleSubmit;
-                    }}
-                    className="bg-primary px-[10px] py-[5px] text-white rounded-md"
-                  >
-                    Add Order
-                  </button>
-                )}
-                {changeBtn && (
-                  <Button color="primary" isLoading>
-                    Loading
-                  </Button>
-                )}
-              </div>
+                    <button
+                      onClick={() => {
+                        setCheckout(false);
+                      }}
+                      className="bg-white border-2 border-primary px-[10px] py-[5px] font-medium rounded-md"
+                    >
+                      Back
+                    </button>
+                    {!changeBtn && (
+                      <button
+                        onClick={() => {
+                          formik.handleSubmit;
+                        }}
+                        className="bg-primary px-[10px] py-[5px] text-white rounded-md"
+                      >
+                        Add Order
+                      </button>
+                    )}
+                    {changeBtn && (
+                      <Button color="primary" isLoading>
+                        Loading
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
             )}

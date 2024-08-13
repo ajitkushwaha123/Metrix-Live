@@ -181,7 +181,7 @@ const AddAddons = () => {
               <div className="flex justify-center bg-white flex-col items-center">
                 <img
                   className=""
-                  src="https://img.freepik.com/free-vector/removing-goods-from-basket-refusing-purchase-changing-decision-item-deletion-emptying-trash-online-shopping-app-laptop-user-cartoon-character_335657-2566.jpg?t=st=1723325298~exp=1723328898~hmac=fb01f636aedff827a34dd5d661bfb17e33fb5ef1e044fb978ce4ca840a8d3815&w=740"
+                  src="https://img.freepik.com/free-vector/removing-goods-from-basket-refusing-purchase-changing-decision-item-deletion-emptying-trash-online-shopping-app-laptop-user-cartoon-character-vector-isolated-concept-metaphor-illustration_335657-2843.jpg?t=st=1723387200~exp=1723390800~hmac=cd84bb500df5699d060a63849cc5e2bbb17b2772cd8e0280fff1ce4b4069b06a&w=740"
                 />
               </div>
             )}
