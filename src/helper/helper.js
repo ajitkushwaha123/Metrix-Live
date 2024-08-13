@@ -1274,3 +1274,16 @@ export async function deleteDiscounts(id) {
     return Promise.reject({ error: "Couldn't delete file" });
   }
 }
+
+export async function invoiceGenerator(values){
+  try{
+    const res = await axios.post(`http://localhost:8000/api/invoice/create` , values);
+    console.log("Invoice Generateddddddddddddd:", values);  
+    console.log("Invoice Generated:", res);
+    return Promise.resolve({data: res});
+  }
+  catch(err){
+    console.log("Error Generating Invoice:", err);
+    return Promise.reject({ error: "Couldn't generate invoice" });
+  }
+}

@@ -82,7 +82,7 @@ function App() {
                 <Route path="/order-view/:id" element={<ViewOrder />} />
                 <Route path="/customer/edit/:id" element={<UpdateCustomer />} />
                 <Route path="/customer/view/:id" element={<ViewCustomer />} />
-                {/* <Route path="/add-customer" element={<NewCustomer />} /> */}
+        
               </Routes>
             </div>
           </div>

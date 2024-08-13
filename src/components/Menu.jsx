@@ -10,6 +10,7 @@ import {
   addCustomers,
   insertOrders,
   getProd,
+  invoiceGenerator,
 } from "../helper/helper";
 import { useFormik } from "formik";
 import toast, { Toaster } from "react-hot-toast";
@@ -17,6 +18,8 @@ import { Button, Select, SelectItem, Avatar } from "@nextui-org/react";
 import { productImg } from "../assets";
 import { useParams, useNavigate } from "react-router-dom";
 import Invoice from "./Invoice";
+import useFetch from "../hooks/fetch.hooks";
+import { set } from "date-fns";
 // import NewOrder from "../Pages/NewOrder";
 
 const Menu = () => {
@@ -35,11 +38,41 @@ const Menu = () => {
   const [cart, setCart] = useState(false);
   const [newCustomer, setNewCustomer] = useState(false);
   const navigate = useNavigate();
+  const [orderId , setOrderId] = useState("");
+
+  const [{apiData, serverError}] = useFetch();
+
+  const items = [];
+  const invoice = {
+    restourantLogo : apiData?.profile,
+    restourantName : apiData?.name, 
+    restourantAddress : apiData?.address,
+    restourantPhone : apiData?.phone,
+    customerName : "",
+    customerPhone : "",
+    billStatus : "",
+    paymentType : "",
+    orderType : "",
+    orderNumber : "",
+    orderDate : "",
+    orderTime : "",
+    items : [],
+    tax : "",
+  }
 
   const { id } = useParams();
   console.log("ID", id);
 
   const AddedProduct = [];
+
+  const generateInvoice = async (invoice) => {
+    try{
+      const respone = await invoiceGenerator(invoice);
+      console.log("Invoice Generated:", respone);
+    }catch(err){
+      console.log("Error while generating invoice:", err);
+    }
+  }
 
   const fetchAllProducts = async () => {
     try {
@@ -159,9 +192,30 @@ const Menu = () => {
     console.log("Order Added", values.products);
 
     const response = await insertOrders(values);
+
+
     console.log("Order Added", response);
+
+    invoice.customerName = values.customerName;
+    invoice.customerPhone = values.phone;
+    invoice.billStatus = values.orderStatus;
+    invoice.paymentType = values.paymentType;
+    invoice.orderType = values.orderType;
+    invoice.items = items;
+    invoice.tax = 0;
+    invoice.orderDate = new Date().toLocaleDateString();
+    invoice.orderTime = new Date().toLocaleTimeString();
+    invoice.orderNumber = orderId;
+    
+
+    // invoice.orderNumber = response.data._Id;
+
+    console.log("Invoice:", invoice);
+
+    generateInvoice(invoice);
     setChangeBtn(false);
     return response;
+
   };
 
   const formik = useFormik({
@@ -184,6 +238,7 @@ const Menu = () => {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
+
       setChangeBtn(true);
       console.log("Added Producttttttttt:", AddedProduct);
 
@@ -215,11 +270,13 @@ const Menu = () => {
           success: <b>Order Created Successfully... !</b>,
           error: <b>Couldn't Create Order... !</b>,
         });
-        console.log("Order Added", orderPromise);
+
         formik.resetForm();
         setCartProduct([]);
         setQuantities({});
         setTotal(0);
+
+
         navigate("/table-booking");
       } catch (err) {
         console.log("Error while adding order:", err);
@@ -414,6 +471,7 @@ const Menu = () => {
             cartProduct.map((product) => {
               if (quantities[product._id] > 0) {
                 AddedProduct.push({ product, quantities });
+                items.push(product);
                 console.log("Product", AddedProduct);
                 return <div key={product._id}></div>;
               }
