@@ -41,17 +41,17 @@ const ChartPie = () => {
   const takeAway = () => {
     switch (selected) {
       case "today":
-        return sales.dailySales?.orderTypeTakeAway || 0;
+        return sales?.dailySales?.orderTypeTakeAway || 0;
       case "yesterday":
-        return sales.yesterdaySales?.orderTypeTakeAway || 0;
+        return sales?.yesterdaySales?.orderTypeTakeAway || 0;
       case "weekly":
-        return sales.weeklySales?.orderTypeTakeAway || 0;
+        return sales?.weeklySales?.orderTypeTakeAway || 0;
       case "monthly":
-        return sales.monthlySales?.orderTypeTakeAway || 0;
+        return sales?.monthlySales?.orderTypeTakeAway || 0;
       case "yearly":
-        return sales.yearlySales?.orderTypeTakeAway || 0;
+        return sales?.yearlySales?.orderTypeTakeAway || 0;
       case "total":
-        return sales.totalSales?.orderTypeTakeAway || 0;
+        return sales?.totalSales?.orderTypeTakeAway || 0;
       default:
         return 0;
     }
@@ -60,17 +60,17 @@ const ChartPie = () => {
   const homeDelivery = () => {
     switch (selected) {
       case "today":
-        return sales.dailySales?.orderTypeHomeDelivery || 0;
+        return sales?.dailySales?.orderTypeHomeDelivery || 0;
       case "yesterday":
-        return sales.yesterdaySales?.orderTypeHomeDelivery || 0;
+        return sales?.yesterdaySales?.orderTypeHomeDelivery || 0;
       case "weekly":
-        return sales.weeklySales?.orderTypeHomeDelivery || 0;
+        return sales?.weeklySales?.orderTypeHomeDelivery || 0;
       case "monthly":
-        return sales.monthlySales?.orderTypeHomeDelivery || 0;
+        return sales?.monthlySales?.orderTypeHomeDelivery || 0;
       case "yearly":
-        return sales.yearlySales?.orderTypeHomeDelivery || 0;
+        return sales?.yearlySales?.orderTypeHomeDelivery || 0;
       case "total":
-        return sales.totalSales?.orderTypeHomeDelivery || 0;
+        return sales?.totalSales?.orderTypeHomeDelivery || 0;
       default:
         return 0;
     }
@@ -79,17 +79,17 @@ const ChartPie = () => {
   const dineIn = () => {
     switch (selected) {
       case "today":
-        return sales.dailySales?.orderTypeDineIn || 0;
+        return sales?.dailySales?.orderTypeDineIn || 0;
       case "yesterday":
-        return sales.yesterdaySales?.orderTypeDineIn || 0;
+        return sales?.yesterdaySales?.orderTypeDineIn || 0;
       case "weekly":
-        return sales.weeklySales?.orderTypeDineIn || 0;
+        return sales?.weeklySales?.orderTypeDineIn || 0;
       case "monthly":
-        return sales.monthlySales?.orderTypeDineIn || 0;
+        return sales?.monthlySales?.orderTypeDineIn || 0;
       case "yearly":
-        return sales.yearlySales?.orderTypeDineIn || 0;
+        return sales?.yearlySales?.orderTypeDineIn || 0;
       case "total":
-        return sales.totalSales?.orderTypeDineIn || 0;
+        return sales?.totalSales?.orderTypeDineIn || 0;
       default:
         return 0;
     }
@@ -107,24 +107,23 @@ const ChartPie = () => {
   const COLORS = ["#97A5EB", "#5570F1", "#FFCC91"];
   const FADED_COLORS = ["#97A5EB", "#5570F1", "#FFCC91"];
 
-
   return (
     <div className="rounded-xl font-poppins">
       <div className="flex justify-between px-7 py-4">
-        <div className="flex justify-center items-center">
+        <div className="flex justify-between w-[100%] items-center">
           <p className="text-[18px] font-poppins text-medium mr-[15px]">
             Order Type
           </p>
-          <button className="bg-secondary flex justify-center items-center px-[6px] py-[1px] rounded-xl">
+          <button className="flex justify-center items-center px-[13px] py-[1px] rounded-xl">
             <Dropdown backdrop="blur">
               <DropdownTrigger
                 color="slate-400"
                 className="text-[40px] text-txtPrimary"
               >
-                <Button className="text-[16px]">
+                <button className="text-[16px] flex justify-between items-center bg-primary text-white px-[15px] py-2 rounded-xl outline-none text-[16px]">
                   {selected.charAt(0).toUpperCase() + selected.slice(1)}
-                  <MdOutlineKeyboardArrowDown />
-                </Button>
+                  <MdOutlineKeyboardArrowDown className="text-[20px] ml-[5px]" />
+                </button>
               </DropdownTrigger>
               <DropdownMenu variant="faded" aria-label="Static Actions">
                 <DropdownItem onClick={() => setSelected("today")} key="today">
@@ -167,8 +166,12 @@ const ChartPie = () => {
         <li className="mr-[12px] flex justify-center text-center focus:list-disc text-[#FFCC91]">
           TakeAway
         </li>
-        <li className="mr-[12px] flex justify-center text-center text-[#97A5EB]">DineIn</li>
-        <li className="mr-[12px] flex justify-center text-center text-primary">HomeDelivery</li>
+        <li className="mr-[12px] flex justify-center text-center text-[#97A5EB]">
+          DineIn
+        </li>
+        <li className="mr-[12px] flex justify-center text-center text-primary">
+          HomeDelivery
+        </li>
       </div>
 
       {/* {isLoading && (
@@ -177,33 +180,33 @@ const ChartPie = () => {
         </div>
       )} */}
       {/* {!isLoading && ( */}
-        <div className="mx-auto flex justify-center items-center">
-          <ResponsiveContainer width="100%" height={400}>
-            <PieChart>
-              <Pie
-                data={data}
-                cx="50%"
-                cy="25%"
-                innerRadius={60}
-                outerRadius={90}
-                fill="#8884d8"
-                paddingAngle={5}
-                dataKey="value"
-              >
-                {data.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={
-                      entry.value === 99999999999
-                        ? FADED_COLORS[index % FADED_COLORS.length]
-                        : COLORS[index % COLORS.length]
-                    }
-                  />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+      <div className="mx-auto flex justify-center items-center">
+        <ResponsiveContainer width="100%" height={400}>
+          <PieChart>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="25%"
+              innerRadius={60}
+              outerRadius={90}
+              fill="#8884d8"
+              paddingAngle={5}
+              dataKey="value"
+            >
+              {data.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={
+                    entry.value === 99999999999
+                      ? FADED_COLORS[index % FADED_COLORS.length]
+                      : COLORS[index % COLORS.length]
+                  }
+                />
+              ))}
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
       {/* )} */}
     </div>
   );

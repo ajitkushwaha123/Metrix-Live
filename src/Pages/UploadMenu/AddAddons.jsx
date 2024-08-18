@@ -5,6 +5,7 @@ import { uploadAddons, getAddons, deleteAddon } from "../../helper/helper";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@nextui-org/react";
 import { RiDeleteBinLine } from "react-icons/ri";
+import LoadingButton from "../../components/LoadingButton";
 
 const AddAddons = () => {
   const [loading, setLoading] = useState(false);
@@ -60,17 +61,38 @@ const AddAddons = () => {
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
+    setLoading(true);
     setIsLoading(true);
     e.preventDefault();
 
     try {
+      console.log("asd" , addons);
+
+      let flag = 0;
+
+      {addons.map((item , index) => {
+        if(item.name === "")
+        {
+          flag = 1;
+        }
+      })}
+
+      if(flag == 1)
+      {
+        toast.error("Please fill all the fields ")
+        setLoading(false);
+        setIsLoading(false);
+        return;
+      }
       const res = await uploadAddons(addons);
       toast.success("Addons Added Successfully");
       fetchedAddons();
       setIsLoading(false);
+      setLoading(false);
     } catch (err) {
       toast.error("Failed to Add Addons");
       setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -134,22 +156,16 @@ const AddAddons = () => {
               >
                 Add Addons
               </button>
-              {!loading && (
+              {!loading ? (
                 <button
                   onClick={(e) => {
                     submitHandler(e);
-                    setLoading(true);
                   }}
                   className="bg-success ml-[30px] text-white text-sm font-medium h-[40px] px-5 rounded-lg"
                 >
                   Add
                 </button>
-              )}
-              {loading && (
-                <Button color="primary" isLoading>
-                  Loading
-                </Button>
-              )}
+              ) : <div> <LoadingButton /> </div>}
             </div>
           </div>
 
@@ -222,14 +238,16 @@ const AddAddons = () => {
               >
                 Add Addons
               </button>
-              <button
-                onClick={(e) => {
-                  submitHandler(e);
-                }}
-                className="bg-success ml-[30px] text-white text-sm font-medium h-[40px] px-5 rounded-lg"
-              >
-                Add
-              </button>
+              {!loading ? (
+                <button
+                  onClick={(e) => {
+                    submitHandler(e);
+                  }}
+                  className="bg-success ml-[30px] text-white text-sm font-medium h-[40px] px-5 rounded-lg"
+                >
+                  Add
+                </button>
+              ) : <div> <LoadingButton /> </div>}
             </div>
           </div>
         </div>

@@ -222,7 +222,7 @@ const AddTax = () => {
               Tax
             </div>
 
-            {fetchTax.length > 0 &&
+            {fetchTax?.length > 0 &&
               fetchTax.map((item, index) => {
                 return (
                   <div
@@ -230,7 +230,7 @@ const AddTax = () => {
                     className="h-[50px] flex justify-between px-[40px] overflow-x-scroll chalaja cursor-pointer border-b-2 border-slate-200 bg-secondary flex justify-center items-center bg-white"
                   >
                     <h2>{item.name}</h2>
-                    <h2>{item.taxPercentage}</h2>
+                    <h2>{item.taxPercentage} % </h2>
                     <button
                       onClick={(e) => {
                         deleteTaxes(e, item._id);

@@ -26,6 +26,15 @@ export async function passwordReset(values)
 export async function loginValidate(values) {
   const errors = {}; 
 
+  if (!values.username) {
+    errors.username = toast.error("Username Required... !");
+  } else if (!values.password) {
+    console.log(values.password);
+    errors.password = toast.error("Password Required... !");
+  } else if (values.password.length < 4) {
+    errors.password = toast.error("Password is too weak... !");
+  }
+
   if(values.username){
     const {status} = await authenticate(values.username);
 
@@ -33,13 +42,6 @@ export async function loginValidate(values) {
       {
         errors.exist = toast.error("User Doesn't Exist... !");
       }
-  }
-
-  if (!values.password) {
-  console.log(values.password);
-    errors.password = toast.error('Password Required... !');
-  } else if (values.password.length < 4) {
-    errors.password = toast.error('Password is too weak... !');
   }
 
   return errors; 
@@ -85,6 +87,16 @@ export async function registerValidate(values) {
       errors.password = toast.error('Password Required... !');
     } else if (values.password.length < 4) {
       errors.password = toast.error('Password is too weak... !');
+    }
+    else 
+    {
+        for(let i = 0 ; i < values.username.length ; i++)
+        {
+            if(values.username[i] == " ")
+            {
+              errors.username = toast.error("Username Can't contain spaces... !");
+            }
+        }
     }
   
     return errors; 

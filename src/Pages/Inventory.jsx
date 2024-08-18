@@ -23,12 +23,12 @@ const Inventory = () => {
   const fetchProductsDetails = async () => {
     try {
       const res = await getProductDetail();
-      setTotalProduct(res.data.productDetail.total);
-      setTotalPublished(res.data.productDetail.totalPublished);
-      setTotalDraft(res.data.productDetail.totalDraft);
-      setLowStock(res.data.productDetail.lowStock);
-      setExpired(res.data.productDetail.expired);
-      setSufficientStock(res.data.productDetail.sufficientStock);
+      setTotalProduct(res?.data.productDetail.total);
+      setTotalPublished(res?.data.productDetail.totalPublished);
+      setTotalDraft(res?.data.productDetail.totalDraft);
+      setLowStock(res?.data.productDetail.lowStock);
+      setExpired(res?.data.productDetail.expired);
+      setSufficientStock(res?.data.productDetail.sufficientStock);
       console.log("product Detail");
     } catch (error) {
       console.log(error);

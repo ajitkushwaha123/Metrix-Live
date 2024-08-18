@@ -19,6 +19,7 @@ const NewOrder = () => {
   const [selectCustomer, setSelectCustomer] = useState("");
   const [selectCustomerName , setSelectCustomerName] = useState("");
   const [selectCustomerPhone , setSelectCustomerPhone] = useState("");
+  const [selectCustomerSince , setSelectCustomerSince] = useState("");
   const [selectedOrder , setSelectedOrder] = useState([]);
 
   console.log("Customer data", selectCustomer);
@@ -85,18 +86,21 @@ const formik = useFormik({
     imageColor: "tertiary",
     customerId: "",
     orderType: "dineIn",
+    customerSince : "",
   },
   // validate: createOrderValidate,
   validateOnBlur: false,
   validateOnChange: false,
   onSubmit: async (values) => {
     values.products = cartProduct;
-    if(values.products == 0){
+    if (values.products == 0) {
       values.products = AddedProduct;
     }
     console.log("Added Products", cartProduct);
 
     console.log("Form Valuesssssssss", values.products);
+
+    console.log("sdfd" , selectCustomerSince);
 
     try {
       if (cartProduct == []) {
@@ -106,10 +110,11 @@ const formik = useFormik({
           values.customerId = selectCustomer;
           values.customerName = selectCustomerName;
           values.phone = selectCustomerPhone;
+          values.customerSince = selectCustomerSince;
         } else {
           console.log("New Customer");
           let customerPromise = await addCustomers(values);
-      
+
           console.log("Customer ID", customerPromise.customer._id);
           values.customerId = customerPromise.customer._id;
         }
@@ -225,14 +230,14 @@ const formik = useFormik({
   return (
     <>
       {/* Modal toggle */}
-      <Button
+      <button
         onClick={toggleModal}
         className="block font-poppins text-white bg-primary font-medium rounded-lg text-sm md:px-5 py-1 md:py-1.5 text-center "
         type="button"
         size="sm"
       >
         Create Order
-      </Button>
+      </button>
 
       {/* Main modal */}
       {isOpen && (
@@ -342,7 +347,8 @@ const formik = useFormik({
                                   onClick={() => {
                                     setSelectCustomer(user._id),
                                       setSelectCustomerName(user.customerName),
-                                      setSelectCustomerPhone(user.phone);
+                                      setSelectCustomerPhone(user.phone),
+                                      setSelectCustomerSince(user.createdAt());
                                   }}
                                   className="flex gap-2 py-[2px] px-[4px] items-center"
                                 >

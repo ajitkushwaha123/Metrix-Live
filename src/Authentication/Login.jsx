@@ -8,6 +8,7 @@ import { loginValidate } from "../helper/validate";
 import { toast, Toaster } from "react-hot-toast";
 import { useAuthStore } from "../store/store";
 import { Button } from "@nextui-org/react";
+import LoadingButton from "../components/LoadingButton";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,8 +19,8 @@ const Login = () => {
 
   const formik = useFormik({
     initialValues: {
-      username: "akash12345",
-      password: "@Jit12345",
+      username: "",
+      password: "",
     },
     validate: loginValidate,
     validateOnBlur: false,
@@ -43,12 +44,17 @@ const Login = () => {
         try {
           let { token } = res.data.data;
           localStorage.setItem("token", token);
-          // setLoading(false);
+          setLoading(false);
           navigate("/dashboard");
         } catch (error) {
           console.error("Error extracting token:", error);
-        
+          setLoading(false);
         }
+      })
+      .catch((error) => {
+        console.error("Error in login:", error.error);
+        setLoading(false);
+        toast.error(error.error);
       });
     },
   });
@@ -115,20 +121,16 @@ const Login = () => {
             </p>
             {!loading && (
               <button
-                onClick={() => {
-                  setLoading(true), formik.handleSubmit();
-                }}
+                onClick={
+                  formik.handleSubmit
+                }
                 type="submit"
-                className="bg-primary px-[20px] py-2 mt-[20px] rounded-md text-white text-[18px]"
+                className="bg-primary px-[20px] font-poppins py-2 mt-[20px] rounded-xl text-white text-[18px]"
               >
                 Login
               </button>
             )}
-            {loading && (
-              <div className="mt-[20px] rounded-xl bg-primary">
-                <Button color="success" isLoading>Loading</Button>
-              </div>
-            )}
+            {loading && <div className="mt-[20px]"><LoadingButton /></div>}
           </div>
         </div>
       </form>

@@ -3,12 +3,15 @@ import toast, { Toaster } from "react-hot-toast";
 import useFetch from "../hooks/fetch.hooks";
 import { FaRegShareSquare } from "react-icons/fa";
 import { ImWhatsapp } from "react-icons/im";
-import { NavLink } from "react-router-dom";
+import { NavLink, redirect } from "react-router-dom";
 import { TbFileInvoice } from "react-icons/tb";
 import { getSingleOrders } from "../helper/helper";
+import { useNavigate , Navigate } from "react-router-dom";
+import PriceFormatter from "../helper/priceFormatter";
 
 
-const Invoice = ({ btnText = "Inovice" , orderId  = ""}) => {
+const Invoice = ({ btnText = "Inovice" , orderId}) => {
+  console.log("dd" , orderId);
   const [{ isLoading, apiData, serverError }] = useFetch();
   const [isOpen, setIsOpen] = useState(false);
   const [share, setShare] = useState(false);
@@ -22,12 +25,16 @@ const Invoice = ({ btnText = "Inovice" , orderId  = ""}) => {
     const [quantity, setQuantity] = useState("");
     const [orderType, setOrderType] = useState("");
     const [orderDate, setOrderDate] = useState("");
+    const [invoiceId , setInvoiceId] = useState("");
+    const [taxes , setTaxes] = useState(0);
+    const [discount , setDiscount] = useState(0);
+    const [discountType , setDiscountType] = useState("absolute");
 
   const fetchProduct = async (id) => {
     try {
       console.log("Fetching product with id:", id);
       const product = await getSingleOrders(`orders/find/${id}`);
-      console.log("Fetched product:", product);
+      console.log("Fetched productttttttttt:", product);
 
       // Format the date
       const options = {
@@ -35,7 +42,7 @@ const Invoice = ({ btnText = "Inovice" , orderId  = ""}) => {
         month: "long",
         day: "numeric",
       };
-      const formattedDate = new Date(product.createdAt).toLocaleDateString(
+      const formattedDate = new Date(product?.createdAt).toLocaleDateString(
         "en-US",
         options
       );
@@ -49,6 +56,11 @@ const Invoice = ({ btnText = "Inovice" , orderId  = ""}) => {
       setQuantity(product.quantity);
       setOrderType(product.orderType);
       setOrderDate(formattedDate);
+      setInvoiceId(product.invoiceId || "");
+      setDiscount(product.discount || 0);
+      setDiscountType(product.discountType || 0);
+      setTaxes(product.tax || 0);
+      console.log("df" , product.tax);
     } catch (error) {
       console.error("Error fetching product:", error);
     }
@@ -74,6 +86,25 @@ const Invoice = ({ btnText = "Inovice" , orderId  = ""}) => {
     }
   } , [id])
 
+  const navigate = useNavigate();
+
+  const handleDownload = (e) => {
+    e.preventDefault();
+    const url = `http://localhost:8000/api/invoice/invoice/${invoiceId}`;
+    alert(url);
+    window.location.href = url;
+    // window.open(url);
+  };
+
+  const phoneNumber = phone; // Replace with the target number  
+  const message = "Here is bill of recent order !.";  
+  const pdfLink = `http://localhost:8000/api/invoice/invoice/${invoiceId}`; // Replace with your PDF link  
+
+  const handleClick = () => {  
+    const encodedMessage = encodeURIComponent(`${message} ${pdfLink}`);  
+    window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`);  
+  };  
+
   return (
     <>
       {/* Modal toggle */}
@@ -82,7 +113,7 @@ const Invoice = ({ btnText = "Inovice" , orderId  = ""}) => {
           toggleModal(e);
         }}
       >
-        <a class="inline-flex items-center" href="#">
+        <a className="inline-flex items-center" href="#">
           <TbFileInvoice />
           {btnText === "" && <div></div>}
           {btnText !== "" && <span className="ml-[10px]">{btnText}</span>}
@@ -92,7 +123,6 @@ const Invoice = ({ btnText = "Inovice" , orderId  = ""}) => {
       {/* Main modal */}
       {isOpen && (
         <div className="flex">
-          <generateInvoice />
           <Toaster position="top-center" reverseOrder={false} />
           <div
             id="crud-modal"
@@ -157,52 +187,51 @@ const Invoice = ({ btnText = "Inovice" , orderId  = ""}) => {
                       )}
                     </span>
 
-
                     <div className="p-4 sm:p-7 overflow-y-auto">
-                      <div class="text-center">
+                      <div className="text-center">
                         <h3
                           id="hs-ai-modal-label"
-                          class="text-lg font-semibold text-gray-800 dark:text-neutral-200"
+                          className="text-lg font-semibold text-gray-800 dark:text-neutral-200"
                         >
                           Invoice from {apiData?.name || "Nancy Shop"}
                         </h3>
-                        <p class="text-sm text-gray-500 dark:text-neutral-500">
+                        <p className="text-sm text-gray-500 dark:text-neutral-500">
                           Invoice #3682303
                         </p>
                       </div>
 
                       <div className="mt-5 sm:mt-10 grid grid-cols-2 sm:grid-cols-3 gap-5">
                         <div>
-                          <span class="block text-xs uppercase text-gray-500 dark:text-neutral-500">
-                            Amount paid:
+                          <span className="block text-xs uppercase text-gray-500 dark:text-neutral-500">
+                            Bill Value :
                           </span>
-                          <span class="block text-sm font-medium text-gray-800 dark:text-neutral-200">
-                            ${price}
+                          <span className="block text-sm font-medium text-gray-800 dark:text-neutral-200">
+                            <PriceFormatter price={price} />
                           </span>
                         </div>
 
                         <div>
-                          <span class="block text-xs uppercase text-gray-500 dark:text-neutral-500">
+                          <span className="block text-xs uppercase text-gray-500 dark:text-neutral-500">
                             Date paid:
                           </span>
-                          <span class="block text-sm font-medium text-gray-800 dark:text-neutral-200">
+                          <span className="block text-sm font-medium text-gray-800 dark:text-neutral-200">
                             {orderDate}
                           </span>
                         </div>
                         <div>
-                          <span class="block text-xs uppercase text-gray-500 dark:text-neutral-500">
+                          <span className="block text-xs uppercase text-gray-500 dark:text-neutral-500">
                             Payment method:
                           </span>
-                          <div class="flex text-center justify-center gap-x-2">
+                          <div className="flex text-center justify-center gap-x-2">
                             <svg
-                              class="size-5"
+                              className="size-5"
                               width="400"
                               height="248"
                               viewBox="0 0 400 248"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
                             >
-                              <g clip-path="url(#clip0)">
+                              <g clipPath="url(#clip0)">
                                 <path
                                   d="M254 220.8H146V26.4H254V220.8Z"
                                   fill="#FF5F00"
@@ -226,107 +255,162 @@ const Invoice = ({ btnText = "Inovice" , orderId  = ""}) => {
                                 </clipPath>
                               </defs>
                             </svg>
-                            <span class="block text-sm font-medium text-gray-800 dark:text-neutral-200">
+                            <span className="block text-sm font-medium text-gray-800 dark:text-neutral-200">
                               {paymentType}
                             </span>
                           </div>
                         </div>
                       </div>
 
-                      <div class="mt-5 sm:mt-10">
-                        <h4 class="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
+                      <div className="mt-5 sm:mt-10">
+                        <h4 className="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
                           Summary
                         </h4>
 
-                        <ul class="mt-3 flex flex-col">
-                          <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:border-neutral-700 dark:text-neutral-200">
-                            <div class="flex items-center justify-between w-full">
+                        <ul className="mt-3 flex flex-col">
+                          <li className="inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:border-neutral-700 dark:text-neutral-200">
+                            <div className="flex items-center justify-between w-full">
                               <span>Payment to Front</span>
-                              <span> ${price} </span>
+                              <span>
+                                {" "}
+                                <PriceFormatter price={price} />{" "}
+                              </span>
                             </div>
                           </li>
-                          <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:border-neutral-700 dark:text-neutral-200">
-                            <div class="flex items-center justify-between w-full">
-                              <span>Tax fee</span>
-                              <span>$52.8</span>
-                            </div>
-                          </li>
-                          <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-semibold bg-gray-50 border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200">
-                            <div class="flex items-center justify-between w-full">
+                          {discount !== 0 && (
+                            <li className="inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:border-neutral-700 dark:text-neutral-200">
+                              <div className="flex items-center justify-between w-full">
+                                <span>Discount</span>
+                                <span>
+                                  -{" "}
+                                  {discountType === "percentage" ? (
+                                    <PriceFormatter
+                                      price={(price * discount) / 100}
+                                    />
+                                  ) : (
+                                    <PriceFormatter price={discount} />
+                                  )}
+                                </span>
+                              </div>
+                            </li>
+                          )}
+                          {taxes !== 0 && (
+                            <li className="inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:border-neutral-700 dark:text-neutral-200">
+                              <div className="flex items-center justify-between w-full">
+                                <span>Tax fee</span>
+                                <span>
+                                  +{" "}
+                                  <PriceFormatter
+                                    price={(price * taxes) / 100}
+                                  />
+                                </span>
+                              </div>
+                            </li>
+                          )}
+                          <li className="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-semibold bg-gray-50 border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200">
+                            <div className="flex items-center justify-between w-full">
                               <span>Amount paid</span>
-                              <span>$316.8</span>
+                              {discountType === "percentage" ? (
+                                <span>
+                                  {" "}
+                                  <PriceFormatter
+                                    price={
+                                      price +
+                                      (price * taxes) / 100 -
+                                      (discount * price) / 100
+                                    }
+                                  />
+                                </span>
+                              ) : (
+                                <span>
+                                  {" "}
+                                  <PriceFormatter
+                                    price={
+                                      price + (price * taxes) / 100 - discount
+                                    }
+                                  />
+                                </span>
+                              )}
                             </div>
                           </li>
                         </ul>
                       </div>
 
-                      <div class="mt-5 flex justify-end gap-x-2">
+                      <div className="mt-5 flex justify-end gap-x-2">
                         <a
-                          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                          className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                           href="#"
                           onClick={(e) => handleShare(e)}
                         >
                           <FaRegShareSquare />
                           Share
                         </a>
-                        <a
-                          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
-                          href="#"
+                        <NavLink
+                          to={`http://localhost:8000/api/invoice/invoice/${invoiceId}`}
+                        >
+                          <button>
+                            <a
+                              className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+                              onClick={(e) => {
+                                handleDownload(e);
+                              }}
+                            >
+                              <svg
+                                className="shrink-0 size-4"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" x2="12" y1="15" y2="3" />
+                              </svg>
+                              Download Bill
+                            </a>
+                          </button>
+                        </NavLink>
+                        {/* <a
+                          className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                          href={`http://localhost:8000/api/invoice/invoice/${invoiceId}`}
                         >
                           <svg
-                            class="shrink-0 size-4"
+                            className="shrink-0 size-4"
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
                             height="24"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          >
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                            <polyline points="7 10 12 15 17 10" />
-                            <line x1="12" x2="12" y1="15" y2="3" />
-                          </svg>
-                          Invoice PDF
-                        </a>
-                        <a
-                          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                          href="#"
-                        >
-                          <svg
-                            class="shrink-0 size-4"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           >
                             <polyline points="6 9 6 2 18 2 18 9" />
                             <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
                             <rect width="12" height="8" x="6" y="14" />
                           </svg>
                           Print
-                        </a>
+                        </a> */}
                       </div>
 
-                      <div class="mt-5 sm:mt-10">
-                        <p class="text-sm text-gray-500 dark:text-neutral-500">
+                      <div className="mt-5 sm:mt-10">
+                        <p className="text-sm text-gray-500 dark:text-neutral-500">
                           If you have any questions, please contact us at{" "}
                           <a
-                            class="inline-flex items-center gap-x-1.5 text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
+                            className="inline-flex items-center gap-x-1.5 text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
                             href="#"
                           >
                             {apiData?.email || "example@site.com"}
                           </a>{" "}
                           or call at{" "}
                           <a
-                            class="inline-flex items-center gap-x-1.5 text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
+                            className="inline-flex items-center gap-x-1.5 text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
                             href="tel:+1898345492"
                           >
                             {apiData?.phone || "+1 898-34-5492"}
@@ -338,24 +422,25 @@ const Invoice = ({ btnText = "Inovice" , orderId  = ""}) => {
                 )}
                 {share === true && (
                   <div>
-                    <div class="w-full max-w-md bg-white shadow-lg rounded-lg px-4 pb-6 relative">
-                      <div class="my-3">
-                        <h6 class="text-base text-gray-800">
+                    <div className="w-full max-w-md bg-white shadow-lg rounded-lg px-4 pb-6 relative">
+                      <div className="my-3">
+                        <h6 className="text-base text-gray-800">
                           Share this link via
                         </h6>
 
-                        <div class="flex justify-center items-center flex-wrap gap-4 mt-4">
+                        <div className="flex justify-center items-center flex-wrap gap-4 mt-4">
                           <NavLink to={"https://wa.me/918178739633"}>
                             <button
                               type="button"
-                              class="w-10 h-10 inline-flex items-center justify-center rounded-full border-none outline-none bg-[#25D366] hover:bg-green-500 active:bg-green-700"
+                              onClick={handleClick}
+                              className="w-10 h-10 inline-flex items-center justify-center rounded-full border-none outline-none bg-[#25D366] hover:bg-green-500 active:bg-green-700"
                             >
                               <ImWhatsapp />
                             </button>
                           </NavLink>
-                          <button
+                          {/* <button
                             type="button"
-                            class="w-10 h-10 inline-flex items-center justify-center rounded-full border-none outline-none bg-[#03a9f4] hover:bg-[#03a1f4] active:bg-[#03a9f4]"
+                            className="w-10 h-10 inline-flex items-center justify-center rounded-full border-none outline-none bg-[#03a9f4] hover:bg-[#03a1f4] active:bg-[#03a9f4]"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -371,7 +456,7 @@ const Invoice = ({ btnText = "Inovice" , orderId  = ""}) => {
                           </button>
                           <button
                             type="button"
-                            class="w-10 h-10 inline-flex items-center justify-center rounded-full border-none outline-none bg-[#0077b5] hover:bg-[#0055b5] active:bg-[#0077b5]"
+                            className="w-10 h-10 inline-flex items-center justify-center rounded-full border-none outline-none bg-[#0077b5] hover:bg-[#0055b5] active:bg-[#0077b5]"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -387,7 +472,7 @@ const Invoice = ({ btnText = "Inovice" , orderId  = ""}) => {
                           </button>
                           <button
                             type="button"
-                            class="w-10 h-10 inline-flex items-center justify-center rounded-full border-none outline-none bg-[#ea0065] hover:bg-[#ea0065d6] active:bg-[#ea0065]"
+                            className="w-10 h-10 inline-flex items-center justify-center rounded-full border-none outline-none bg-[#ea0065] hover:bg-[#ea0065d6] active:bg-[#ea0065]"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -408,17 +493,20 @@ const Invoice = ({ btnText = "Inovice" , orderId  = ""}) => {
                                 data-original="#000000"
                               />
                             </svg>
-                          </button>
+                          </button> */}
                         </div>
                       </div>
 
                       <div>
-                        <h6 class="text-base text-gray-800">Or copy link</h6>
-                        <div class="w-full rounded-lg overflow-hidden border border-gray-300 flex items-center mt-4">
-                          <p class="text-sm text-gray-500 flex-1 ml-4">
-                            https://readymadeui.com/
+                        <h6 className="text-base text-gray-800">
+                          Or copy link
+                        </h6>
+                        <div className="w-full rounded-lg overflow-hidden border border-gray-300 flex items-center mt-4">
+                          <p className="text-sm text-gray-500 flex-1 ml-4">
+                            https://localhost.com:8000/api/invoice/invoice/
+                            {invoiceId}
                           </p>
-                          <button class="bg-blue-600 hover:bg-blue-700 px-6 py-3 text-sm text-white">
+                          <button className="bg-blue-600 hover:bg-blue-700 px-6 py-3 text-sm text-white">
                             Copy
                           </button>
                         </div>

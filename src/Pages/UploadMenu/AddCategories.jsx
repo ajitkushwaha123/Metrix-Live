@@ -69,9 +69,20 @@ const AddCategories = () => {
     e.preventDefault();
 
     console.log(category);
-    setIsLoading(true);
 
     try {
+      let flag = 0;
+      {category.map((item , index) => {
+        if(item.name == "")flag = 1;
+      })}
+
+      if(flag)
+      {
+        toast.error("Please fill all the fields");
+        return;
+      }
+
+      setIsLoading(true);
       const res = await uploadCategory(category);
       toast.success("Category Added Successfully");
       fetchCategory();
@@ -118,6 +129,7 @@ const AddCategories = () => {
                         onChange={(e) => {
                           handleName(e, item.id);
                         }}
+                        required="true"
                         type="text"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                         placeholder="Enter category name"

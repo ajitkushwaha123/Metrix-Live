@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { metrix } from "../assets";
+import { logo, metrix } from "../assets";
 import { MdDashboardCustomize } from "react-icons/md";
 import { BsHandbag } from "react-icons/bs";
 import { LuUsers } from "react-icons/lu";
@@ -33,7 +33,7 @@ const Sidebar = () => {
       link: "/order",
     },
     {
-      title: "Inventory",
+      title: "Menu",
       icon: <BsFolder2Open />,
       link: "/inventory",
     },
@@ -70,32 +70,36 @@ const Sidebar = () => {
   return (
     <div className="hover:w-[296px] hidden sm:block w-[88px] pb-[30px] h-screen font-poppins group bg-[#fff]">
       <div className="w-[100%] flex justify-start group-hover:px-[50px] px-[20px] items-center h-[100px]">
-        <img className="w-[50px] h-[50px]" src={metrix} alt="Metrix Logo" />
+        <div className="bg-primary w-[50px] flex justify-center items-center h-[50px] p-2 rounded-xl">
+          <img className="" src={logo} alt="Kravy Logo" />
+        </div>
         <h3 className="text-black ml-[10px] font-poppins font-bold text-[25px] hidden group-hover:block">
-          Metrix
+          Kravy
         </h3>
       </div>
 
       <div className="flex flex-col justify-center items-center">
         {/* Navigation Links */}
-        <div className="overflow-y-scroll chalaja h-[340px] ">
+        <div className="overflow-y-scroll custom-image h-[340px] ">
           <ul
             className={`flex flex-col justify-center items-center font-poppins`}
           >
             {navLinks.map((nav, index) => (
-              <li
-                key={index}
-                className={`flex items-center h-[49px] hover:bg-[#5570F1] rounded-lg group-hover:w-[233px] hover:text-white text-[20px] px-[14px] group-hover:px-[30px] my-[3px] ${
-                  isActive === nav.link ? "bg-[#5570F1] text-white" : ""
-                }`}
-                aria-label={nav.title}
-                onClick={() => setIsActive(nav.link)}
-              >
-                {nav.icon}
-                <span className="hidden group-hover:block ml-[10px]">
-                  <NavLink to={nav.link}>{nav.title}</NavLink>
-                </span>
-              </li>
+              <NavLink to={nav.link}>
+                <li
+                  key={index}
+                  className={`flex items-center h-[49px] hover:bg-[#5570F1] rounded-lg group-hover:w-[233px] hover:text-white text-[20px] px-[14px] group-hover:px-[30px] my-[3px] ${
+                    isActive === nav.link ? "bg-[#5570F1] text-white" : ""
+                  }`}
+                  aria-label={nav.title}
+                  onClick={() => setIsActive(nav.link)}
+                >
+                  {nav.icon}
+                  <span className="hidden group-hover:block ml-[10px]">
+                    {nav.title}
+                  </span>
+                </li>
+              </NavLink>
             ))}
           </ul>
         </div>

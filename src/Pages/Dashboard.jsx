@@ -14,6 +14,7 @@ import { BsFolder2Open } from 'react-icons/bs';
 import { BsCart3 } from "react-icons/bs";
 import RecentOrders from '../components/RecentOrders';
 import { getProductDetail , getCustomerDetail } from '../helper/helper';
+import {logo} from "../assets"
 
 const Dashboard = () => {
   const [totalCustomer, setTotalCustomer] = useState(0);
@@ -59,6 +60,8 @@ const Dashboard = () => {
   return (
     <div className="w-full overflow-x-hidden">
       <BreadCrum />
+
+      {/* <img src={logo}/> */}
 
       <div className="px-[20px] md:px-[40px] flex flex-col md:flex-row">
         <div className="w-[100%] mb-[20px] md:mb-[0px] md:w-[33.33%] md:pr-[15px]">
@@ -138,11 +141,12 @@ const Dashboard = () => {
                 <Stats
                   height="159px"
                   icon={<BsCart3 />}
-                  title1={"Abandoned Cart"}
-                  title2={"Customers"}
+                  title1={"Current Week"}
+                  title2={"Current month"}
                   stat1={"0"}
                   stat2={"0"}
                   padY={"9"}
+                  sale={true}
                 />
               </div>
             </div>

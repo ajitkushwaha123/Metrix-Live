@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { getSalesForGraph, getCustomerForGraph } from "../helper/helper";
+import PriceFormatter from "../helper/priceFormatter";
 
 const DayChart = ({ select }) => {
   const [sales, setSales] = useState([]);
@@ -46,7 +47,11 @@ const DayChart = ({ select }) => {
         <CartesianGrid strokeDasharray="5 5" />
         <XAxis dataKey="_id" />
         <YAxis />
-        <Tooltip />
+        <Tooltip
+          formatter={(value) =>
+            select === "sales" ? <PriceFormatter price={value} /> : value
+          }
+        />
         <Legend />
         <Bar
           type="monotone"
@@ -61,9 +66,9 @@ const DayChart = ({ select }) => {
   return (
     <div className="chart-container flex justify-center items-center">
       {select === "sales" &&
-        renderChart("totalSales", sales.length > 0 ? sales : defaultData)}
+        renderChart("totalSales", sales?.length > 0 ? sales : defaultData)}
       {select === "order" &&
-        renderChart("totalOrders", sales.length > 0 ? sales : defaultData)}
+        renderChart("totalOrders", sales?.length > 0 ? sales : defaultData)}
       {select === "customers" &&
         renderChart(
           "totalCustomers",

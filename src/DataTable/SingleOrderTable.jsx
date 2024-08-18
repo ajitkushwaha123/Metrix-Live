@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useProductContext } from "../context/productContext";
-import { loader } from "../assets";
+import { loader, productImg } from "../assets";
 // import AvatarGroup from "./Avatar";
 
 import {
@@ -33,18 +33,17 @@ import NewOrder from "../Pages/NewOrder";
 import { deleteAPI, getSingleOrders } from "../helper/helper";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import PriceFormatter from "../helper/priceFormatter";
+import Invoice from "../components/Invoice";
 
 const columns = [
   { name: "ID", uid: "id", sortable: true },
   { name: "Product Image", uid: "productImages" },
   { name: "PRODUCT NAME", uid: "name", sortable: true },
-  { name: "QUANTITY", uid: "quantity", sortable: true },
   { name: "CATEGORY", uid: "category" },
-  { name: "DISCOUNT PRICE", uid: "discountPrice", sortable: true },
   { name: "STOCK", uid: "stock", sortable: true },
   { name: "PRICE", uid: "price" },
-  // { name: "STATUS", uid: "status", sortable: true },
-  { name: "ACTIONS", uid: "actions" },
+  // { name: "ACTIONS", uid: "actions" },
 ];
 
 const statusOptions = [
@@ -60,22 +59,23 @@ const statusColorMap = {
 };
 
 const INITIAL_VISIBLE_COLUMNS = [
-  "productImages",
+  // "productImages",
   "name",
   "category",
-  // "status",
-  "discountPrice",
+  "status",
+  // "discountPrice",
   "stock",
   "price",
   "actions",
 ];
 
 export default function SingleOrderTable() {
-  
   const { id } = useParams();
   console.log("iddddd", id);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [invoiceId , setInvoiceId] = useState(id);
+  console.log("asfd" , invoiceId);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -92,7 +92,7 @@ export default function SingleOrderTable() {
     }
   };
 
- const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]);
 
   const fetchOrders = async () => {
     try {
@@ -111,10 +111,11 @@ export default function SingleOrderTable() {
         category: product.category,
         status: product.orderStatus,
         avatar: product.photos[0],
-        price: product.price,
+        price: <PriceFormatter price={product.price} />,
         stock: product.stock,
         discountPrice: product.discountPrice,
       }));
+
 
       setUsers(updatedUsers);
     } catch (error) {
@@ -122,12 +123,11 @@ export default function SingleOrderTable() {
     }
   };
 
- useEffect(() => {
-   fetchOrders();
- }, [id]);
+  useEffect(() => {
+    fetchOrders();
+  }, [id]);
 
- console.log("Users:", users);
-
+  console.log("Users:", users);
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
@@ -197,9 +197,9 @@ export default function SingleOrderTable() {
     switch (columnKey) {
       case "name":
         return (
-          <NavLink to={`/singleproduct/${user.id}`}>
+          // <NavLink to={`/singleproduct/${user.id}`}>
             <h2>{user.name}</h2>
-          </NavLink>
+          // </NavLink>
         );
       case "productImages":
         return (
@@ -367,7 +367,9 @@ export default function SingleOrderTable() {
               size="sm"
             >
             </Button> */}
-            <NewOrder />
+            <div className="bg-primary flex justify-center items-center text-white py-1 px-3 rounded-xl">
+              <Invoice btnText="Invoice" orderId={invoiceId} />
+            </div>
             {/* {isOpen == true && <NewOrder />} */}
           </div>
         </div>
@@ -463,6 +465,7 @@ export default function SingleOrderTable() {
               wrapper: "after:bg-primary after:text-background text-background",
             },
           }}
+          size="md"
           classNames={classNames}
           selectedKeys={selectedKeys}
           selectionMode="multiple"
@@ -483,7 +486,7 @@ export default function SingleOrderTable() {
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody emptyContent={"No users found"} items={sortedItems}>
+          <TableBody emptyContent={"No Order Details found"} items={sortedItems}>
             {sortedItems.map((item) => (
               <TableRow key={item.id}>
                 {headerColumns.map((column) => (

@@ -7,9 +7,9 @@ import {
   deleteDiscounts,
 } from "../../helper/helper";
 import toast, { Toaster } from "react-hot-toast";
-import { Button } from "@nextui-org/react";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { Select, SelectItem } from "@nextui-org/react";
+import LoadingButton from "../../components/LoadingButton"
 
 const AddDiscount = () => {
   const [loading, setLoading] = useState(false);
@@ -101,9 +101,9 @@ const AddDiscount = () => {
 
   const navigate = useNavigate();
 
-  const submitHandler = async (e) => {
+  const submitHandler = async () => {
+    setLoading(true)
     console.log(" sid ", discount);
-    e.preventDefault();
 
     let flag = true;
     discount.map((item) => {
@@ -118,13 +118,14 @@ const AddDiscount = () => {
       }
     });
 
-    if(flag === false){
+    if (flag === false) {
+      setLoading(false);
       return;
-    }
-    else{
+    } else {
       setIsLoading(true);
       try {
         const res = await uploadDiscount(discount);
+        console.log(loading);
         toast.success("Discount Added Successfully");
         fetchedDiscount();
         setIsLoading(false);
@@ -238,15 +239,18 @@ const AddDiscount = () => {
               >
                 Add Item
               </button>
+              {!loading ? (
                 <button
-                  onClick={(e) => {
-                    submitHandler(e);
-                    setLoading(true);
-                  }}
+                  onClick={submitHandler}
                   className="bg-success ml-[30px] text-white text-sm font-medium h-[40px] px-5 rounded-lg"
                 >
                   Add
                 </button>
+              ) : (
+                <div>
+                  <LoadingButton />
+                </div>
+              )}
             </div>
           </div>
 
@@ -364,15 +368,19 @@ const AddDiscount = () => {
               >
                 Add Discount
               </button>
+              {!loading ? (
                 <button
-                  onClick={(e) => {
-                    console.log(loading);
-                    submitHandler(e);
-                  }}
+                  onClick={submitHandler}
                   className="bg-success ml-[30px] text-white text-sm font-medium h-[40px] px-5 rounded-lg"
                 >
                   Add
                 </button>
+              ) : (
+                <div>
+                  {" "}
+                  <LoadingButton />{" "}
+                </div>
+              )}
             </div>
           </div>
         </div>

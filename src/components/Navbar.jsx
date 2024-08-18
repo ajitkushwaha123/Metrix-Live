@@ -3,7 +3,7 @@ import { FaBell } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
 import useFetch from "../hooks/fetch.hooks";
 import { FaShop } from "react-icons/fa6";
-import { metrix } from "../assets/index";
+import { logo, metrix } from "../assets";
 import { PiHamburger } from "react-icons/pi";
 import { MdDashboardCustomize } from "react-icons/md";
 import { BsHandbag } from "react-icons/bs";
@@ -31,7 +31,7 @@ const navLinks = [
     link: "/order",
   },
   {
-    title: "Inventory",
+    title: "Menu",
     icon: <BsFolder2Open />,
     link: "/inventory",
   },
@@ -84,7 +84,9 @@ const Navbar = ({ title }) => {
             }}
             className="text-[20px] sm:hidden ml-[10px] mr-[5px]"
           />
-          <img className="sm:hidden" src={metrix} />
+          <div className="bg-primary sm:hidden p-2 rounded-xl">
+            <img className="w-[28px] h-[28px]" src={logo} />
+          </div>
           <div className="text-[22px] text-medium">
             <h2>{title}</h2>
           </div>

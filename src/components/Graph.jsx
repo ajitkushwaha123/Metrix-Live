@@ -36,20 +36,20 @@ const Graph = ({title , present , present2 , height="327px"}) => {
       <div className="flex justify-between items-center w-full px-[20px] md:px-7 py-4">
         <div className="">
           <p className="text-[18px] font-poppins text-medium mr-[15px]">
-            Marketting
+            Analytics
           </p>
         </div>
         <div>
-          <button className="bg-secondary flex justify-center items-center md:px-[6px] py-[1px] rounded-xl mr-[20px]">
+          <button className="flex justify-center items-center md:px-[6px] py-[1px] rounded-xl mr-[20px]">
             <Dropdown backdrop="blur">
               <DropdownTrigger
                 color="slate-400"
                 classNames="text-[40px] text-txtPrimary"
               >
-                <Button className="text-[16px]">
+                <button className="flex justify-center items-center bg-primary text-white px-[15px] py-2 rounded-xl outline-none text-[16px]">
                   {renderTimePeriod()}
-                  <MdOutlineKeyboardArrowDown />
-                </Button>
+                  <MdOutlineKeyboardArrowDown className='text-[20px] ml-[7px]'/>
+                </button>
               </DropdownTrigger>
               <DropdownMenu variant="faded" aria-label="Static Actions">
                 <DropdownItem

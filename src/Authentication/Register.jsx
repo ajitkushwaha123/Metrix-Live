@@ -9,7 +9,7 @@ import { toast, Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { registerValidate, loginValidate } from "../helper/validate";
 import { postOrderTable, registerUser, verifyPassword } from "../helper/helper";
-import { Button } from "@nextui-org/react";
+import LoadingButton from "../components/LoadingButton";
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
@@ -25,29 +25,25 @@ const Register = () => {
 
   const postTable = async (tables) => {
     const res = await postOrderTable(tables);
-    console.log("snehuuuuu", res);
   };
 
   const formik = useFormik({
     initialValues: {
-      username: "123456",
-      email: "123456@gmail.com",
-      password: "123456",
+      username: "",
+      email: "",
+      password: "",
     },
     validate: registerValidate,
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
       setLoading(true);
-      values = await Object.assign(values);
       let registerPromise = registerUser(values);
       toast.promise(registerPromise, {
         loading: "Creating...",
         success: <b>Register Successfully... !</b>,
         error: <b>Could not Register... !</b>,
       });
-
-      setLoading(false);
 
       registerPromise
         .then((res) => {
@@ -56,20 +52,27 @@ const Register = () => {
             password: values.password,
           });
 
-          loginPromise.then((res) => {
-            try {
-              let { token } = res.data.data;
-              console.log("token:", token);
-              localStorage.setItem("token", token);
+          loginPromise
+            .then((res) => {
+              try {
+                let { token } = res.data.data;
+                console.log("token:", token);
+                localStorage.setItem("token", token);
 
-              postTable(tables);
-              navigate("/dashboard");
+                postTable(tables);
+                navigate("/dashboard");
+                setLoading(false);
+              } catch (error) {
+                console.error("Error extracting token:", error);
+                setLoading(false);
+              }
+            })
+            .catch((error) => {
+              toast.error(
+                "Ex Ka number yaad rehta hai, par password nahi 😔💔"
+              );
               setLoading(false);
-            } catch (error) {
-              console.error("Error extracting token:", error);
-              setLoading(false);
-            }
-          });
+            });
         })
         .catch((error) => {
           let loginPromise = verifyPassword({
@@ -77,20 +80,29 @@ const Register = () => {
             password: values.password,
           });
 
-          loginPromise.then((res) => {
-            try {
-              let { token } = res.data.data;
-              localStorage.setItem("token", token);
-              navigate("/dashboard");
+          loginPromise
+            .then((res) => {
+              try {
+                let { token } = res.data.data;
+                localStorage.setItem("token", token);
+                navigate("/dashboard");
+                toast.success("Login successfully ...!")
+                setLoading(false);
+              } catch (error) {
+                console.error("Error extracting token:", error);
+                setLoading(false);
+              }
+            })
+            .catch((error) => {
+              toast.error(
+                "Ex Ka number yaad rehta hai, par password nahi 😔💔"
+              );
               setLoading(false);
-            } catch (error) {
-              console.error("Error extracting token:", error);
-              setLoading(false);
-            }
-          });
+            });
         });
     },
   });
+
 
   return (
     <div className="w-full font-poppins flex justify-center items-center">
@@ -170,21 +182,15 @@ const Register = () => {
             {!loading && (
               <div>
                 <button
-                  onClick={() => {
-                    setLoading(true), formik.handleSubmit();
-                  }}
+                  onClick={formik.handleSubmit}
                   type="submit"
-                  className="bg-primary px-[20px] py-2 rounded-md text-white text-[18px]"
+                  className="bg-primary px-[20px] py-2 rounded-xl text-white text-[18px]"
                 >
                   Register
                 </button>
               </div>
             )}
-            {loading && (
-              <Button color="primary" isLoading>
-                Loading
-              </Button>
-            )}
+            {loading && <div className=""><LoadingButton /></div>}
           </div>
         </div>
       </form>

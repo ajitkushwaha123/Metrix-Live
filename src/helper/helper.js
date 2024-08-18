@@ -1,10 +1,10 @@
 // Api request
 import { user } from "@nextui-org/react";
 import axios from "axios";
-axios.defaults.baseURL = "https://metrix-backend.onrender.com";
+axios.defaults.baseURL = "http://localhost:8000";
 import { jwtDecode } from "jwt-decode";
 
-const API_URL = "https://metrix-backend.onrender.com/api";
+const API_URL = "http://localhost:8000/api";
 // Authentication function
 export async function authenticate(username) {
   try {
@@ -117,7 +117,6 @@ export async function registerUser(credential) {
     } = await axios.post(`/api/register`, credential);
 
     let { username, email } = credential;
-
     if (status === 201) {
       await axios.post("/api/registerMail", {
         username,
@@ -1276,11 +1275,21 @@ export async function deleteDiscounts(id) {
 }
 
 export async function invoiceGenerator(values){
+  const token = localStorage.getItem("token");
+  console.log("token" , token);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+
   try{
-    const res = await axios.post(`http://localhost:8000/api/invoice/create` , values);
+    const {data} = await axios.post(`http://localhost:8000/api/invoice/create`  , values , config);
     console.log("Invoice Generateddddddddddddd:", values);  
-    console.log("Invoice Generated:", res);
-    return Promise.resolve({data: res});
+    console.log("Invoice Generated:", data);
+    return Promise.resolve(data);
   }
   catch(err){
     console.log("Error Generating Invoice:", err);

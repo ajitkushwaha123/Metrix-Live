@@ -5,6 +5,7 @@ import { uploadVariant, getVariant, deleteVariants } from "../../helper/helper";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@nextui-org/react";
 import { RiDeleteBinLine } from "react-icons/ri";
+import LoadingButton from "../../components/LoadingButton";
 
 const AddVariant = () => {
   const [loading, setLoading] = useState(false);
@@ -60,17 +61,37 @@ const AddVariant = () => {
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
-    setIsLoading(true);
     e.preventDefault();
+    setLoading(true);
 
     try {
+
+      let flag = 0;
+      {variant.map((item , index) => {
+        if(item.name === "")
+        {
+          flag = 1;
+        }
+      })}
+
+      if(flag)
+      {
+        toast.error("Please fill all the fields");
+        setLoading(false);
+        return ;
+      }
+
+      setIsLoading(true);
+
       const res = await uploadVariant(variant);
       toast.success("Variant Added Successfully");
       fetchedVariant();
+      setLoading(false);
       setIsLoading(false);
     } catch (err) {
       toast.error("Failed to Add Variant");
       setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -134,21 +155,20 @@ const AddVariant = () => {
               >
                 Add Item
               </button>
-              {!loading && (
+              {!loading ? (
                 <button
                   onClick={(e) => {
                     submitHandler(e);
-                    setLoading(true);
                   }}
                   className="bg-success ml-[30px] text-white text-sm font-medium h-[40px] px-5 rounded-lg"
                 >
                   Add
                 </button>
-              )}
-              {loading && (
-                <Button color="primary" isLoading>
-                  Loading
-                </Button>
+              ) : (
+                <div>
+                  {" "}
+                  <LoadingButton />{" "}
+                </div>
               )}
             </div>
           </div>
@@ -223,14 +243,21 @@ const AddVariant = () => {
               >
                 Add Variant
               </button>
-              <button
-                onClick={(e) => {
-                  submitHandler(e);
-                }}
-                className="bg-success ml-[30px] text-white text-sm font-medium h-[40px] px-5 rounded-lg"
-              >
-                Add
-              </button>
+              {!loading ? (
+                <button
+                  onClick={(e) => {
+                    submitHandler(e);
+                  }}
+                  className="bg-success ml-[30px] text-white text-sm font-medium h-[40px] px-5 rounded-lg"
+                >
+                  Add
+                </button>
+              ) : (
+                <div>
+                  {" "}
+                  <LoadingButton />{" "}
+                </div>
+              )}
             </div>
           </div>
         </div>

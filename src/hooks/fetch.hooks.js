@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { getUsername } from "../helper/helper";
 
-axios.defaults.baseURL = "https://metrix-backend.onrender.com";
+axios.defaults.baseURL = "http://localhost:8000";
 
 export default function useFetch(query) {
     const [getData, setData] = useState({

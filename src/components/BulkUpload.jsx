@@ -55,14 +55,14 @@ const BulkUpload = () => {
     <>
       <Toaster position="top-center" reverseOrder={false} />
       {/* Modal toggle */}
-      <Button
+      <button
         onClick={toggleModal}
         className="block flex justify-center items-center font-poppins text-white bg-primary font-medium rounded-lg text-sm px-5 py-1.5 text-center "
         type="button"
         size="sm"
       >
         <span className="text-[21px] mr-[8px]">+</span> Bulk Upload
-      </Button>
+      </button>
 
       {/* Main modal */}
       {isOpen && (

@@ -7,6 +7,8 @@ import { getOrders } from "../helper/helper";
 import { TbFileInvoice } from "react-icons/tb";
 import toast , {Toaster} from 'react-hot-toast'
 import Invoice from "./Invoice";
+import LoadingButton from "../components/LoadingButton"
+import PriceFormatter from "../helper/priceFormatter"
 
 const TableBooking = () => {
   const [rows, setRows] = useState([{ id: 1, tables: 1, title: "Row 1" }]);
@@ -144,9 +146,7 @@ const TableBooking = () => {
                 </button>
               )}
               {loading && (
-                <Button color="primary" isLoading>
-                  Loading
-                </Button>
+                <LoadingButton />
               )}
             </div>
           </div>
@@ -194,10 +194,13 @@ const TableBooking = () => {
                 </div>
                 <div className="grid px-[10px] py-[20px] md:py-[30px] grid-cols-4 sm:grid-cols-6 md:grid-cols-10 gap-4">
                   {Array.from({ length: row.tables }, (_, i) => {
+
                     let orderId ;
                     const bookedItem = bookedTable.find(
                       (item) => item.tableId === `${row.id}${i}` && item.orderStatus !== "completed"
                     );
+
+                    console.log("bookedItem" , bookedItem);
 
                     return (
                       <NavLink key={i} to={`/menu/${row.id}${i}`}>
@@ -206,16 +209,37 @@ const TableBooking = () => {
                             <div
                               className={`relative flex flex-col bg-secondary relative border-2 border-dashed border-slate-200 w-[60px] sm:w-[80px] h-[60px] sm:h-[80px] text-[20px] font-semibold flex justify-center items-center`}
                             >
-                              <button className="bg-success text-white px-[10px] py-1 rounded-xl">
-                                {bookedItem.price}
+                              <button className="bg-success text-[14px] text-white px-[10px] py-1 rounded-xl">
+                                {/* <br /> {bookedItem.discountType} */}
+                                {bookedItem.discountType === "percentage" ? (
+                                  <span>
+                                    <PriceFormatter
+                                      price={
+                                        bookedItem.price +
+                                        (bookedItem.tax * bookedItem.price) /
+                                          100 - (bookedItem.discount * bookedItem.price)/100
+                                      }
+                                    />
+                                  </span>
+                                ) : (
+                                  <span>
+                                    <PriceFormatter
+                                      price={
+                                        bookedItem.price +
+                                        (bookedItem.tax * bookedItem.price) /
+                                          100
+                                      }
+                                    />
+                                  </span>
+                                )}
                               </button>
-                                <div className="text-white mb-[-20px] w-[30px] h-[30px] rounded-full bg-primary flex justify-center items-center">
-                                  <Invoice
-                                    btnText=""
-                                    orderId={bookedItem._id}
-                                    className="text-white mt-[6px] flex justify-center items-center bg-primary px-[10px]"
-                                  />
-                                </div>
+                              <div className="text-white mb-[-20px] w-[30px] h-[30px] rounded-full bg-primary flex justify-center items-center">
+                                <Invoice
+                                  btnText=""
+                                  orderId={bookedItem._id}
+                                  className="text-white mt-[6px] flex justify-center items-center bg-primary px-[10px]"
+                                />
+                              </div>
                             </div>
                           </NavLink>
                         ) : (

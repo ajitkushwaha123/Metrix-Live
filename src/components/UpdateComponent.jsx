@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { LuShirt } from "react-icons/lu";
-import { upload, upload2 } from "../assets";
 import { useFormik } from "formik";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -9,11 +8,8 @@ import { useProductContext } from "../context/productContext";
 import { updateProduct , getCategory } from "../helper/helper";
 import { Textarea, Input, Checkbox } from "@nextui-org/react";
 import toast, { Toaster } from "react-hot-toast";
-import axios from "axios";
 import { Select, SelectItem  , Avatar} from "@nextui-org/react";
 
-
-const API = "http://localhost:8000/api/products";
 
 const UpdateComponent = () => {
   const navigate = useNavigate();
@@ -23,7 +19,7 @@ const UpdateComponent = () => {
 
   const [cloudinaryPhotos, setCloudinaryPhotos] = useState([]);
   const [uploadedPhotos, setUploadedPhotos] = useState([]);
-  const [imageUrl, setImageUrl] = useState(); // Replace with your initial image URL
+  const [imageUrl, setImageUrl] = useState('https://cdn-icons-png.flaticon.com/128/9093/9093050.png'); // Replace with your initial image URL
   const [draft, setDraft] = useState(false);
   const [category, setCategory] = useState([]);
   const [selectCategory, setSelectCategory] = useState("");
@@ -46,8 +42,8 @@ const UpdateComponent = () => {
 
   useEffect(() => {
     if (singleProduct.photos) {
-      setCloudinaryPhotos(singleProduct.photos);
-      setImageUrl(singleProduct.photos[0]);
+      setCloudinaryPhotos(singleProduct.photos || '');
+      setImageUrl(singleProduct.photos[0] || '');
       formik.setFieldValue("productName", singleProduct.productName);
       formik.setFieldValue("category", singleProduct.category);
       formik.setFieldValue("price", singleProduct.price);
@@ -146,12 +142,15 @@ const UpdateComponent = () => {
       <form className="flex w-full flex-col px-[30px] justify-center items-center rounded-xl items-center">
         <div className="px-[40px] min-w-[300px] max-w-[480px] mb-[30px] bg-white py-[20px] justify-center items-center flex ">
           <div className="font-poppins bg-white">
-            <div className="flex justify-center items-center flex-col">
+            {/* <div className="flex justify-center items-center flex-col">
               <div>
                 <div className="flex justify-center items-center">
                   <img
                     className="rounded-xl p-2 w-[180px] h-[180px] cursor-pointer"
-                    src={imageUrl}
+                    src={
+                      imageUrl  ||
+                      "https://cdn-icons-png.flaticon.com/128/9093/9093050.png"
+                    }
                     onClick={() => document.getElementById("photos").click()}
                   />
                   <input
@@ -183,10 +182,10 @@ const UpdateComponent = () => {
                       </button>
                     </div>
                   ))}
-                  {uploadedPhotos.map((photo, index) => (
+                  {uploadedPhotos?.map((photo, index) => (
                     <div key={index} className="relative">
                       <img
-                        src={URL.createObjectURL(photo)}
+                        src={URL.createObjectURL(photo || "")}
                         alt={`Uploaded Photo ${index}`}
                         className="rounded-lg w-[100px] h-[100px]"
                       />
@@ -201,7 +200,7 @@ const UpdateComponent = () => {
                   ))}
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className=" mb-[20px]">
               <Input
@@ -237,14 +236,6 @@ const UpdateComponent = () => {
                         key={item.key}
                         className="flex py-[4px] px-[4px] items-center gap-2"
                       >
-                        <Avatar
-                          alt={item.data.photo}
-                          className="flex-shrink-0"
-                          size="sm"
-                          src={item.data.photo}
-                          isBordered
-                          color="success"
-                        />
                         <div className="flex flex-col">
                           <span>{selectCategory}</span>
                           <span className="text-default-500 text-tiny"></span>
@@ -259,14 +250,6 @@ const UpdateComponent = () => {
                         onClick={() => setSelectCategory(user.name)}
                         className="flex gap-2 py-[3px] px-[4px] items-center"
                       >
-                        <Avatar
-                          isBordered
-                          // color={"suc"}
-                          alt={user.name}
-                          className="flex-shrink-0"
-                          size="sm"
-                          src={user.photo}
-                        />
                         <div className="flex flex-col">
                           <span className="text-small">{user.name}</span>
                           <span className="text-tiny text-default-400">
@@ -279,7 +262,8 @@ const UpdateComponent = () => {
                 </Select>
               </div>
               <NavLink to={"/add-category"}>
-                <input type="checkbox" />Add New
+                <input type="checkbox" />
+                Add New
                 {/* <button className="bg-primary ml-[10px] text-white px-4 py-2 rounded-lg">
                   Create New
                 </button> */}
@@ -296,7 +280,7 @@ const UpdateComponent = () => {
                 size="lg"
                 startContent={
                   <div className="pointer-events-none flex items-center">
-                    <span className="text-default-400 text-medium">$</span>
+                    <span className="text-default-400 text-medium"> ₹ </span>
                   </div>
                 }
               />
@@ -327,7 +311,7 @@ const UpdateComponent = () => {
                 className="bg-black mx-[15px] rounded-lg flex justify-center items-center text-white px-6 text-[18px] py-2"
               >
                 <MdOutlineArrowDropDown className="mr-[15px]" />
-                <span className="hidden md:block">Save as</span> Draft
+                <span className="hidden md:block">Save as </span> Draft
               </button>
               <button
                 onClick={(e) => {
@@ -335,7 +319,7 @@ const UpdateComponent = () => {
                 }}
                 className="bg-primary rounded-lg flex justify-center items-center text-white px-6 text-[18px] py-2"
               >
-                <span className="hidden md:block">Save & </span> Publish
+                <span className="hidden md:block">Save & </span> <p> Publish</p>
               </button>
             </div>
           </div>

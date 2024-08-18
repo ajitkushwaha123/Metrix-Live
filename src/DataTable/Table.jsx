@@ -31,6 +31,7 @@ import { NavLink, useParams } from "react-router-dom";
 import { loader } from "../assets";
 import BulkUpload from "../components/BulkUpload";
 import { deleteProducts, getProd } from "../helper/helper";
+import PriceFormatter from "../helper/priceFormatter";
 
 const statusColorMap = {
   published: "success",
@@ -38,7 +39,7 @@ const statusColorMap = {
   draft: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name","category" , "price" , "role", "stock", "status", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["name","category" , "stock" , "price", "status", "actions"];
 
 export default function InvTable() {
 
@@ -76,7 +77,7 @@ useEffect(() => {
 const users = [];
 console.log("chrrc" , products);
 
-fetchedProducts.forEach((product) => {
+fetchedProducts?.forEach((product) => {
   const user = {
     id: product._id,
     name: product.productName,
@@ -84,7 +85,7 @@ fetchedProducts.forEach((product) => {
     status: product.status,
     // age: product.age,
     avatar: product.photos[0],
-    price: product.price,
+    price: <PriceFormatter price={product.price} />,
     stock: product.stock,
     // discountPrice : product.discountPrice,
   };
@@ -158,20 +159,6 @@ const reloadFunction = () => {
     const cellValue = user[columnKey];
 
     switch (columnKey) {
-      case "name":
-        return (
-          <User
-            avatarProps={{radius: "full", size: "sm", src: user.avatar}}
-            classNames={{
-              description: "text-default-500",
-            }}
-            description={user.email}
-            name={cellValue}
-            id={user.id}
-          >
-            {user.email}
-          </User>
-        );
       case "role":
         return (
           <div className="flex flex-col">

@@ -208,14 +208,6 @@ const AddProduct = () => {
                               key={item.key}
                               className="flex py-[4px] px-[4px] items-center gap-2"
                             >
-                              <Avatar
-                                alt={item.data.photo}
-                                className="flex-shrink-0"
-                                size="sm"
-                                src={item.data.photo}
-                                isBordered
-                                color="success"
-                              />
                               <div className="flex flex-col">
                                 <span>{item.data.name}</span>
                                 <span className="text-default-500 text-tiny">
@@ -232,14 +224,6 @@ const AddProduct = () => {
                               onClick={() => setSelectCategory(user.name)}
                               className="flex gap-2 py-[3px] px-[4px] items-center"
                             >
-                              <Avatar
-                                isBordered
-                                // color={"suc"}
-                                alt={user.name}
-                                className="flex-shrink-0"
-                                size="sm"
-                                src={user.photo}
-                              />
                               <div className="flex flex-col">
                                 <span className="text-small">{user.name}</span>
                                 <span className="text-tiny text-default-400">
@@ -253,8 +237,6 @@ const AddProduct = () => {
                     </div>
                   </div>
 
-                  
-
                   <div className="mb-[20px] ">
                     <Input
                       {...formik.getFieldProps("price")}
@@ -266,7 +248,7 @@ const AddProduct = () => {
                       startContent={
                         <div className="pointer-events-none flex items-center">
                           <span className="text-default-400 w-[full] text-medium">
-                            $
+                            ₹
                           </span>
                         </div>
                       }

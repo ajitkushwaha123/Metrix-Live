@@ -33,13 +33,14 @@ import { deleteAPI, getOrders } from "../helper/helper";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import PriceFormatter from "../helper/priceFormatter";
 
 const columns = [
   { name: "ID", uid: "id", sortable: true },
   {name : "Product Image", uid: "productImages"},
   { name: "PRODUCT NAME", uid: "name", sortable: true },
   { name: "ORDER DATE", uid: "orderDate", sortable: true },
-  { name: "QUANTITY", uid: "quantity", sortable: true },
+  // { name: "QUANTITY", uid: "quantity", sortable: true },
   {name: "CUSTOMER NAME", uid: "customerName"},
   { name: "PAYMENT TYPE", uid: "paymentType", sortable: true },
   { name: "TOTAL PRICE", uid: "total", sortable: true },
@@ -71,13 +72,12 @@ const orderTypeColorMap = {
 
 const statusColorMap = {
   completed: "success",
-  pending : "danger",
+  pending : "primary",
   progress: "warning",
-  cancelled: "error"
+  cancelled: "danger"
 };
 
 const INITIAL_VISIBLE_COLUMNS = [
-  "productImages",
   "name",
   "orderDate",
   "quantity",
@@ -118,54 +118,61 @@ export default function OrderTable() {
   };
 
   const fetchOrders = async () => {
-    const {data} = await getOrders(`/orders`);
+    try {
+      
+      const { data } = await getOrders(`/orders`);
+      console.log("Orders:", data);
 
-    console.log("Orders:", data);
-    const newUsers = data.orders.map((order) => {
-      console.log("Order:", order.products);
-      const singleproduct = order.products.map((product) => {
-        return product.product;
+      const newUsers = data.orders.map((order) => {
+        console.log("Order:", order.products);
+
+        const singleProducts = order.products.map((product) => product.product);
+        console.log("Single Products:", singleProducts);
+
+        const productNames = singleProducts.map(
+          (product) => product.productName
+        );
+        const productImages = singleProducts.map((product) => product.photos);
+
+        const firstImage =
+          productImages.length > 0
+            ? productImages[0]
+            : "https://res.cloudinary.com/drku1djt5/image/upload/fl_preserve_transparency/v1723651866/delivery-man_v3vwub.jpg?_s=public-apps";
+
+        console.log("First Image:", firstImage);
+
+        const firstProductName = productNames[0] || "No Product Name";
+        const totalProducts = productNames.length;
+        const orderDate = new Date(order.createdAt);
+
+        return {
+          id: order._id,
+          name: firstProductName,
+          productImages: productImages,
+          avatar: firstImage,
+          total: <PriceFormatter price={order.price} />,
+          phone: order.phone,
+          totalProducts: totalProducts,
+          status: order.orderStatus,
+          newCustomer: order.newCustomer,
+          customerName: order.customerName,
+          orderNote: order.orderNote,
+          paymentType: order.paymentType,
+          products: order.products,
+          quantity: order.quantity,
+          orderType: order.orderType,
+          orderDate: orderDate.toLocaleDateString(),
+          invoice: order.invoice,
+        };
       });
 
-      console.log("Single Product:", singleproduct);
-
-      const productName = singleproduct.map((product) => {
-        return product.productName;
-      });
-
-      const productImage = singleproduct.map((product) => {
-        return product.photos;
-      });
-
-      const firstImage = productImage[0];
-
-      console.log("productImage", productImage);
-
-      const firstProductName = productName[0];
-      const totalProduct = productName.length;
-      const orderDate = new Date(order.createdAt);
-      return {
-        id: order._id,
-        name: firstProductName,
-        productImages: productImage,
-        avatar: firstImage,
-        total: order.price,
-        phone: order.phone,
-        totalProducts: totalProduct,
-        status: order.orderStatus,
-        newCustomer: order.newCustomer,
-        customerName: order.customerName,
-        orderNote: order.orderNote,
-        paymentType: order.paymentType,
-        products: order.products,
-        quantity: order.quantity,
-        orderType: order.orderType,
-        orderDate: `${orderDate.toLocaleDateString()}`,
-      };
-    });
-
-    setUsers(newUsers);
+      setUsers(newUsers);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
   };
+
+
 
   useEffect(() => {
     fetchOrders();
@@ -235,7 +242,7 @@ export default function OrderTable() {
     switch (columnKey) {
       case "name":
         return (
-          <NavLink to={`/singleproduct/${user.id}`}>
+          <NavLink to={`/order-view/${user.id}`}>
             <h2>{user.name}</h2>
           </NavLink>
         );
@@ -256,7 +263,12 @@ export default function OrderTable() {
             )}
           >
             {user.productImages.map((image) => (
-              <Avatar src={image} />
+              <Avatar
+                src={
+                  image ||
+                  "https://res.cloudinary.com/drku1djt5/image/upload/fl_preserve_transparency/v1723651866/delivery-man_v3vwub.jpg?_s=public-apps"
+                }
+              />
             ))}
           </AvatarGroup>
         );
@@ -313,10 +325,11 @@ export default function OrderTable() {
                 <DropdownItem>
                   <NavLink to={`/order-view/${user.id}`}>View</NavLink>
                 </DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
+                {/* <DropdownItem>Edit</DropdownItem> */}
                 <DropdownItem onClick={() => deleteOrder(user.id)}>
                   Delete
                 </DropdownItem>
+                Download Bill
               </DropdownMenu>
             </Dropdown>
           </div>
