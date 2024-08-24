@@ -97,7 +97,7 @@ export default function ViewCustomerTable() {
 
     try {
       const res = await axios.delete(
-        `http://localhost:8000/api/orders/${id}`,
+        `${process.env.REACT_APP_API_URL}/api/orders/${id}`,
         config
       );
       console.log("Response:", res);
@@ -134,11 +134,11 @@ export default function ViewCustomerTable() {
        console.log("productImage", productImage);
 
        const firstProductName = productName[0];
-       const totalProducts = productName.length;
+       const totalProduct = productName.length;
        const orderDate = new Date(order.createdAt);
        return {
          id: order._id,
-         totalProducts: totalProducts,
+         totalProducts: totalProduct,
          name: firstProductName,
          productImages: productImage,
          avatar: firstImage,

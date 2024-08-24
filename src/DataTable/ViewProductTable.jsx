@@ -60,15 +60,15 @@ export default function VeiwProductTable() {
         },
       };
 
-      console.log(`http://localhost:8000/api/products/${id}`);
+      console.log(`${process.env.REACT_APP_API_URL}/api/products/${id}`);
       setLoading(true);
 
       axios
-        .delete(`http://localhost:8000/api/products/${id}`, config)
+        .delete(`${process.env.REACT_APP_API_URL}/api/products/${id}`, config)
         .then((res) => {
           setLoading(false);
           console.log(res);
-          // getProducts(`http://localhost:8000/api/product`);
+          // getProducts(`${process.env.REACT_APP_API_URL}/api/product`);
           window.location.reload();
           navigate("/inventory");
         })

@@ -1329,7 +1329,7 @@ export async function invoiceGenerator(values){
   };
 
   try{
-    const {data} = await axios.post(`http://localhost:8000/api/invoice/create`  , values , config);
+    const {data} = await axios.post(`${API_URL}/invoice/create`  , values , config);
     console.log("Invoice Generateddddddddddddd:", values);  
     console.log("Invoice Generated:", data);
     return Promise.resolve(data);
@@ -1356,7 +1356,7 @@ export async function invoiceEdit(id , values) {
 
   try {
     const { data } = await axios.put(
-      `http://localhost:8000/api/invoice/edit/${id}`,
+      `${API_URL}/invoice/edit/${id}`,
       values,
       config
     );
