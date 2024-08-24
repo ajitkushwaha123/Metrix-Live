@@ -448,8 +448,9 @@ export default function OrderTable() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <NewOrder className="text-sm"/>
-            {/* {isOpen == true && <NewOrder />} */}
+            <NavLink to={`/menu/-1`}>
+              <button className="px-[10px] text-white bg-primary py-1.5 rounded-xl">Create Order</button>
+            </NavLink>
           </div>
         </div>
         <div className="flex font-poppins justify-between items-center">

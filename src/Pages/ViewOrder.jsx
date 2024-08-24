@@ -242,23 +242,7 @@ const ViewOrder = () => {
                     <h2 className="text-slate-400">
                       Total amount :
                       <br />
-                      {discountType === "percentage" ? (
-                        <span className="text-black">
-                          {(
-                            <PriceFormatter
-                              price={price + (price * tax) / 100 - (price * discount)/100}
-                            />
-                          ) || <Skeleton width={50} />}
-                        </span>
-                      ) : (
-                        <span className="text-black">
-                          {(
-                            <PriceFormatter
-                              price={price + (price * tax) / 100 - discount}
-                            />
-                          ) || <Skeleton width={50} />}
-                        </span>
-                      )}
+                      <PriceFormatter price={price} />
                     </h2>
                   </div>
                 </div>

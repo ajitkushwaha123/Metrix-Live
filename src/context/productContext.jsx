@@ -4,7 +4,7 @@ import reducer from "../reducer/productReducer";
 
 const AppContext = createContext();
 
-const API = "http://localhost:8000/api";
+const API = `${process.env.REACT_APP_API_URL}/api`;
 
 const initialState = {
   isLoading: false,

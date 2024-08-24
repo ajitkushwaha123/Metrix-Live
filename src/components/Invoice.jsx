@@ -6,29 +6,29 @@ import { ImWhatsapp } from "react-icons/im";
 import { NavLink, redirect } from "react-router-dom";
 import { TbFileInvoice } from "react-icons/tb";
 import { getSingleOrders } from "../helper/helper";
-import { useNavigate , Navigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import PriceFormatter from "../helper/priceFormatter";
 
-
-const Invoice = ({ btnText = "Inovice" , orderId}) => {
-  console.log("dd" , orderId);
+const Invoice = ({ btnText = "Inovice", orderId }) => {
+  console.log("dd", orderId);
   const [{ isLoading, apiData, serverError }] = useFetch();
   const [isOpen, setIsOpen] = useState(false);
   const [share, setShare] = useState(false);
-    const [id, setId] = useState(orderId);
-    const [customerName, setCustomerName] = useState("");
-    const [phone, setPhone] = useState("");
-    const [paymentType, setPaymentType] = useState("");
-    const [price, setPrice] = useState("");
-    const [status, setStatus] = useState("");
-    const [orderNote, setOrderNote] = useState("");
-    const [quantity, setQuantity] = useState("");
-    const [orderType, setOrderType] = useState("");
-    const [orderDate, setOrderDate] = useState("");
-    const [invoiceId , setInvoiceId] = useState("");
-    const [taxes , setTaxes] = useState(0);
-    const [discount , setDiscount] = useState(0);
-    const [discountType , setDiscountType] = useState("absolute");
+  const [id, setId] = useState(orderId);
+  const [customerName, setCustomerName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [paymentType, setPaymentType] = useState("");
+  const [price, setPrice] = useState("");
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [status, setStatus] = useState("");
+  const [orderNote, setOrderNote] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [orderType, setOrderType] = useState("");
+  const [orderDate, setOrderDate] = useState("");
+  const [invoiceId, setInvoiceId] = useState("");
+  const [taxes, setTaxes] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [discountType, setDiscountType] = useState("absolute");
 
   const fetchProduct = async (id) => {
     try {
@@ -47,20 +47,21 @@ const Invoice = ({ btnText = "Inovice" , orderId}) => {
         options
       );
 
-      setCustomerName(product.customerName);
+      setCustomerName(product.customerName || "");
       setPhone(product.phone);
-      setPaymentType(product.paymentType);
-      setPrice(product.price);
-      setStatus(product.status);
-      setOrderNote(product.orderNote);
-      setQuantity(product.quantity);
-      setOrderType(product.orderType);
+      setPaymentType(product.paymentType || "");
+      setPrice(product.price || 0);
+      setStatus(product.status || " ");
+      setOrderNote(product.orderNote || "");
+      setQuantity(product.quantity || 0);
+      setOrderType(product.orderType || "");
       setOrderDate(formattedDate);
       setInvoiceId(product.invoiceId || "");
       setDiscount(product.discount || 0);
       setDiscountType(product.discountType || 0);
       setTaxes(product.tax || 0);
-      console.log("df" , product.tax);
+      console.log("df", product.tax);
+      setTotalAmount(product.totalAmount || 0);
     } catch (error) {
       console.error("Error fetching product:", error);
     }
@@ -80,11 +81,10 @@ const Invoice = ({ btnText = "Inovice" , orderId}) => {
   };
 
   useEffect(() => {
-    if(id != "")
-    {
-        fetchProduct(id);
+    if (id != "") {
+      fetchProduct(id);
     }
-  } , [id])
+  }, [id]);
 
   const navigate = useNavigate();
 
@@ -92,18 +92,17 @@ const Invoice = ({ btnText = "Inovice" , orderId}) => {
     e.preventDefault();
     const url = `http://localhost:8000/api/invoice/invoice/${invoiceId}`;
     alert(url);
-    window.location.href = url;
-    // window.open(url);
+    window.open(url, "_blank");
   };
 
-  const phoneNumber = phone; // Replace with the target number  
-  const message = "Here is bill of recent order !.";  
-  const pdfLink = `http://localhost:8000/api/invoice/invoice/${invoiceId}`; // Replace with your PDF link  
+  const phoneNumber = phone; // Replace with the target number
+  const message = "Here is bill of recent order !.";
+  const pdfLink = `http://localhost:8000/api/invoice/invoice/${invoiceId}`; // Replace with your PDF link
 
-  const handleClick = () => {  
-    const encodedMessage = encodeURIComponent(`${message} ${pdfLink}`);  
-    window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`);  
-  };  
+  const handleClick = () => {
+    const encodedMessage = encodeURIComponent(`${message} ${pdfLink}`);
+    window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`);
+  };
 
   return (
     <>
@@ -206,7 +205,7 @@ const Invoice = ({ btnText = "Inovice" , orderId}) => {
                             Bill Value :
                           </span>
                           <span className="block text-sm font-medium text-gray-800 dark:text-neutral-200">
-                            <PriceFormatter price={price} />
+                            <PriceFormatter price={totalAmount} />
                           </span>
                         </div>
 
@@ -273,7 +272,7 @@ const Invoice = ({ btnText = "Inovice" , orderId}) => {
                               <span>Payment to Front</span>
                               <span>
                                 {" "}
-                                <PriceFormatter price={price} />{" "}
+                                <PriceFormatter price={totalAmount} />{" "}
                               </span>
                             </div>
                           </li>
@@ -285,7 +284,7 @@ const Invoice = ({ btnText = "Inovice" , orderId}) => {
                                   -{" "}
                                   {discountType === "percentage" ? (
                                     <PriceFormatter
-                                      price={(price * discount) / 100}
+                                      price={(totalAmount * discount) / 100}
                                     />
                                   ) : (
                                     <PriceFormatter price={discount} />
@@ -301,7 +300,7 @@ const Invoice = ({ btnText = "Inovice" , orderId}) => {
                                 <span>
                                   +{" "}
                                   <PriceFormatter
-                                    price={(price * taxes) / 100}
+                                    price={(totalAmount * taxes) / 100}
                                   />
                                 </span>
                               </div>
@@ -315,9 +314,9 @@ const Invoice = ({ btnText = "Inovice" , orderId}) => {
                                   {" "}
                                   <PriceFormatter
                                     price={
-                                      price +
-                                      (price * taxes) / 100 -
-                                      (discount * price) / 100
+                                      totalAmount +
+                                      (totalAmount * taxes) / 100 -
+                                      (discount * totalAmount) / 100
                                     }
                                   />
                                 </span>
@@ -326,7 +325,7 @@ const Invoice = ({ btnText = "Inovice" , orderId}) => {
                                   {" "}
                                   <PriceFormatter
                                     price={
-                                      price + (price * taxes) / 100 - discount
+                                      totalAmount + (totalAmount * taxes) / 100 - discount
                                     }
                                   />
                                 </span>

@@ -30,15 +30,12 @@ import { NavLink, useParams } from "react-router-dom";
 import { loader } from "../assets";
 import { deleteCustomers, getCustomers, getOrders } from "../helper/helper";
 import NewCustomer from "../Pages/Customers/AddCustomer";
-import UpdateCustomer from "../Pages/Customers/UpdateCustomer";
 
 const columns = [
   { name: "ID", uid: "id", sortable: true },
   { name: "Profile", uid: "customerImage" },
   { name: "CUSTOMER NAME", uid: "name", sortable: true },
   { name: "PHONE", uid: "phone", sortable: true },
-  { name: "Orders", uid: "orderLength", sortable: true },
-  { name: "ORDER TOTAL", uid: "price", sortable: true },
   { name: "CUSTOMER SINCE", uid: "customerSince", sortable: true },
   // {name: "ROLE", uid: "role", sortable: true},
   { name: "STATUS", uid: "status", sortable: true },
@@ -59,7 +56,6 @@ const INITIAL_VISIBLE_COLUMNS = [
   "customerImage",
   "name",
   "phone",
-  "orderLength",
   "price",
   "customerSince",
   "status",
@@ -92,7 +88,7 @@ export default function InvTable() {
   const fetchCustomers = async () => {
     try {
       const response = await getCustomers('/customer');
-      console.log("data", response);
+      console.log("customer data", response);
 
       const newCustomers = response.map((product) => ({
         id: product._id,
@@ -100,10 +96,8 @@ export default function InvTable() {
         phone: product.phone,
         status: product.status,
         imageColor: product.imageColor,
-        orderLength: product.products.length | 0,
         customerImage: product.customerImage,
         price: product.OrderPrice,
-        order: product.products,
         customerSince: formatCustomerSince(product.createdAt),
       }));
 

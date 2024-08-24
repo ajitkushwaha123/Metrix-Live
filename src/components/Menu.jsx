@@ -12,6 +12,9 @@ import {
   invoiceGenerator,
   getDiscount,
   getTax,
+  invoiceEdit,
+  searchProduct,
+  searchProductByShortCode,
 } from "../helper/helper";
 import { useFormik } from "formik";
 import toast, { Toaster } from "react-hot-toast";
@@ -21,6 +24,8 @@ import { useParams, useNavigate, NavLink } from "react-router-dom";
 import useFetch from "../hooks/fetch.hooks";
 import { FaDownload } from "react-icons/fa6";
 import PriceFormatter from "../helper/priceFormatter";
+import LoadingButton from "./LoadingButton";
+import Variant from "./Variant";
 
 const Menu = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -41,13 +46,18 @@ const Menu = () => {
   const navigate = useNavigate();
   const [invoiceId, setInvoiceId] = useState("");
   const [isGeneratingInvoice, setIsGeneratingInvoice] = useState(false);
-  const [fetchDiscount , setFetchDiscount] = useState([]);
-  const [fetchTax , setFetchTax] = useState([]);
-  const [discount , setDiscount] = useState(0);
-  const [discountType , setDiscountType] = useState("percentage");
-  const [tax , setTax] = useState(0);
-
+  const [fetchDiscount, setFetchDiscount] = useState([]);
+  const [fetchTax, setFetchTax] = useState([]);
+  const [discount, setDiscount] = useState(0);
+  const [discountType, setDiscountType] = useState("percentage");
+  const [tax, setTax] = useState(0);
+  const [kotGenerated, setKotGenerated] = useState(false);
+  const [addingOrder, setAddingOrder] = useState(false);
+  const [selectedVariants, setSelectedVariants] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [shortCodeQuery, setShortCodeQuery] = useState("");
   const [{ apiData, serverError }] = useFetch();
+  const [finalValue , setFinalValue] = useState(0);
 
   const items = [];
   const invoice = {
@@ -64,7 +74,7 @@ const Menu = () => {
     orderDate: "",
     orderTime: "",
     items: [],
-    tax: "",
+    tax: 0,
   };
 
   const { id } = useParams();
@@ -77,45 +87,43 @@ const Menu = () => {
     setIsGeneratingInvoice(true);
     try {
       const res = await invoiceGenerator(invoice);
-      setInvoiceId(res._id);
-      console.log("Invoice Generated:", res._id);
-      formik.setFieldValue("invoiceId", res._id.toString());
+      console.log("Response from invoiceGenerator:", res);
+      if (res && res._id) {
+        setInvoiceId(res._id.toString());
+        console.log("Invoice ID set:", res._id);
+        formik.setFieldValue("invoiceId", res._id.toString());
+        return res._id.toString(); // Return the invoice ID
+      } else {
+        console.error("No _id found in response");
+        return null;
+      }
     } catch (err) {
-      console.log("Error while generating invoice:", err);
+      toast.error(`Error Generating Invoice: ${err}`);
+      return null;
     } finally {
       setIsGeneratingInvoice(false);
     }
   };
 
-  useEffect(() => {
-    const updateTotalCartValue = () => {
-      let totalQuantity = 0;
-      const total = cartProduct
-        .reduce((total, product) => {
-          const quantity = quantities[product._id] || 0;
-          totalQuantity += quantity;
-          return total + product.price * quantity;
-        }, 0)
-        .toFixed(2);
-
-      console.log("Total:", total);
-      setTotal(total);
-      console.log("Total Quantity:", totalQuantity);
-      formik.setFieldValue("price", total);
-    };
-
-    updateTotalCartValue();
-  }, [cartProduct, quantities]);
+  const editInvoice = async (invoice) => {
+    console.log("invoiceId", invoiceId);
+    try {
+      const res = await invoiceEdit(invoiceId, invoice);
+      console.log("res", res);
+    } catch (err) {
+      toast.error(`Error editing invoice: ${err}`);
+      console.log("Error editing Invoice");
+    }
+  };
 
   const handleOrder = async (values) => {
     setChangeBtn(true);
-    console.log("Order Added", values.products);
-    values.invoiceId = invoiceId;
+    console.log("Order Added", values);
 
     const response = await insertOrders(values);
 
     console.log("Order Added", response);
-    console.log("Invoice:", values.invoiceId);
+    console.log("Invoice:", invoiceId);
 
     setChangeBtn(false);
     return response;
@@ -139,20 +147,20 @@ const Menu = () => {
       tableId: id.toString(),
       invoiceId: "",
       customerSince: "",
-      newCustomer : true,
-      discount : discount,
-      tax : tax,
-      discountType : discountType,
+      newCustomer: true,
+      discount: 0,
+      tax: 0,
+      discountType: "percentage",
+      totalAmount : "",
     },
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
-
+      setAddingOrder(true);
       values.tableId = id;
-      console.log("test", values);
-
-      console.log("Form Values:", values);
+      console.log("Form Values:", values); 
       values.customerSince = selectCustomerSince;
+
       if (selectCustomer !== "") {
         values.customerId = selectCustomer;
         values.customerName = selectCustomerName;
@@ -163,11 +171,10 @@ const Menu = () => {
       } else {
         console.log("New Customer");
         let customerPromise = await addCustomers(values);
-
         console.log("Customer ID", customerPromise.customer._id);
         values.customerId = customerPromise.customer._id;
       }
-      
+
       values.discount = discount;
       values.tax = tax;
       values.discountType = discountType;
@@ -177,51 +184,99 @@ const Menu = () => {
       invoice.paymentType = values.paymentType;
       invoice.orderType = values.orderType;
       invoice.items = items;
-      invoice.tax = (tax*values.price)/100;
-      if(discountType == "percentage")
-      {
-        invoice.discount = (discount * values.price) / 100;
+      invoice.tax = (tax * values.totalAmount) / 100 || 0;
+      invoice.discount =
+        discountType === "percentage"
+          ? (discount * values.totalAmount) / 100
+          : discount;
+      invoice.orderDate = new Date().toLocaleDateString();
+      invoice.orderTime = new Date().toLocaleTimeString();
+
+      let currentInvoiceId = invoiceId;
+      if (!currentInvoiceId) {
+        currentInvoiceId = await generateInvoice(invoice);
+        console.log("Invoice ID is not set yet.");
+      } else {
+        await editInvoice(invoice);
       }
-      else
-      {
+
+      if (currentInvoiceId) {
+        values.invoiceId = currentInvoiceId;
+        console.log("Added Product:", AddedProduct);
+
+        if (values.products.length === 0) {
+          values.products = AddedProduct;
+        }
+
+        console.log("values", values);
+
+        try {
+          let orderPromise = handleOrder(values);
+          toast.promise(orderPromise, {
+            loading: "Creating...",
+            success: <b>Order Created Successfully... !</b>,
+            error: <b>Couldn't Create Order... !</b>,
+          });
+
+          console.log("Id", currentInvoiceId);
+
+          formik.resetForm();
+          setAddingOrder(false);
+          if(values.tableId !== "-1")
+          {
+            navigate("/table-booking");
+          }
+        } catch (err) {
+          console.error("Error handling order:", err);
+          setAddingOrder(false);
+        }
+      } else {
+        console.error("Failed to generate or retrieve invoice ID");
+        setAddingOrder(false);
+      }
+    },
+  });
+
+  const generateKOT = async () => {
+    try {
+      invoice.items = items;
+      invoice.tax = (tax * finalValue) / 100 || 0;
+      if (discountType == "percentage") {
+        invoice.discount = (discount * finalValue) / 100;
+      } else {
         invoice.discount = discount;
       }
       invoice.orderDate = new Date().toLocaleDateString();
       invoice.orderTime = new Date().toLocaleTimeString();
+      const response = await generateInvoice(invoice);
+      setKotGenerated(true);
+      toast.success("KOT Generated... !");
+      console.log(response);
+    } catch (err) {
+      toast.error(`Error Generating KOT... ! ${err}`);
+    }
+  };
 
-      await generateInvoice(invoice);
+  useEffect(() => {
+    const updateTotalCartValue = () => {
+      let totalQuantity = 0;
+      const total = cartProduct
+        .reduce((total, product) => {
+          const itemKey = `${product._id}-${product.price}`;
+          const quantity = quantities[itemKey] || 0;
+          totalQuantity += quantity;
+          return total + product.price * quantity;
+        }, 0)
+        .toFixed(2);
 
-      if (!invoiceId) {
-        console.log("Invoice ID is not set yet.");
-        return;
-      }
+      console.log("Total:", total);
+      setTotal(total);
+      console.log("Total Quantity:", totalQuantity);
+      formik.setFieldValue("totalAmount" , total);
+    };
 
-      setChangeBtn(true);
-      console.log("Added Product:", AddedProduct);
-
-      if (values.products.length === 0) {
-        values.products = AddedProduct;
-      }
-
-      try {
-        let orderPromise = handleOrder(values);
-        toast.promise(orderPromise, {
-          loading: "Creating...",
-          success: <b>Order Created Successfully... !</b>,
-          error: <b>Couldn't Create Order... !</b>,
-        });
-
-        console.log("Id", invoiceId);
-
-        formik.resetForm();
-        setCartProduct([]);
-        setQuantities({});
-        setTotal(0);
-      } catch (err) {
-        console.log("Error while handling order:", err);
-      }
-    },
-  });
+    updateTotalCartValue();
+  }, [cartProduct, quantities]);
 
   const fetchAllProducts = async () => {
     try {
@@ -269,43 +324,6 @@ const Menu = () => {
     fetchCategory();
   }, []);
 
-  const handleProductClick = (e, item) => {
-    e.preventDefault();
-    toast.success(`${item.productName} added to cart`);
-
-    const existingCartItem = cartProduct.find(
-      (cartItem) => cartItem._id === item._id
-    );
-
-    if (existingCartItem) {
-      setCartProduct((prevCartProduct) =>
-        prevCartProduct.map((cartItem) =>
-          cartItem._id === item._id
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
-            : cartItem
-        )
-      );
-    } else {
-      setCartProduct((prevCartProduct) => [
-        ...prevCartProduct,
-        { ...item, quantity: 1 },
-      ]);
-    }
-
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [item._id]: (prevQuantities[item._id] || 0) + 1,
-    }));
-  };
-
-  const addItem = (event, productId) => {
-    event.preventDefault();
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: (prevQuantities[productId] || 0) + 1,
-    }));
-  };
-
   const deleteItem = (event, productId) => {
     event.preventDefault();
     setQuantities((prevQuantities) => {
@@ -347,6 +365,131 @@ const Menu = () => {
   useEffect(() => {
     fetchedTax();
   }, []);
+
+  const handleDownload = (e) => {
+    e.preventDefault();
+    const url = `http://localhost:8000/api/invoice/kot/${invoiceId}`;
+    alert(url);
+    window.open(url, "_blank");
+  };
+
+  const handleShowVariant = (e, variants) => {
+    e.preventDefault();
+    console.log("varr", variants);
+
+    setSelectedVariants(variants);
+  };
+
+  const handleProductClick = (e, item) => {
+    if (e) e.preventDefault();
+    toast.success(`${item.productName} added to cart`);
+
+    const itemKey = `${item._id}-${item.price}`;
+    console.log("Item Key:", itemKey);
+
+    const existingCartItem = cartProduct.find(
+      (cartItem) => cartItem._id === item._id && cartItem.price === item.price
+    );
+
+    if (existingCartItem) {
+      setCartProduct((prevCartProduct) =>
+        prevCartProduct.map((cartItem) =>
+          cartItem._id === item._id && cartItem.price === item.price
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        )
+      );
+      console.log("Existing item found, quantity increased.");
+    } else {
+      setCartProduct((prevCartProduct) => [
+        ...prevCartProduct,
+        { ...item, quantity: 1 },
+      ]);
+      console.log("New item added to cart with quantity 1.");
+    }
+
+    setQuantities((prevQuantities) => {
+      const newQuantities = {
+        ...prevQuantities,
+        [itemKey]: (prevQuantities[itemKey] || 0) + 1,
+      };
+      console.log("Updated Quantities:", newQuantities);
+      return newQuantities;
+    });
+  };
+
+  const handleVariantSelect = (variant, variantName, product) => {
+    const updatedProduct = {
+      ...product,
+      productName: product.productName + " - " + variantName,
+      price: variant,
+    };
+    handleProductClick(null, updatedProduct);
+  };
+
+  const addItem = (event, itemKey) => {
+    event.preventDefault();
+    setQuantities((prevQuantities) => {
+      const newQuantities = {
+        ...prevQuantities,
+        [itemKey]: (prevQuantities[itemKey] || 0) + 1,
+      };
+      console.log("Add Item - Updated Quantities:", newQuantities);
+      return newQuantities;
+    });
+
+    setCartProduct((prevCartProduct) =>
+      prevCartProduct.map((cartItem) =>
+        `${cartItem._id}-${cartItem.price}` === itemKey
+          ? { ...cartItem, quantity: cartItem.quantity + 1 }
+          : cartItem
+      )
+    );
+  };
+
+  const searchByName = async (e) => {
+    setIsLoading(true);
+    console.log(searchQuery);
+    try {
+      const { data } = await searchProduct(searchQuery);
+      console.log("data", data);
+      setProduct(data);
+      setIsLoading(false);
+    } catch (err) {
+      toast.error(`Error Finding Product ${err}`);
+      setIsLoading(false);
+    }
+  };
+
+  const searchByShortCode = async (e) => {
+    setIsLoading(true);
+    console.log(searchQuery);
+    try {
+      const { data } = await searchProductByShortCode(shortCodeQuery);
+      console.log(data);
+      setProduct(data);
+      setIsLoading(false);
+    } catch (err) {
+      toast.error(`Error Finding Product ${err}`);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const calculateTotalValue = () => {
+      const finalTotal =
+        discountType === "percentage"
+          ? total - (discount * total) / 100 + (tax * total) / 100
+          : total - discount + (total * tax) / 100;
+
+      setFinalValue(finalTotal);
+      console.log("final", finalTotal);
+
+      formik.setFieldValue("price", finalTotal);
+    };
+
+    calculateTotalValue();
+  }, [total, discount, tax, discountType]);
 
   return (
     <div className="flex w-full bg-[#EEF0FA] px-[15px] md:px-[0px] md:ml-[15px] flex-col md:flex-row my-[20px] text-[16px]">
@@ -392,13 +535,37 @@ const Menu = () => {
         </div>
         <div className="w-[50%] mx-3 my-[-10px] h-[100%] md:w-[70%]">
           <div className="flex justify-center items-center">
-            <div className="w-[50%] h-[50px] flex rounded-md bg-white items-center ml-[10px]">
-              <CiSearch className="text-[20px] mx-[10px]" />
-              <input type="text" className="w-[90%] outline-none py-2" />
+            <div className="w-[50%] px-[10px] h-[50px] flex rounded-md bg-white items-center ml-[10px]">
+              <input
+                placeholder="Search Product Name"
+                onChange={(e) => setSearchQuery(e.target.value)}
+                type="text"
+                className="w-[90%] outline-none py-2"
+              />
+              <button
+                onClick={(e) => {
+                  searchByName(e);
+                }}
+                className="bg-primary py-2 rounded-xl text-white"
+              >
+                <CiSearch className="text-[20px] mx-[10px]" />
+              </button>
             </div>
-            <div className="w-[50%] py-3 h-[50px] flex justify-center rounded-md bg-white items-center ml-[10px]">
-              <FaSearchengin className="text-[15px] mx-[10px]" />
-              <input type="text" className="w-[100%] outline-none py-2" />
+            <div className="w-[50%] px-[10px] h-[50px] flex rounded-md bg-white items-center ml-[10px]">
+              <input
+                placeholder="Search By short Code"
+                onChange={(e) => setShortCodeQuery(e.target.value)}
+                type="text"
+                className="w-[90%] outline-none py-2"
+              />
+              <button
+                onClick={(e) => {
+                  searchByShortCode(e);
+                }}
+                className="bg-primary py-2 rounded-xl text-white"
+              >
+                <FaSearchengin className="text-[20px] mx-[10px]" />
+              </button>
             </div>
           </div>
 
@@ -406,15 +573,36 @@ const Menu = () => {
             <div className="mx-3 my-3 h-[92%] w-[100%] overflow-y-scroll chalaja rounded-md">
               {product?.length > 0 ? (
                 <div className="grid cursor-pointer grid-cols-1 md:grid-cols-4 gap-4">
-                  {product?.map((item, index) => (
-                    <div
-                      key={index}
-                      onClick={(e) => handleProductClick(e, item)}
-                      className="h-[80px] overflow-x-scroll chalaja flex justify-center items-center bg-white p-4 rounded-md text-start"
-                    >
-                      {item.productName}
-                    </div>
-                  ))}
+                  {product?.map((item, index) =>
+                    item?.variant?.length > 0 ? (
+                      <div
+                        key={index}
+                        onClick={(e) => handleShowVariant(e, item?.variant)}
+                        className="h-[80px] overflow-x-scroll chalaja flex justify-center items-center bg-white p-4 rounded-md text-start"
+                      >
+                        <p>
+                          <Variant
+                            variant={item?.variant}
+                            productName={item?.productName}
+                            onVariantSelect={(variant) => {
+                              const variantName = item.variant.find(
+                                (v) => v.value === variant
+                              )?.variant;
+                              handleVariantSelect(variant, variantName, item);
+                            }}
+                          />
+                        </p>
+                      </div>
+                    ) : (
+                      <div
+                        key={index}
+                        onClick={(e) => handleProductClick(e, item)}
+                        className="h-[80px] overflow-x-scroll chalaja flex justify-center items-center bg-white p-4 rounded-md text-start"
+                      >
+                        <p>{item.productName}</p>
+                      </div>
+                    )
+                  )}
                 </div>
               ) : (
                 <div className="w-full px-[12px] bg-white h-[100%] mx-auto flex flex-col justify-center items-center">
@@ -470,31 +658,32 @@ const Menu = () => {
               )}
               {cartProduct?.length > 0 &&
                 cartProduct?.map((item, index) => {
+                  const itemKey = `${item._id}-${item.price}`;
                   console.log("cartProduct:", cartProduct);
                   return (
                     <div
                       key={index}
                       className="flex py-3 cursor-pointer overflow-y-scroll chalaja border-2 border-slate-100 rounded-md my-[10px] px-[10px] justify-between items-center"
                     >
-                      <div className=" w-[50%]">
+                      <div className="w-[50%]">
                         <p>{item.productName}</p>
                       </div>
 
                       <div>
-                        <div className="flex  w-[30%] justify-center items-center">
-                          {quantities[item._id] > 0 ? (
+                        <div className="flex w-[30%] justify-center items-center">
+                          {quantities[itemKey] > 0 ? (
                             <div className="flex">
                               <button
-                                onClick={(event) => addItem(event, item._id)}
+                                onClick={(event) => addItem(event, itemKey)}
                                 className="border-2 bg-slate-200 px-[8px] border-indigo-500/40 text-[17px] font-medium rounded-md"
                               >
                                 +
                               </button>
                               <div className="mx-[8px]">
-                                {quantities[item._id]}
+                                {quantities[itemKey]}
                               </div>
                               <button
-                                onClick={(event) => deleteItem(event, item._id)}
+                                onClick={(event) => deleteItem(event, itemKey)}
                                 className="border-2 bg-slate-200 px-[7px] border-indigo-500/40 text-[17px] font-medium rounded-md"
                               >
                                 -
@@ -502,7 +691,7 @@ const Menu = () => {
                             </div>
                           ) : (
                             <button
-                              onClick={(event) => addItem(event, item._id)}
+                              onClick={(event) => addItem(event, itemKey)}
                               className="text-primary cursor-pointer justify-center items-center"
                             >
                               <div>Add Item</div>
@@ -510,9 +699,9 @@ const Menu = () => {
                           )}
                         </div>
                       </div>
-                      <div className=" w-[20%]">
+                      <div className="w-[20%]">
                         <PriceFormatter
-                          price={item.price * quantities[item._id]}
+                          price={item.price * (quantities[itemKey] || 1)}
                         />
                       </div>
                     </div>
@@ -547,9 +736,7 @@ const Menu = () => {
                         );
                       }}
                     >
-                      <option selected>
-                        Select {discountType} {discount}
-                      </option>
+                      <option selected>Apply Coupon</option>
                       {fetchDiscount?.map((item) => (
                         <option
                           className="py-2 flex justify-between items-center rounded-md chalaja"
@@ -557,8 +744,6 @@ const Menu = () => {
                           value={item.name}
                         >
                           <div>{item.name}</div>
-                          {item.couponValue}
-                          {item.couponType}
                         </option>
                       ))}
                     </select>
@@ -598,23 +783,38 @@ const Menu = () => {
               </div>
               <div className="w-[100%] h-[50px] flex justify-center items-center">
                 <button className="bg-primary w-[33%] mx-[10px] text-white px-[15px] py-3 rounded-md">
-                  {discountType === "percentage" ? (
-                    <PriceFormatter price={total - (discount * total) / 100 + ((tax*total)/100)} />
-                  ) : (
-                    <PriceFormatter
-                      price={total - discount + (total*tax)/100} 
-                    />
-                  )}
+                  <PriceFormatter price={finalValue} />
                 </button>
 
                 {cartProduct?.length > 0 && (
                   <div className="flex w-[66.66%] justify-center items-center">
-                    <button className="bg-success flex justify-center items-center w-[50%] mx-[10px] text-white px-[15px] py-3 rounded-md">
-                      <span className="mr-[5px]">
-                        <FaDownload />
-                      </span>
-                      KOT
-                    </button>
+                    {kotGenerated === false ? (
+                      isGeneratingInvoice === true ? (
+                        <LoadingButton />
+                      ) : (
+                        <button
+                          onClick={generateKOT}
+                          className="bg-success text-[14px] flex justify-center items-center w-[50%] mx-[10px] text-white px-[15px] py-3 rounded-md"
+                        >
+                          <span className="mr-[5px]">
+                            <FaDownload />
+                          </span>
+                          KOT
+                        </button>
+                      )
+                    ) : isGeneratingInvoice === true ? (
+                      <LoadingButton />
+                    ) : (
+                      <button
+                        onClick={(e) => handleDownload(e)}
+                        className="bg-success text-[14px] flex justify-center items-center w-[50%] mx-[10px] text-white px-[15px] py-3 rounded-md"
+                      >
+                        <span className="mr-[5px]">
+                          <FaDownload />
+                        </span>
+                        Download
+                      </button>
+                    )}
                     <button
                       onClick={() => {
                         setCheckout(true);
@@ -646,8 +846,9 @@ const Menu = () => {
         <div>
           {cartProduct?.length > 0 &&
             cartProduct.map((product) => {
-              if (quantities[product._id] > 0) {
-                AddedProduct.push({ product, quantities });
+              const itemKey = `${product._id}-${product.price}`;
+              if (quantities[itemKey] > 0) {
+                AddedProduct.push({ product, quantity: quantities[itemKey] });
                 items.push(product);
                 console.log("Product", AddedProduct);
                 return <div key={product._id}></div>;
@@ -886,18 +1087,15 @@ const Menu = () => {
                 >
                   Back
                 </button>
-                {!changeBtn && (
+                {addingOrder === false ? (
                   <button
                     onClick={(e) => formik.handleSubmit(e)}
                     className="bg-primary px-[10px] py-[5px] text-white rounded-md"
                   >
                     Add Order
                   </button>
-                )}
-                {changeBtn && (
-                  <Button color="primary" isLoading>
-                    Loading
-                  </Button>
+                ) : (
+                  <LoadingButton />
                 )}
               </div>
             </div>
@@ -1130,18 +1328,15 @@ const Menu = () => {
                     >
                       Back
                     </button>
-                    {!changeBtn && (
+                    {addingOrder === false ? (
                       <button
                         onClick={(e) => formik.handleSubmit(e)}
                         className="bg-primary px-[10px] py-[5px] text-white rounded-md"
                       >
                         Add Order
                       </button>
-                    )}
-                    {changeBtn && (
-                      <Button color="primary" isLoading>
-                        Loading
-                      </Button>
+                    ) : (
+                      <LoadingButton />
                     )}
                   </div>
                 </div>

@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getSingleCustomer } from "../../helper/helper";
-import Navbar from "../../components/Navbar";
 import BreadCrum from "../../components/BreadCrum";
-import { MdOutlineArrowDropDown } from "react-icons/md";
-import { BsFolder2Open, BsHandbag } from "react-icons/bs";
-import ViewProductTable from "../../DataTable/ViewProductTable";
 import { CiUser } from "react-icons/ci";
 import { MdOutlinePayment } from "react-icons/md";
 import { CiLocationOn } from "react-icons/ci";
-import { capitalize } from "../../DataTable/utils";
-import SingleOrderTable from "../../DataTable/SingleOrderTable";
 import ViewCustomerTable from "../../DataTable/ViewCustomerTable";
-import { format } from "date-fns"; // Import date-fns for formatting
+import { format } from "date-fns"; 
 
 const ViewCustomer = () => {
   const { id } = useParams();
@@ -63,7 +57,7 @@ const ViewCustomer = () => {
 
         <div className="py-[30px]">
           <div className="flex flex-col md:flex-row">
-            <div className="mx-[10px] bg-[white] pb-[15px] rounded-xl  md:w-[33%]">
+            <div className="mx-[10px] sm:w-[50%] md:w-[33%] bg-[white] pb-[15px] rounded-xl  md:w-[33%]">
               <div className="flex justify-between p-5">
                 <div className="flex justify-center items-center">
                   <p className="bg-secondary mr-[15px] text-[24px] text-primary p-2 rounded-lg">
@@ -105,7 +99,7 @@ const ViewCustomer = () => {
               </div>
             </div>
 
-            <div className="mx-[10px] my-[25px] md:my-[0px] bg-[white] pb-[15px] rounded-xl  md:w-[33%]">
+            {/* <div className="mx-[10px] my-[25px] md:my-[0px] bg-[white] pb-[15px] rounded-xl  md:w-[33%]">
               <div className="flex justify-between p-5">
                 <div className="flex justify-center items-center">
                   <p className="bg-secondary mr-[15px] text-[24px] text-primary p-2 rounded-lg">
@@ -120,7 +114,7 @@ const ViewCustomer = () => {
                     <h2 className="text-slate-400">
                       Quantity : <br />
                       <span className="text-black text-medium text-[17px] px-[3px]">
-                        {/* {quantity} */}
+                        
                       </span>
                     </h2>
                   </div>
@@ -135,9 +129,9 @@ const ViewCustomer = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            <div className="mx-[10px] bg-[white] pb-[15px] rounded-xl  md:w-[33%]">
+            {/* <div className="mx-[10px] bg-[white] pb-[15px] rounded-xl  md:w-[33%]">
               <div className="flex justify-between p-5">
                 <div className="flex justify-center items-center">
                   <p className="bg-secondary mr-[15px] text-[24px] text-primary p-2 rounded-lg">
@@ -163,7 +157,7 @@ const ViewCustomer = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 

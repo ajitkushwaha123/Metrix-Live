@@ -79,7 +79,7 @@ const RecentOrders = () => {
         </h2>
         {isLoading ? (
           <div className="w-full">
-            <Skeleton height={600} width={501} />
+            <Skeleton height={600} width={400} />
           </div>
         ) : (
           <div className="md:px-7">

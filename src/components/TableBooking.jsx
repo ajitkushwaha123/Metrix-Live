@@ -14,7 +14,6 @@ const TableBooking = () => {
   const [rows, setRows] = useState([{ id: 1, tables: 1, title: "Row 1" }]);
   const [loading , setLoading] = useState(false);
   const [isLoading , setIsLoading] = useState(false);
-  const [bookedPrice , setBookedPrice] = useState(0);
   const [bookedTable , setBookedTable] = useState([]);
 
   const fetchOrders = async () => {
@@ -197,8 +196,12 @@ const TableBooking = () => {
 
                     let orderId ;
                     const bookedItem = bookedTable.find(
-                      (item) => item.tableId === `${row.id}${i}` && item.orderStatus !== "completed"
+                      (item) =>
+                        item.tableId === `${row.id}${i}` &&
+                        item.orderStatus !== "completed" &&
+                        item.orderStatus !== "cancelled"
                     );
+
 
                     console.log("bookedItem" , bookedItem);
 
@@ -210,28 +213,7 @@ const TableBooking = () => {
                               className={`relative flex flex-col bg-secondary relative border-2 border-dashed border-slate-200 w-[60px] sm:w-[80px] h-[60px] sm:h-[80px] text-[20px] font-semibold flex justify-center items-center`}
                             >
                               <button className="bg-success text-[14px] text-white px-[10px] py-1 rounded-xl">
-                                {/* <br /> {bookedItem.discountType} */}
-                                {bookedItem.discountType === "percentage" ? (
-                                  <span>
-                                    <PriceFormatter
-                                      price={
-                                        bookedItem.price +
-                                        (bookedItem.tax * bookedItem.price) /
-                                          100 - (bookedItem.discount * bookedItem.price)/100
-                                      }
-                                    />
-                                  </span>
-                                ) : (
-                                  <span>
-                                    <PriceFormatter
-                                      price={
-                                        bookedItem.price +
-                                        (bookedItem.tax * bookedItem.price) /
-                                          100
-                                      }
-                                    />
-                                  </span>
-                                )}
+                                <PriceFormatter price={bookedItem.price} />
                               </button>
                               <div className="text-white mb-[-20px] w-[30px] h-[30px] rounded-full bg-primary flex justify-center items-center">
                                 <Invoice

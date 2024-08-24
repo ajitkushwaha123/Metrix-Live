@@ -47,7 +47,7 @@ const Order = () => {
         <div className="w-full py-[20px] md:py-[0px] md:pl-[30px]">
           <Stats
             icon={<BsHandbag />}
-            title3={"Cancelled"}
+            title3={"Completed"}
             title1={"In-Progress"}
             txtColor={"text-red-200"}
             title2={"Pending"}

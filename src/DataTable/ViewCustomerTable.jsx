@@ -62,10 +62,8 @@ const statusColorMap = {
 };
 
 const INITIAL_VISIBLE_COLUMNS = [
-  "productImages",
   "name",
   "orderDate",
-  "quantity",
   "paymentType",
   "total",
   "status",
@@ -400,14 +398,13 @@ export default function ViewCustomerTable() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            {/* <Button
-              className="bg-primary text-background"
+            <NavLink to={`/menu/-1`}><button
+              className="bg-primary px-[15px] py-1 rounded-xl text-background"
               endContent={<PlusIcon />}
               size="sm"
             >
-            </Button> */}
-            <NewOrder />
-            {/* {isOpen == true && <NewOrder />} */}
+              Add Order
+             </button></NavLink>
           </div>
         </div>
         <div className="flex font-poppins justify-between items-center">

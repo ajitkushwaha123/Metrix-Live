@@ -1,10 +1,10 @@
 // Api request
 import { user } from "@nextui-org/react";
 import axios from "axios";
-axios.defaults.baseURL = "http://localhost:8000";
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 import { jwtDecode } from "jwt-decode";
 
-const API_URL = "http://localhost:8000/api";
+const API_URL = `${process.env.REACT_APP_API_URL}/api`;
 // Authentication function
 export async function authenticate(username) {
   try {
@@ -147,22 +147,37 @@ export async function addProduct(values) {
     console.log(values);
 
     const formData = new FormData();
-    formData.append("productName", values.productName); // Ensure productName is a single value
-    formData.append("discountPrice", values.discountPrice);
-    formData.append("orderType", values.orderType);
-    formData.append("longDescription", values.longDescription);
-    formData.append("variant", values.variant);
-    formData.append("shortDescription", values.shortDescription);
-    formData.append("category", values.category);
-    formData.append("price", values.price);
-    formData.append("stock", values.stock);
-    formData.append("status", values.status);
-    formData.append("photos", values.photos[0]); // Ensure photos is a single value
-    if (values.photos[1]) formData.append("photos", values.photos[1]);
-    if (values.photos[2]) formData.append("photos", values.photos[2]);
-    if (values.photos[3]) formData.append("photos", values.photos[3]);
-    console.log("Form Data:", values.photos);
+    formData.append("productName", values.productName || ""); // Ensure productName is a single value
+    formData.append("discountPrice", values.discountPrice || 0);
+    formData.append("orderType", values.orderType || "");
+    formData.append("longDescription", values.longDescription || "");
+    formData.append("shortDescription", values.shortDescription || "");
+    formData.append("category", values.category || "");
+    formData.append("price", values.price || 0);
+    formData.append("stock", values.stock || 0);
+    formData.append("status", values.status || "published");
+    formData.append("productType", values.productType || "others");
+    formData.append("shortCode", values.shortCode || "");
 
+    // Append each variant to the FormData
+    if (Array.isArray(values.variant)) {
+      values.variant.forEach((v, index) => {
+        formData.append(`variant[${index}][variant]`, v.variant);
+        formData.append(`variant[${index}][value]`, v.value);
+      });
+    }
+
+    // Ensure photos is defined and is an array
+    if (Array.isArray(values.photos)) {
+      formData.append("photos", values.photos[0] || ""); // Ensure photos is a single value
+      if (values.photos[1]) formData.append("photos", values.photos[1]);
+      if (values.photos[2]) formData.append("photos", values.photos[2]);
+      if (values.photos[3]) formData.append("photos", values.photos[3]);
+    } else {
+      formData.append("photos", ""); // Default value if photos is not an array
+    }
+
+    console.log("Form Data:", values.photos);
     console.log("Selected photos:", values.photos);
 
     const config = {
@@ -182,6 +197,7 @@ export async function addProduct(values) {
     return Promise.reject({ error: error.message });
   }
 }
+
 
 export async function updateProduct(values) {
   try {
@@ -664,8 +680,35 @@ export async function searchProduct(query) {
       },
     };
 
+    console.log("query" , query);
+
     const { data } = await axios.get(
       `${API_URL}/products?search=${query}`,
+      config
+    );
+    console.log(`${API_URL}/products?search=${query}`)
+    console.log("Search Products:", data);
+    return Promise.resolve({ data });
+  } catch (err) {
+    console.log("Error fetching products:", err);
+    return Promise.reject({ error: "Couldn't find products" });
+  }
+}
+
+export async function searchProductByShortCode(query) {
+  try {
+    const token = localStorage.getItem("token");
+    console.log(token);
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.get(
+      `${API_URL}/products/shortCode?search=${query}`,
       config
     );
     console.log("Search Products:", data);
@@ -1292,6 +1335,35 @@ export async function invoiceGenerator(values){
     return Promise.resolve(data);
   }
   catch(err){
+    console.log("Error Generating Invoice:", err);
+    return Promise.reject({ error: "Couldn't generate invoice" });
+  }
+}
+
+export async function invoiceEdit(id , values) {
+  const token = localStorage.getItem("token");
+  console.log("token", token);
+
+  console.log("id" , id);
+  console.log("val" , values);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  try {
+    const { data } = await axios.put(
+      `http://localhost:8000/api/invoice/edit/${id}`,
+      values,
+      config
+    );
+    console.log("Invoice Edited", values);
+    console.log("Invoice Generated:", data);
+    return Promise.resolve(data);
+  } catch (err) {
     console.log("Error Generating Invoice:", err);
     return Promise.reject({ error: "Couldn't generate invoice" });
   }

@@ -7,6 +7,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { createOrderValidate } from "../../helper/validate";
 import { Avatar , Button } from "@nextui-org/react";
 import { addCustomers } from "../../helper/helper";
+import LoadingButton from "../../components/LoadingButton";
 
 const NewCustomer = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,14 +30,14 @@ const NewCustomer = () => {
   const [selectedUser, setSelectedUser] = useState(null);
 
   const fetchProducts = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       const response = await getProd();
       setProducts(response.data);
-      setLoading(false);
+      // setLoading(false);
     } catch (error) {
       setError(error);
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -50,13 +51,16 @@ const NewCustomer = () => {
   };
 
   const handleCustomers = async (values) => {
+    setLoading(true);
     try {
       const  data  = await addCustomers(values)
 
       console.log("Customer Added", data);
+      setLoading(false);
       return Promise.resolve({ customer: data });
     } catch (err) {
       console.error("Error adding customer :", err.message);
+      setLoading(false);
       return Promise.reject({ err: err.message });
     }
   };
@@ -120,20 +124,21 @@ const handleImage = (e, user) => {
   setSelectedUser(user); 
   setSelected(true);
   console.log(image);
+  toast.success("Image Selected Successfully ...!")
 };
 
 
   return (
     <>
       {/* Modal toggle */}
-      <Button
+      <button
         onClick={toggleModal}
         className="block flex justify-center items-center font-poppins text-white bg-primary font-medium rounded-lg text-sm px-5 py-1.5 text-center "
         type="button"
         size="sm"
       >
         <span className="text-[21px] mr-[8px]">+</span> Add Customer
-      </Button>
+      </button>
 
       {/* Main modal */}
       {isOpen && (
@@ -181,7 +186,7 @@ const handleImage = (e, user) => {
                   onSubmit={formik.handleSubmit}
                   className="p-4  flex md:p-5"
                 >
-                  <img src={selected.img}/>
+                  <img src={selected.img} />
                   <div className="flex w-[100%] justify-center item-center flex-col">
                     <div className="flex justify-between items-center">
                       <h2>Customer Information</h2>
@@ -213,21 +218,21 @@ const handleImage = (e, user) => {
                             >
                               Select Profile
                             </label>
-                          
-                              <div className="custom-image flex overflow-x-scroll py-[10px] px-[7px] gap-4 w-auto">
-                                {users.map((user, index) => (
-                                  <div
-                                    onClick={(e) => handleImage(e, user)} // Pass the user object to handleImage
-                                    key={index}
-                                     >
-                                    <Avatar
-                                      isBordered
-                                      color={user.color}
-                                      src={user.img}
-                                    />
-                                  </div>
-                                ))}
-                              </div>  
+
+                            <div className="custom-image flex overflow-x-scroll py-[10px] px-[7px] gap-4 w-auto">
+                              {users.map((user, index) => (
+                                <div
+                                  onClick={(e) => handleImage(e, user)} // Pass the user object to handleImage
+                                  key={index}
+                                >
+                                  <Avatar
+                                    isBordered
+                                    color={user.color}
+                                    src={user.img}
+                                  />
+                                </div>
+                              ))}
+                            </div>
                           </div>
 
                           <div className="">
@@ -292,9 +297,13 @@ const handleImage = (e, user) => {
                       >
                         Cancel
                       </button>
-                      <button className="bg-primary px-[10px] py-[5px] text-white rounded-md">
-                        {newCustomer ? "Update Customer" : "Add Customer"}
-                      </button>
+                      {loading === true ? (
+                        <LoadingButton />
+                      ) : (
+                        <button className="bg-primary px-[10px] py-[5px] text-white rounded-md">
+                          {newCustomer ? "Update Customer" : "Add Customer"}
+                        </button>
+                      )}
                     </div>
                   </div>
                 </form>

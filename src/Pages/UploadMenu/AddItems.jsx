@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Select, SelectItem, Avatar } from "@nextui-org/react";
-import { getVariant, getCategory } from "../../helper/helper";
+import { getVariant, getCategory, addProduct } from "../../helper/helper";
 import { loader } from "../../assets/index";
+import { useFormik } from "formik";
+import toast , {Toaster} from "react-hot-toast";
+import LoadingButton from "../../components/LoadingButton";
+
 
 const productType = [
   { _id: 1, name: "Veg" },
@@ -19,64 +23,14 @@ const variantType = [
 
 const AddItems = () => {
   const [selectCategory, setSelectCategory] = useState("");
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectProductType, setSelectProductType] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [fetchedVariant, setFetchedVariant] = useState([]);
-  const [selectedProductType, setSelectedProductType] = useState("");
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      productName: "",
-      category: "",
-      price: "",
-      productType: "",
-      variant: [{ id: 1, variant: "", value: "" }],
-      shortCode: "",
-    },
-  ]);
+  const [selectedOption , setSelectedOption] = useState("");
+  const [customInput , setCustomInput] = useState("");
+  const [variants, setVariants] = useState([]);
+  const [loading , setLoading] = useState(false);
 
-  const [customInput, setCustomInput] = useState("");
-
-   const handleSelectChange = (event) => {
-     const { value } = event.target;
-     const price = event.target
-     setSelectedOption(value);
-
-     // Update the variant in the products state
-     setProducts((prevProducts) =>
-       prevProducts.map((product) =>
-         product.id === 1
-           ? {
-               ...product,
-               variant: [{ id: 1, variant: value, price : price }],
-             }
-           : product
-       )
-     );
-   };
-
-
-  const handleInputChange = (e) => {
-    setCustomInput(e.target.value);
-
-    console.log(customInput);
-  };
-
-  const addItem = (e) => {
-    e.preventDefault();
-    setProducts([
-      ...products,
-      {
-        id: products.length + 1,
-        productName: "",
-        category: "",
-        price: "",
-        productType: "",
-        variant: [{ id: 1, variant: "", value: "" }],
-        shortCode: "",
-      },
-    ]);
-  };
 
   const [categories, setCategories] = useState();
 
@@ -116,242 +70,252 @@ const AddItems = () => {
     fetchVariant();
   }, []);
 
-  const handleName = (e, id) => {
-    setProducts((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, productName: e.target.value } : item
-      )
-    );
-    // console.log(products);
+  const formik = useFormik({
+    initialValues: {
+      productName: "",
+      category: "",
+      price: "",
+      productType: "",
+      variant: [],
+      shortCode: "",
+      stock: "",
+      status: "published",
+    },
+    validateOnBlur: false,
+    validateOnChange: false,
+    onSubmit: async (values) => {
+      setLoading(true);
+      values.category = selectCategory;
+      values.productType = selectProductType;
+      values.variant = variants;
+      console.log("val", values);
+
+      try {
+        const res = await addProduct(values);
+        console.log("product Added", res);
+        toast.success("Product Added Successfully");
+        setLoading(false);
+      } catch (err) {
+        console.log("Error ADDING PRODUCTS", err);
+        toast.error(`Error adding product ${err}`)
+        setLoading(false);
+      }
+    },
+  });
+
+  const handleSelectChange = (e) => {
+    setSelectedOption(e.target.value);
   };
 
-  const handlePrice = (e, id) => {
-    setProducts((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, price: e.target.value } : item
-      )
-    );
-    console.log(products);
+  const handleInputChange = (e) => {
+    setCustomInput(e.target.value);
   };
 
-  const handleCategory = (e, name, index) => {
-    console.log("name", name);
-    console.log("index", index);
-
-    setProducts((prev) =>
-      prev.map((item) =>
-        item.id === index ? { ...item, category: name } : item
-      )
-    );
-    console.log("pre", products);
+  const addVariant = () => {
+    const newVariant = { variant: selectedOption, value: customInput };
+    setVariants([...variants, newVariant]);
+    console.log([...variants, newVariant]);
   };
 
-  console.log("vcsc", categories);
-
-  const handleProductType = (e, name, id) => {
-    console.log("name", name);
-    console.log("id", id);
-
-    setProducts((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, productType: name } : item
-      )
-    );
-    console.log(products);
-  };
-
-  const handleVariant = (e, name, value, id) => {
-    console.log("name", name);
-    console.log(value);
-    console.log("id", id);
-
-    setProducts((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? { ...item, variant: { variant: name, value: value } }
-          : item
-      )
-    );
-    console.log(products);
-  };
-
-  const handleShortCode = (e, id) => {
-    setProducts((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, shortCode: e.target.value } : item
-      )
-    );
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("products", products);
-  };
 
   return (
     <>
       {!isLoading && (
         <div className="w-full">
-          <div className="w-full chalaja">
-            {products?.map((product, index) => {
-              return (
-                <div className="flex w-[100%] overflow-x-hidden chalaja sm:w-[770px] md:w-[1000px] lg:w-[1300px] overflow-x-scroll md:flex-row my-[15px]">
-                  {/* <div className="">
-                    <label
-                      htmlFor="productName"
-                      className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Item Name
-                    </label>
-                    <input
-                      type="text"
-                      className="bg-gray-50 min-w-[260px] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                      placeholder="Enter Item Name"
-                      onChange={(e) => {
-                        handleName(e, product.id);
-                      }}
-                    />
-                  </div> */}
+          <Toaster position="top-center" reverseOrder="false"></Toaster>
+          <form
+            className="flex justify-center items-center"
+            onSubmit={formik.handleSubmit}
+          >
+            <div className="max-w-[500px] flex justify-center items-center flex-col md:min-w-[400px] bg-white px-5 py-2">
+              <div className="w-[100%] flex justify-center items-center flex-col py-[5px] my-[15px]">
+                <div className="">
+                  <label
+                    htmlFor="productName"
+                    className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Item Name
+                  </label>
+                  <input
+                    type="text"
+                    className="bg-gray-50 min-w-[260px] border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    placeholder="Enter Item Name"
+                    {...formik.getFieldProps("productName")}
+                  />
+                </div>
 
-                  {/* <div className="min-w-[270px] mx-[10px]">
-                    <label
-                      htmlFor="type"
-                      className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Category
-                    </label>
+                <div className="my-[10px]">
+                  <label
+                    htmlFor="type"
+                    className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Category
+                  </label>
 
-                    <select
-                      className="pl-[15px] chalaja outline-none py-2 rounded-xl"
-                      id="category"
-                      onChange={(e) =>
-                        handleCategory(e, e.target.value, product.id)
-                      }
-                    >
-                      <option selected>Select Category</option>
-                      {categories?.map((item) => (
-                        <option
-                          className="py-2 rounded-md chalaja"
-                          key={item.name}
-                          value={item.name}
-                        >
-                          {item.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div> */}
-
-                  {/* <div className="ml-[20px]">
-                    <label
-                      htmlFor="productPrice"
-                      className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Price
-                    </label>
-                    <input
-                      type="number"
-                      className="bg-gray-50 min-w-[260px] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                      placeholder="Enter Price"
-                      onChange={(e) => {
-                        handlePrice(e, product.id);
-                      }}
-                    />
-                  </div> */}
-
-                  {/* <div className="min-w-[270px] mx-[10px]">
-                    <label
-                      htmlFor="type"
-                      className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Product Type
-                    </label>
-
-                    <select
-                      className="px-[15px] min-w-[270px] chalaja outline-none py-2 rounded-xl"
-                      id="productType"
-                      onChange={(e) =>
-                        handleProductType(e, e.target.value, product.id)
-                      }
-                    >
-                      <option selected>Select Product Type</option>
-                      {productType?.map((item) => (
-                        <option
-                          className="py-2 rounded-md chalaja"
-                          key={item.name}
-                          value={item.name}
-                        >
-                          {item.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div> */}
-
-                  <div className="min-w-[270px] mx-[10px]">
-                    <label
-                      htmlFor="variant"
-                      className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Select Variant
-                    </label>
-
-                    <select
-                      className="px-[15px] min-w-[270px] chalaja outline-none py-2 rounded-xl"
-                      id="variant"
-                      onChange={handleSelectChange}
-                      value={selectedOption}
-                    >
-                      <option value="" disabled>
-                        Select Variant
+                  <select
+                    className="border-2 bg-gray-50 max-w-[260px] outline-none py-2 rounded-xl"
+                    id="category"
+                    value={selectCategory}
+                    onChange={(e) => setSelectCategory(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Select Category
+                    </option>
+                    {categories?.map((item) => (
+                      <option
+                        className="py-2 rounded-md chalaja"
+                        key={item.name}
+                        value={item.name}
+                      >
+                        {item.name}
                       </option>
-                      <option value="noVariant">No Variant</option>
-                      {fetchedVariant.map((item) => (
-                        <option
-                          className="py-2 rounded-md chalaja"
-                          key={item.name}
-                          value={item.name}
-                        >
-                          {item.name}
-                        </option>
-                      ))}
-                    </select>
+                    ))}
+                  </select>
+                </div>
 
-                    {selectedOption && (
-                      <div>
-                        <input
-                          type="text"
-                          className="bg-red-500 z-100 h-[100px]"
-                          value={customInput}
-                          onChange={(e) => {handleInputChange(e)}}
-                          placeholder="Enter custom value"
-                        />
-                        <h1>{selectedOption}</h1>
-                        <h2>{customInput}</h2>
-                      </div>
-                    )}
+                <div className="my-[10px]">
+                  <label
+                    htmlFor="productPrice"
+                    className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Price
+                  </label>
+                  <input
+                    type="number"
+                    className="bg-gray-50 min-w-[260px] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    placeholder="Enter Price"
+                    {...formik.getFieldProps("price")}
+                  />
+                </div>
+
+                <div className="my-[10px]">
+                  <label
+                    htmlFor="type"
+                    className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Product Type
+                  </label>
+
+                  <select
+                    className="px-[15px] bg-gray-50 min-w-[260px] border-2 py-2 rounded-xl"
+                    id="productType"
+                    value={selectProductType}
+                    onChange={(e) => setSelectProductType(e.target.value)}
+                  >
+                    <option selected>Select Product Type</option>
+                    {productType?.map((item) => (
+                      <option
+                        className="py-2 rounded-md chalaja"
+                        key={item.name}
+                        value={item.name}
+                      >
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="my-[10px]">
+                  <label
+                    htmlFor="shortCode"
+                    className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Short Code
+                  </label>
+                  <input
+                    type="text"
+                    className="bg-gray-50 min-w-[260px] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    placeholder="Enter Price"
+                    {...formik.getFieldProps("shortCode")}
+                  />
+                </div>
+
+                <div className="my-[10px]">
+                  <label
+                    htmlFor="shortCode"
+                    className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Stock
+                  </label>
+                  <input
+                    type="number"
+                    className="bg-gray-50 min-w-[260px] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    placeholder="Enter Price"
+                    {...formik.getFieldProps("stock")}
+                  />
+                </div>
+
+                <div className="min-w-[260px] my-[10px]">
+                  <label
+                    htmlFor="variant"
+                    className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Select Variant
+                  </label>
+
+                  <select
+                    className="px-[15px] bg-gray-50 border-2 min-w-[270px] py-2 rounded-xl"
+                    id="variant"
+                    value={selectedOption}
+                    onChange={handleSelectChange}
+                  >
+                    <option value="" disabled>
+                      Select Variant
+                    </option>
+                    <option value="noVariant">No Variant</option>
+                    {fetchedVariant.map((item) => (
+                      <option
+                        className="py-2 rounded-md chalaja"
+                        key={item.name}
+                        value={item.name}
+                      >
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+
+                  {selectedOption && (
+                    <div>
+                      <input
+                        type="text"
+                        className="z-100 h-[40px] mr-[15px] w-[35%] outline-none border-2 rounded-xl px-2"
+                        value={customInput}
+                        onChange={handleInputChange}
+                        placeholder="Variant Price"
+                      />
+                      <button
+                        onClick={addVariant}
+                        className="mt-2 px-3 py-2 bg-primary rounded-xl text-white"
+                      >
+                        Add Variant
+                      </button>
+                    </div>
+                  )}
+
+                  <div>
+                    <h3>Variants List : </h3>
+                    <ul>
+                      {variants.map((variant, index) => (
+                        <li key={index}>
+                          {variant.variant} : {variant.value}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
-              );
-            })}
+              </div>
 
-            <div className="flex justify-center products-center">
-              <button
-                onClick={(e) => {
-                  addItem(e);
-                }}
-                className="bg-primary text-white text-sm font-medium py-2.5 px-5 rounded-lg"
-              >
-                Add Item
-              </button>
-              <button
-                onClick={(e) => {
-                  handleSubmit(e);
-                }}
-                className="bg-success text-white text-sm font-medium py-2.5 px-5 rounded-lg"
-              >
-                Publish
-              </button>
+              <div className="flex justify-center products-center">
+                {loading === true ? (
+                  <LoadingButton />
+                ) : (
+                  <button className="bg-success text-white text-sm font-medium py-2.5 px-5 rounded-lg">
+                    Publish
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
+          </form>
         </div>
       )}
       {isLoading && (
@@ -364,90 +328,3 @@ const AddItems = () => {
 };
 
 export default AddItems;
-
-//  <div className=" mx-[10px]">
-//    <label
-//      htmlFor="price"
-//      className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
-//    >
-//      Price
-//    </label>
-//    <input
-//      onChange={(e) => {
-//        handlePrice(e, item.id);
-//      }}
-//      type="text"
-//      className="bg-gray-50 min-w-[270px] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-//      placeholder="Enter Price"
-//    />
-//  </div>
-
-// /
-
-//  <div className="min-w-[270px] mx-[10px]">
-//    <label
-//      htmlFor="add-variant"
-//      className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
-//    >
-//      Add Variant
-//    </label>
-//    <div className="">
-//      <Select
-//        className=""
-//        products={fetchedVariant}
-//        placeholder="Select Varaint"
-//        labelPlacement="outside"
-//        classNames={{
-//          base: "max-w-xs",
-//          trigger: "h-10",
-//          radius: "none",
-//        }}
-//         onChange={(e) => handleVariant(e, item.id, e.target.value)}
-//        renderValue={(products) =>
-//          products.map((item) => (
-//            <div
-//              key={item.key}
-//              className="flex pb-[2px] px-[4px] products-center gap-2"
-//            >
-//              <div className="flex flex-col">
-//                <span>{item.data.name}</span>
-//              </div>
-//            </div>
-//          ))
-//        }
-//      >
-//        {(user) => (
-//          <SelectItem key={user._id} textValue={user.name}>
-//            <div
-//              onClick={(e) => handleVariant(e, item.id, user.name)}
-//              className="flex gap-2 py-[3px] px-[4px] products-center"
-//            >
-//              <div className="flex flex-col">
-//                <span className="text-small">{user.name}</span>
-//                <span className="text-tiny text-default-400">
-//                  {user.phone}
-//                </span>
-//              </div>
-//            </div>
-//          </SelectItem>
-//        )}
-//      </Select>
-//    </div>
-//  </div>
-
-//  <div className="ml-[10px]">
-//    <label
-//      htmlFor="short-code"
-//      className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
-//    >
-//      Short Code
-//    </label>
-//    <input
-//      onChange={(e) => {
-//        handleShortCode(e, item.id);
-//      }}
-//     type="text"
-//     className="bg-gray-50 min-w-[270px] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-//     placeholder="Enter Short Code"
-//   />
-// </div>
