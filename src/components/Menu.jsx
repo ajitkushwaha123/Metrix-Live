@@ -368,7 +368,7 @@ const Menu = () => {
 
   const handleDownload = (e) => {
     e.preventDefault();
-    const url = `http://localhost:8000/api/invoice/kot/${invoiceId}`;
+    const url = `${process.env.REACT_APP_API_URL}/api/invoice/kot/${invoiceId}`;
     alert(url);
     window.open(url, "_blank");
   };

@@ -11,8 +11,6 @@ import { useParams } from 'react-router-dom';
 import { useProductContext } from "../context/productContext";
 
 
-// const API = "http://localhost:8000/api/products";
-
 const ViewProduct = () => {
 
     const { getSingleProduct, isSingleLoading, singleProduct } = useProductContext();
