@@ -144,7 +144,6 @@ export default function ViewCustomerTable() {
          avatar: firstImage,
          total: order.price,
          phone: order.phone,
-         totalProducts: totalProducts,
          status: order.orderStatus,
          newCustomer: order.newCustomer,
          customerName: order.customerName,
