@@ -72,7 +72,7 @@ const fetchProducts = async () => {
 
 useEffect(() => {
   fetchProducts();
-})
+}, [])
 
 const users = [];
 console.log("chrrc" , products);
@@ -83,11 +83,9 @@ fetchedProducts?.forEach((product) => {
     name: product.productName,
     category: product.category,
     status: product.status,
-    // age: product.age,
     avatar: product.photos[0],
     price: <PriceFormatter price={product.price} />,
     stock: product.stock,
-    // discountPrice : product.discountPrice,
   };
 
   users.push(user);
