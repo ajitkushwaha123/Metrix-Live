@@ -23,7 +23,7 @@ const navLinks = [
   {
     title: "Dashboard",
     icon: <MdDashboardCustomize />,
-    link: "/dashboard",
+    link: "/",
   },
   {
     title: "Orders",

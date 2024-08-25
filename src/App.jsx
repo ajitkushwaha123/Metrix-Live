@@ -34,6 +34,7 @@ import Navbar from './components/Navbar'
 import TableBooking from './components/TableBooking'
 import Menu from './components/Menu'
 import UploadMenu from './Pages/UploadMenu/UploadMenu'
+import Protected from './components/Protected'
 
 
 function App() {
@@ -52,39 +53,39 @@ function App() {
             </div>
             <div>
               <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/order" element={<Order />} />
-                <Route path="/inventory" element={<Inventory />} />
-                <Route path="table-booking" element={<TableBooking />} />
-                <Route path='/menu/:id' element={<Menu />} />
-                <Route path='/upload-menu' element={ <UploadMenu />} />
+                {/* <Route path="/" element={<Login />} /> */}
+                <Route path="/" element={<Protected component={Dashboard} />} />
+                <Route path="/dashboard" element={<Protected component={Dashboard} />} />
+                <Route path="/order" element={<Protected component={Order} />} />
+                <Route path="/inventory" element={<Protected component={Inventory} />} />
+                <Route path="table-booking" element={<Protected component={TableBooking} />} />
+                <Route path="/menu/:id" element={<Protected component={Menu} />} />
+                <Route path="/upload-menu" element={<Protected component={UploadMenu} />} />
                 <Route
                   path="/inventory/new-product"
-                  element={<NewInventory />}
+                  element={<Protected component={NewInventory} />}
                 />
-                <Route path="/profile" element={<Settings />} />
-                <Route path="/conversations" element={<Conversations />} />
-                <Route path="/customer" element={<Customer />} />
-                <Route path="/support" element={<Support />} />
-                <Route path="/gift" element={<Gift />} />
-                <Route path="/logout" element={<Logout />} />
-                <Route path="/singleproduct/:id" element={<SingleProduct />} />
-                <Route path="add-category" element={<AddCategory />} />
-                <Route path="/category" element={<Category />} />
-                <Route path="/category/:id" element={<DetailCategory />} />
-                <Route path="/category/edit/:id" element={<UpdateCategory />} />
-                <Route path="/gemini" element={<ImageGenerator />} />
-                <Route path="/prod" element={<Prod />} />
+                <Route path="/profile" element={<Protected component={Settings} />} />
+                <Route path="/conversations" element={<Protected component={Conversations} />} />
+                <Route path="/customer" element={<Protected component={Customer} />} />
+                <Route path="/support" element={<Protected component={Support} />} />
+                <Route path="/gift" element={<Protected component={Gift} />} />
+                <Route path="/logout" element={<Protected component={Logout} />} />
+                <Route path="/singleproduct/:id" element={<Protected component={SingleProduct} />} />
+                <Route path="add-category" element={<Protected component={AddCategory} />} />
+                <Route path="/category" element={<Protected component={Category} />} />
+                <Route path="/category/:id" element={<Protected component={DetailCategory} />} />
+                <Route path="/category/edit/:id" element={<Protected component={UpdateCategory} />} />
+                <Route path="/gemini" element={<Protected component={ImageGenerator} />} />
+                <Route path="/prod" element={<Protected component={Prod} />} />
                 <Route
                   path="/inventory/update-product/:id"
-                  element={<UpdateProduct />}
+                  element={<Protected component={UpdateProduct} />}
                 />
-                <Route path="/inventory/view/:id" element={<ViewProduct />} />
-                <Route path="/order-view/:id" element={<ViewOrder />} />
-                <Route path="/customer/edit/:id" element={<UpdateCustomer />} />
-                <Route path="/customer/view/:id" element={<ViewCustomer />} />
-        
+                <Route path="/inventory/view/:id" element={<Protected component={ViewProduct} />} />
+                <Route path="/order-view/:id" element={<Protected component={ViewOrder} />} />
+                <Route path="/customer/edit/:id" element={<Protected component={UpdateCustomer} />} />
+                <Route path="/customer/view/:id" element={<Protected component={ViewCustomer} />} />
               </Routes>
             </div>
           </div>
