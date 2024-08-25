@@ -43,36 +43,38 @@ const INITIAL_VISIBLE_COLUMNS = ["name","category" , "stock" , "price", "status"
 
 export default function InvTable() {
 
-  const [loading , setLoading] = useState(false);
-  const [fetchedProducts, setFetchedProducts] = useState([]);
+const[loading, setLoading] = useState(false);
+const [fetchedProducts, setFetchedProducts] = useState([]);
 
 const navigate = useNavigate();
-const handleDelete = async (id) => {  
-    setLoading(true);
 
-    const res = await deleteProducts(id);
+const handleDelete = async (id) => {
+  setLoading(true);
+  try {
+    await deleteProducts(id);
     toast.success("Product Deleted Successfully");
-  
+    fetchProducts(); // Refresh the product list after deletion
+  } catch (error) {
+    toast.error("Error deleting product");
+  } finally {
     setLoading(false);
+  }
 };
-
-
 
 const { isLoading, products } = useProductContext();
 
 const fetchProducts = async () => {
   try {
     const res = await getProd();
-    console.log("res", res);
     setFetchedProducts(res.data);
   } catch (error) {
     console.error("Error fetching products:", error);
   }
-}
+};
 
 useEffect(() => {
   fetchProducts();
-}, [])
+}, []);
 
 const users = [];
 console.log("chrrc" , products);
