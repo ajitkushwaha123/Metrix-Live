@@ -46,6 +46,7 @@ const Login = () => {
           localStorage.setItem("token", token);
           setLoading(false);
           navigate("/dashboard");
+          window.location.reload();
         } catch (error) {
           console.error("Error extracting token:", error);
           setLoading(false);

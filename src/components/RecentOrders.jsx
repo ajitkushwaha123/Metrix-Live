@@ -102,59 +102,61 @@ const RecentOrders = () => {
             ) : (
               <div className="max-h-[700px] overflow-y-scroll chalaja">
                 {orders.map((order, index) => (
-                  <div
-                    key={index}
-                    className="flex border-b-2 rounded-lg border-slate-100 px-5 py-2 justify-between"
-                  >
-                    <div className="flex">
-                      <div>
-                        <img
-                          className="w-[60px] h-[60px] object-cover rounded-md"
-                          src={
-                            firstImage[index] ||
-                            "https://res.cloudinary.com/drku1djt5/image/upload/fl_preserve_transparency/v1723651866/delivery-man_v3vwub.jpg?_s=public-apps"
-                          }
-                          alt="Order item"
-                        />
-                      </div>
-                      <div className="ml-[20px] flex flex-col text-start">
+                  <NavLink to={`/order-view/${order._id}`}>
+                    <div
+                      key={index}
+                      className="flex border-b-2 rounded-lg border-slate-100 px-5 py-2 justify-between"
+                    >
+                      <div className="flex">
                         <div>
-                          {order.products.length > 0 && (
-                            <h3>
-                              {order.products[0].product?.productName ||
-                                "No Product Name"}
-                            </h3>
-                          )}
+                          <img
+                            className="w-[60px] h-[60px] object-cover rounded-md"
+                            src={
+                              firstImage[index] ||
+                              "https://res.cloudinary.com/drku1djt5/image/upload/fl_preserve_transparency/v1723651866/delivery-man_v3vwub.jpg?_s=public-apps"
+                            }
+                            alt="Order item"
+                          />
                         </div>
-                        <div>{<PriceFormatter price={order.price} />}</div>
+                        <div className="ml-[20px] flex flex-col text-start">
+                          <div>
+                            {order.products.length > 0 && (
+                              <h3>
+                                {order.products[0].product?.productName ||
+                                  "No Product Name"}
+                              </h3>
+                            )}
+                          </div>
+                          <div>{<PriceFormatter price={order.price} />}</div>
+                        </div>
                       </div>
-                    </div>
-                    <div>
                       <div>
-                        <p>{formattedDate(order.createdAt)}</p>
+                        <div>
+                          <p>{formattedDate(order.createdAt)}</p>
+                        </div>
+                        {order.orderStatus === "completed" && (
+                          <div className="bg-secondary rounded-sm mt-[8px]">
+                            <h2 className="text-success">Completed</h2>
+                          </div>
+                        )}
+                        {order.orderStatus === "pending" && (
+                          <div className="bg-secondary rounded-sm mt-[8px]">
+                            <h2 className="text-primary">Pending</h2>
+                          </div>
+                        )}
+                        {order.orderStatus === "progress" && (
+                          <div className="bg-secondary rounded-sm px-[4px] mt-[8px]">
+                            <h2 className="text-warning">In Progress</h2>
+                          </div>
+                        )}
+                        {order.orderStatus === "cancelled" && (
+                          <div className="bg-secondary rounded-sm px-[4px] mt-[8px]">
+                            <h2 className="text-warning">Cancelled</h2>
+                          </div>
+                        )}
                       </div>
-                      {order.orderStatus === "completed" && (
-                        <div className="bg-secondary rounded-sm mt-[8px]">
-                          <h2 className="text-success">Completed</h2>
-                        </div>
-                      )}
-                      {order.orderStatus === "pending" && (
-                        <div className="bg-secondary rounded-sm mt-[8px]">
-                          <h2 className="text-primary">Pending</h2>
-                        </div>
-                      )}
-                      {order.orderStatus === "progress" && (
-                        <div className="bg-secondary rounded-sm px-[4px] mt-[8px]">
-                          <h2 className="text-warning">In Progress</h2>
-                        </div>
-                      )}
-                      {order.orderStatus === "cancelled" && (
-                        <div className="bg-secondary rounded-sm px-[4px] mt-[8px]">
-                          <h2 className="text-warning">Cancelled</h2>
-                        </div>
-                      )}
                     </div>
-                  </div>
+                  </NavLink>
                 ))}
               </div>
             )}

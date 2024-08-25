@@ -80,7 +80,7 @@ const Sidebar = () => {
 
       <div className="flex flex-col justify-center items-center">
         {/* Navigation Links */}
-        <div className="overflow-y-scroll custom-image h-[340px] ">
+        <div className="overflow-y-scroll custom-image h-[400px] ">
           <ul
             className={`flex flex-col justify-center items-center font-poppins`}
           >
