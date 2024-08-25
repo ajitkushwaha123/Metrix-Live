@@ -90,14 +90,14 @@ const Invoice = ({ btnText = "Inovice", orderId }) => {
 
   const handleDownload = (e) => {
     e.preventDefault();
-    const url = `http://localhost:8000/api/invoice/invoice/${invoiceId}`;
+    const url = `${process.env.REACT_APP_API_URL}/api/invoice/invoice/${invoiceId}`;
     alert(url);
     window.open(url, "_blank");
   };
 
   const phoneNumber = phone; // Replace with the target number
   const message = "Here is bill of recent order !.";
-  const pdfLink = `http://localhost:8000/api/invoice/invoice/${invoiceId}`; // Replace with your PDF link
+  const pdfLink = `${process.env.REACT_APP_API_URL}/api/invoice/invoice/${invoiceId}`; // Replace with your PDF link
 
   const handleClick = () => {
     const encodedMessage = encodeURIComponent(`${message} ${pdfLink}`);
@@ -325,7 +325,9 @@ const Invoice = ({ btnText = "Inovice", orderId }) => {
                                   {" "}
                                   <PriceFormatter
                                     price={
-                                      totalAmount + (totalAmount * taxes) / 100 - discount
+                                      totalAmount +
+                                      (totalAmount * taxes) / 100 -
+                                      discount
                                     }
                                   />
                                 </span>
@@ -345,7 +347,7 @@ const Invoice = ({ btnText = "Inovice", orderId }) => {
                           Share
                         </a>
                         <NavLink
-                          to={`http://localhost:8000/api/invoice/invoice/${invoiceId}`}
+                          to={`${process.env.REACT_APP_API_URL}/api/invoice/invoice/${invoiceId}`}
                         >
                           <button>
                             <a
@@ -502,7 +504,7 @@ const Invoice = ({ btnText = "Inovice", orderId }) => {
                         </h6>
                         <div className="w-full rounded-lg overflow-hidden border border-gray-300 flex items-center mt-4">
                           <p className="text-sm text-gray-500 flex-1 ml-4">
-                            https://localhost.com:8000/api/invoice/invoice/
+                            {process.env.REACT_APP_API_URL}/api/invoice/invoice/
                             {invoiceId}
                           </p>
                           <button className="bg-blue-600 hover:bg-blue-700 px-6 py-3 text-sm text-white">

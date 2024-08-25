@@ -42,7 +42,7 @@ const BulkUpload = () => {
 
   const onButtonClick = (e) => {
     e.preventDefault();
-    const csvUrl = "/assets/dummy.csv"; // Corrected the path to a CSV file
+    const csvUrl = "/assets/dummy.csv"; 
     const link = document.createElement("a");
     link.href = csvUrl;
     link.download = "dummy.csv"; // specify the filename
