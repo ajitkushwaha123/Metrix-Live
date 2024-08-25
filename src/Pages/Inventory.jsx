@@ -104,7 +104,7 @@ const Inventory = () => {
 
       <div className="px-[15px] md:px-[30px] py-[30px]">
         <div className="bg-white md:py-[40px] px-4 py-8 md:px-[40px]">
-          {/* <InvTable /> */}
+          <InvTable />
         </div>
       </div>
     </div>
