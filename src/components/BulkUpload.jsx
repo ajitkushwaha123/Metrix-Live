@@ -42,7 +42,7 @@ const BulkUpload = () => {
 
   const onButtonClick = (e) => {
     e.preventDefault();
-    const csvUrl = "/assets/dummy.csv"; 
+    const csvUrl = `${window.location.origin}/dummy.csv`;
     const link = document.createElement("a");
     link.href = csvUrl;
     link.download = "dummy.csv"; // specify the filename
@@ -50,6 +50,7 @@ const BulkUpload = () => {
     link.click();
     document.body.removeChild(link);
   };
+
 
   return (
     <>

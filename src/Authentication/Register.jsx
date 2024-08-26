@@ -69,7 +69,7 @@ const Register = () => {
             })
             .catch((error) => {
               toast.error(
-                "Ex Ka number yaad rehta hai, par password nahi 😔💔"
+                "Invalid username or password"
               );
               setLoading(false);
             });
@@ -95,7 +95,7 @@ const Register = () => {
             })
             .catch((error) => {
               toast.error(
-                "Ex Ka number yaad rehta hai, par password nahi 😔💔"
+                "Invalid username or password"
               );
               setLoading(false);
             });

@@ -7,7 +7,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { createOrderValidate } from "../../helper/validate";
 import { Avatar } from "@nextui-org/react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getSingleCustomer  , handleCustomers } from "../../helper/helper";
+import { getSingleCustomer, handleCustomers } from "../../helper/helper";
 
 const UpdateCustomer = () => {
   const { id } = useParams();
@@ -19,7 +19,6 @@ const UpdateCustomer = () => {
   const [selected, setSelected] = useState(false);
   const [color, setColor] = useState("");
   const [customer, setCustomer] = useState([]);
-
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
@@ -37,7 +36,7 @@ const UpdateCustomer = () => {
     const fetchCustomer = async () => {
       try {
         console.log("id", id);
-        const {data} = await getSingleCustomer(id);
+        const { data } = await getSingleCustomer(id);
         console.log("product", data);
         setCustomer(data);
         setImage(data.customerImage);
@@ -63,20 +62,19 @@ const UpdateCustomer = () => {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
-        console.log("values", values);
-        let addCustomerPromise = handleCustomers(values , id);
-        toast.promise(addCustomerPromise, {
-          loading: "Creating...",
-          success: <b>Customer Added Successfully... !</b>,
-          error: <b>Error Creating Customer... !</b>,
-        });
+      console.log("values", values);
+      let addCustomerPromise = handleCustomers(values, id);
+      toast.promise(addCustomerPromise, {
+        loading: "Creating...",
+        success: <b>Customer Added Successfully... !</b>,
+        error: <b>Error Creating Customer... !</b>,
+      });
 
-        addCustomerPromise.then(function () {
-          navigate("/customer");
-        });
-        }
+      addCustomerPromise.then(function () {
+        navigate("/customer");
+      });
+    },
   });
-
 
   const users = [
     {
@@ -165,6 +163,7 @@ const UpdateCustomer = () => {
     setSelectedUser(user);
     setSelected(true);
     console.log(image);
+    toast.success("Image Selected Successfully ...!");
   };
 
   const cancelUpdate = () => {
@@ -319,7 +318,7 @@ const UpdateCustomer = () => {
                         Cancel
                       </button>
                       <button className="bg-primary px-[10px] py-[5px] text-white rounded-md">
-                        Update Customer 
+                        Update Customer
                       </button>
                     </div>
                   </div>
