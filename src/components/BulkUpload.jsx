@@ -1,11 +1,7 @@
 import React, { useState } from "react";
-import { useFormik } from "formik";
 import toast, { Toaster } from "react-hot-toast";
 import { bulkUploader } from "../helper/helper";
 import { FaDownload } from "react-icons/fa6";
-import { NavLink } from "react-router-dom";
-import { Button } from "@nextui-org/react";
-
 
 const BulkUpload = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,9 +31,15 @@ const BulkUpload = () => {
           error: <b>Couldn't upload Product... !</b>,
         });
 
-     uploadPromise.then(() => {
-       toggleModal();
-     });
+     uploadPromise
+       .then(() => {
+         toggleModal();
+       })
+       .catch((err) => {
+        console.log("error" , err);
+        
+        toast.error(`${err.error}`);
+       });
   }
 
   const onButtonClick = (e) => {
@@ -45,7 +47,7 @@ const BulkUpload = () => {
     const csvUrl = `${window.location.origin}/dummy.csv`;
     const link = document.createElement("a");
     link.href = csvUrl;
-    link.download = "dummy.csv"; // specify the filename
+    link.download = "dummy.csv"; 
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

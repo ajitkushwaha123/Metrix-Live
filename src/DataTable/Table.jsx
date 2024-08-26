@@ -21,7 +21,6 @@ import {
   User,
   Pagination,
 } from "@nextui-org/react";
-import {PlusIcon} from "./PlusIcon";
 import {VerticalDotsIcon} from "./VerticalDotsIcon";
 import {SearchIcon} from "./SearchIcon";
 import {ChevronDownIcon} from "./ChevronDownIcon";

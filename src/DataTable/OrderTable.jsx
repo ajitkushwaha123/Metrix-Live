@@ -28,10 +28,7 @@ import {ChevronDownIcon} from "./ChevronDownIcon";
 // import {columns, statusOptions} from "./data";
 import {capitalize} from "./utils";
 import { NavLink } from "react-router-dom";
-import NewOrder from "../Pages/NewOrder";
 import { deleteAPI, getOrders } from "../helper/helper";
-import { useParams } from "react-router-dom";
-import axios from "axios";
 import toast from "react-hot-toast";
 import PriceFormatter from "../helper/priceFormatter";
 
@@ -119,7 +116,7 @@ export default function OrderTable() {
 
   const fetchOrders = async () => {
     try {
-      
+       
       const { data } = await getOrders(`/orders`);
       console.log("Orders:", data);
 

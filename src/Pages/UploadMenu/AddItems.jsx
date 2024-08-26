@@ -111,7 +111,8 @@ const AddItems = () => {
     setCustomInput(e.target.value);
   };
 
-  const addVariant = () => {
+  const addVariant = (e) => {
+    e.preventDefault();
     const newVariant = { variant: selectedOption, value: customInput };
     setVariants([...variants, newVariant]);
     console.log([...variants, newVariant]);
@@ -284,7 +285,7 @@ const AddItems = () => {
                         placeholder="Variant Price"
                       />
                       <button
-                        onClick={addVariant}
+                        onClick={(e) => {addVariant(e)}}
                         className="mt-2 px-3 py-2 bg-primary rounded-xl text-white"
                       >
                         Add Variant
