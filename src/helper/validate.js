@@ -112,3 +112,16 @@ export async function profileValidate(values) {
   errors.success - toast.success('Profile Update Success');
   return errors; 
 }
+
+export async function supportValidate(values) {
+  const errors = {};
+  if (!values.restaurantName) {
+    errors.restaurantName = toast.error("Restaurant Name Required... !");
+  } else if (!values.phoneNumber) {
+    errors.phoneNumber = toast.error("Phone Required... !");
+  } else if (!values.explainIssue) {
+    errors.explainIssue = toast.error("Describe your problem ... !");
+  }
+
+  return errors;
+}

@@ -1368,3 +1368,23 @@ export async function invoiceEdit(id , values) {
     return Promise.reject({ error: "Couldn't generate invoice" });
   }
 }
+
+export async function supportRequest(values){
+  const token = localStorage.getItem("token");
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  try {
+    const {data} = await axios.post(`${API_URL}/support`, values, config);
+    console.log(data);
+    return Promise.resolve({data});
+  } catch (error) {
+    console.error("Error submitting form:", error);
+    return Promise.reject({error})
+  }
+}

@@ -8,7 +8,6 @@ import Order from './Pages/Order'
 import Inventory from './Pages/Inventory'
 import Settings from './Pages/Settings'
 import Conversations from './Pages/Conversations'
-import Support from './Pages/Support'
 import Gift from './Pages/Gift'
 import Logout from './Authentication/Logout'
 import Login from './Authentication/Login'
@@ -35,7 +34,7 @@ import TableBooking from './components/TableBooking'
 import Menu from './components/Menu'
 import UploadMenu from './Pages/UploadMenu/UploadMenu'
 import Protected from './components/Protected'
-
+import Support from './Pages/Support/Support'
 
 function App() {
 
