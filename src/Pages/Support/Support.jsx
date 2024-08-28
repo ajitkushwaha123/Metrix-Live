@@ -24,11 +24,9 @@ const Support = () => {
     validateOnChange: false,
     onSubmit: async (values) => {
       setIsLoading(true);
-      console.log("values", values);
 
       try {
         const supportPromise = supportRequest(values);
-        console.log(supportPromise);
 
         toast.promise(supportPromise, {
           loading: "Submitting...",
@@ -36,10 +34,11 @@ const Support = () => {
           error: "Error Submitting request. Please try again.",
         });
 
-        setIsLoading(false);
+        await supportPromise; 
       } catch (err) {
-        console.error("Error submitting request:", err);
-        setIsLoading(false);
+        // console.error("Error submitting request:", err); 
+      } finally {
+        setIsLoading(false); 
       }
     },
   });
@@ -56,8 +55,8 @@ const Support = () => {
           aria-hidden="true"
           class="justify-center items-center  md:inset-0 h-[calc(100%-1rem)] max-h-full"
         >
-          <div class="relative p-4 w-full max-w-md max-h-full">
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+          <div class="p-4 w-full max-w-md max-h-full">
+            <div class="bg-white rounded-lg shadow dark:bg-gray-700">
               <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                   Contact Support
@@ -145,7 +144,7 @@ const Support = () => {
                 {!isLoading ? (
                   <button
                     type="submit"
-                    class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    class="text-white inline-flex items-center bg-primary hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   >
                     <svg
                       class="me-1 -ms-1 w-5 h-5"

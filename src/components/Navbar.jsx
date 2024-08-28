@@ -55,6 +55,11 @@ const navLinks = [
     icon: <CgMenuBoxed />,
     link: "/upload-menu",
   },
+  {
+    title: "Support",
+    icon: <TfiHeadphoneAlt />,
+    link: "/support",
+  },
 ];
 
 const Navbar = ({ title }) => {

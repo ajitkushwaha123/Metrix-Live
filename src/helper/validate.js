@@ -125,3 +125,14 @@ export async function supportValidate(values) {
 
   return errors;
 }
+
+export async function addItemValidate(values) {
+  const errors = {};
+  if (!values.productName) {
+    errors.productName = toast.error("Item Name Required... !");
+  } else if (!values.price) {
+    errors.price = toast.error("Price Required ... !");
+  }
+
+  return errors;
+}

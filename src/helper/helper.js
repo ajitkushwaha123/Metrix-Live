@@ -177,9 +177,6 @@ export async function addProduct(values) {
       formData.append("photos", ""); // Default value if photos is not an array
     }
 
-    console.log("Form Data:", values.photos);
-    console.log("Selected photos:", values.photos);
-
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -189,11 +186,11 @@ export async function addProduct(values) {
 
     const { data } = await axios.post("/api/products", formData, config);
 
-    console.log("Product added successfully:", data);
+    // console.log("Product added successfully:", data);
 
     return Promise.resolve({ product: data });
   } catch (error) {
-    console.error("Error adding product:", error);
+    // console.error("Error adding product:", error);
     return Promise.reject({ error: error.message });
   }
 }
@@ -1381,10 +1378,10 @@ export async function supportRequest(values){
 
   try {
     const {data} = await axios.post(`${API_URL}/support`, values, config);
-    console.log(data);
+    // console.log(data);
     return Promise.resolve({data});
   } catch (error) {
-    console.error("Error submitting form:", error);
+    // console.error("Error submitting form:", error);
     return Promise.reject({error})
   }
 }
