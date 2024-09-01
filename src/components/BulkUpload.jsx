@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { bulkUploader } from "../helper/helper";
 import { FaDownload } from "react-icons/fa6";
+import AiUpload from "../Pages/UploadMenu/AiUpload";
 
 const BulkUpload = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [aiupload, setAiUpload] = useState(false);
+
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
@@ -53,7 +56,11 @@ const BulkUpload = () => {
     document.body.removeChild(link);
   };
 
+  const handleAI = () => {
+    setAiUpload((prevState) => !prevState); 
+  };
 
+  
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
@@ -67,7 +74,6 @@ const BulkUpload = () => {
         <span className="text-[21px] mr-[8px]">+</span> Bulk Upload
       </button>
 
-      {/* Main modal */}
       {isOpen && (
         <div className="flex">
           <Toaster position="top-center" reverseOrder={false} />
@@ -79,102 +85,119 @@ const BulkUpload = () => {
           >
             <div className="relative p-4 min-w-[350px]  max-h-full">
               {/* Modal content */}
-              <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                {/* Modal header */}
-                <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    Bulk Upload
-                  </h3>
-                  <button
-                    type="button"
-                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                    onClick={toggleModal}
-                  >
-                    <svg
-                      className="w-3 h-3"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 14 14"
+              {aiupload ? (
+                <AiUpload />
+              ) : (
+                <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                  {/* Modal header */}
+                  <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                      Bulk Upload
+                    </h3>
+                    <button
+                      type="button"
+                      className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                      onClick={toggleModal}
                     >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                      />
-                    </svg>
-                    <span className="sr-only">Close modal</span>
-                  </button>
-                </div>
-                {/* Modal body */}
-                <form
-                  //   onSubmit={formik.handleSubmit}
-                  className="p-4 min-w-[350px] max-w-[450px] flex md:p-5"
-                >
-                  <div className="flex w-[90%] justify-center item-center flex-col">
-                    <div className="flex justify-between items-center">
-                      <h2>Data Information</h2>
-                    </div>
-                    <div className="my-[10px] mb-4">
-                      <div className="">
-                        <div className="">
-                          <label
-                            htmlFor="customerName"
-                            className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >
-                            Upload File
-                          </label>
+                      <svg
+                        className="w-3 h-3"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 14 14"
+                      >
+                        <path
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                        />
+                      </svg>
+                      <span className="sr-only">Close modal</span>
+                    </button>
+                  </div>
+                  {/* Modal body */}
+
+                  <form
+                    //   onSubmit={formik.handleSubmit}
+                    className="p-4 min-w-[350px] max-w-[450px] flex md:p-5"
+                  >
+                    <div className="flex w-[90%] justify-center item-center flex-col">
+                      <div className="flex justify-between items-center">
+                        <h2>Data Information</h2>
+                        <div>
                           <input
-                            type="file"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block py-2.5 px-1 md:p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            placeholder="Upload csv file"
-                            onChange={(e) => {
-                              fileHandler(e);
-                            }}
+                            type="checkbox"
+                            checked={aiupload}
+                            onChange={(e) => handleAI(e)}
+                            className="mr-[10px]"
                           />
+                          Ai Upload
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="my-[10px] mb-4">
+                          <div className="">
+                            <div className="">
+                              <label
+                                htmlFor="customerName"
+                                className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                              >
+                                Upload File
+                              </label>
+                              <input
+                                type="file"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block py-2.5 px-1 md:p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                placeholder="Upload csv file"
+                                onChange={(e) => {
+                                  fileHandler(e);
+                                }}
+                              />
+                            </div>
+
+                            <div className="text-start my-[10px]">
+                              <label
+                                htmlFor="phone"
+                                className="block text-start text-primary mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                              >
+                                Dummy File
+                              </label>
+
+                              <button
+                                onClick={(e) => {
+                                  onButtonClick(e);
+                                }}
+                                className="text-red-400 text-start flex justify-center items-center"
+                              >
+                                <FaDownload className="mr-[10px]" /> Download
+                              </button>
+                            </div>
+                          </div>
                         </div>
 
-                        <div className="text-start my-[10px]">
-                          <label
-                            htmlFor="phone"
-                            className="block text-start text-primary mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        <div className="flex w-full justify-between items-center">
+                          <button
+                            onClick={toggleModal}
+                            className="bg-white border-2 border-primary px-[10px] py-[5px] font-medium rounded-md"
                           >
-                            Dummy File
-                          </label>
-
-                            <button
-                              onClick={(e) => {
-                                onButtonClick(e);
-                              }}
-                              className="text-red-400 text-start flex justify-center items-center"
-                            >
-                              <FaDownload className="mr-[10px]" /> Download
-                            </button>
+                            Cancel
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              handleSubmit(e);
+                            }}
+                            className="bg-primary px-[10px] py-[5px] text-white rounded-md"
+                          >
+                            Upload
+                          </button>
                         </div>
                       </div>
                     </div>
-
-                    <div className="flex w-full justify-between items-center">
-                      <button
-                        onClick={toggleModal}
-                        className="bg-white border-2 border-primary px-[10px] py-[5px] font-medium rounded-md"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          handleSubmit(e);
-                        }}
-                        className="bg-primary px-[10px] py-[5px] text-white rounded-md"
-                      >
-                        Upload
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
+                  </form>
+                </div>
+              )}
             </div>
           </div>
         </div>

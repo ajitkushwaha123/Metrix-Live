@@ -1385,3 +1385,55 @@ export async function supportRequest(values){
     return Promise.reject({error})
   }
 }
+export async function imageUploader(photos) {
+  try {
+    const token = localStorage.getItem("token");
+    console.log(token);
+
+    console.log("photos", photos);
+    const formData = new FormData();
+    formData.append("photos", photos);
+
+    console.log("Form Data:", formData);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    const response = await axios.post(
+      `${API_URL}/gemini/upload`,
+      formData
+      // config
+    );
+    console.log("Bulk Upload:", response.data); 
+
+    return Promise.resolve({ response: response.data });
+  } catch (err) {
+    console.log("Error submitting form:", err);
+    return Promise.reject({ error: "Couldn't upload file" });
+  }
+}
+
+
+export async function aiUpload(value) {
+  try {
+    const token = localStorage.getItem("token");
+    console.log(value);
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json", 
+      },
+    };
+
+    const { data } = await axios.post("/api/bulkupload/uploadAi", value, config);
+
+    return Promise.resolve({ product: data });
+  } catch (error) {
+    // console.error("Error adding product:", error);
+    return Promise.reject({ error: error.message });
+  }
+}

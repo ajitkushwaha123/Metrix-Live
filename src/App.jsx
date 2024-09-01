@@ -35,6 +35,7 @@ import Menu from './components/Menu'
 import UploadMenu from './Pages/UploadMenu/UploadMenu'
 import Protected from './components/Protected'
 import Support from './Pages/Support/Support'
+import ItemTable from './Pages/UploadMenu/ItemTable'
 
 function App() {
 
@@ -60,6 +61,7 @@ function App() {
                 <Route path="table-booking" element={<Protected component={TableBooking} />} />
                 <Route path="/menu/:id" element={<Protected component={Menu} />} />
                 <Route path="/upload-menu" element={<Protected component={UploadMenu} />} />
+                <Route path="/item-table" element={<Protected component={ItemTable} />} />
                 <Route
                   path="/inventory/new-product"
                   element={<Protected component={NewInventory} />}

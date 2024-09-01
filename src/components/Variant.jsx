@@ -3,12 +3,10 @@ import PriceFormatter from "../helper/priceFormatter";
 
 const Variant = ({ variant, productName, onVariantSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedVariant, setSelectedVariant] = useState(null);
 
   const handleVariantClick = (item) => {
     setIsOpen(false);
-    setSelectedVariant(item.value);
-    onVariantSelect(item.value); // Call the callback function with the selected variant price
+    onVariantSelect(item.value); 
     console.log(item.value);
   };
 
@@ -18,6 +16,7 @@ const Variant = ({ variant, productName, onVariantSelect }) => {
         className="h-[80px] bg-white overflow-x-scroll chalaja flex justify-center items-center flex-col p-4 rounded-md text-start"
         type="button"
         onClick={() => setIsOpen(!isOpen)}
+        aria-label={`Select variant for ${productName}`}
       >
         {productName}
       </button>
@@ -39,6 +38,7 @@ const Variant = ({ variant, productName, onVariantSelect }) => {
                   type="button"
                   className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                   onClick={() => setIsOpen(false)}
+                  aria-label="Close modal"
                 >
                   <svg
                     className="w-3 h-3"
@@ -61,18 +61,23 @@ const Variant = ({ variant, productName, onVariantSelect }) => {
 
               <div className="p-4 md:p-5 space-y-4">
                 <div className="grid cursor-pointer grid-cols-2 md:grid-cols-4 gap-4">
-                  {variant?.map((item, index) => (
-                    <div
-                      key={index}
-                      onClick={() => handleVariantClick(item)}
-                      className="h-[80px] bg-[#EEF0FA] overflow-x-scroll chalaja flex justify-center items-center flex-col p-4 rounded-md text-start"
-                    >
-                      <div>{item.variant}</div>
-                      <div>
-                        <PriceFormatter price={item.value} />
-                      </div>
-                    </div>
-                  ))}
+                  {variant?.map(
+                    (item, index) =>
+                      ((item.variant !== "" || item.value !== 0) && (item.variant && item.value)) && (
+                        <div
+                          key={index}
+                          onClick={() => handleVariantClick(item)}
+                          className="h-[80px] bg-[#EEF0FA] overflow-x-scroll chalaja flex justify-center items-center flex-col p-4 rounded-md text-start"
+                        >
+                          <div>{item.variant}</div>
+                          <div>
+                            {item.value !== 0 && (
+                              <PriceFormatter price={item.value} />
+                            )}
+                          </div>
+                        </div>
+                      )
+                  )}
                 </div>
               </div>
             </div>
