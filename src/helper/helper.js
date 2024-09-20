@@ -14,6 +14,14 @@ export async function authenticate(username) {
   }
 }
 
+export async function authenticateEmail(email) {
+  try {
+    return await axios.post("/api/authenticate-mail", { email });
+  } catch (error) {
+    return { error: "Username doesn't exist... !" };
+  }
+}
+
 export async function getUsername() {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -111,25 +119,55 @@ export async function getSingleOrders(url) {
 
 export async function registerUser(credential) {
   try {
-    const {
-      data: { msg },
-      status,
-    } = await axios.post(`/api/register`, credential);
-
-    let { username, email } = credential;
-    if (status === 201) {
-      await axios.post("/api/registerMail", {
-        username,
-        userEmail: email,
-        text: msg,
-      });
-    }
-
-    return Promise.resolve(msg);
+    const {data} = await axios.post(`/api/register`, credential);
+    console.log("msg", data);
+    return data; 
   } catch (error) {
-    return Promise.reject({ error });
+    console.error("Error during registration:", error);
+    console.log(error.response.data);
+    return Promise.reject(
+      error.response?.data || { error: "Registration failed" }
+    ); 
   }
 }
+
+export async function mailVerification(values){
+
+   values.subject = "Mail Verification";
+
+   try{
+    const { data } = await axios.post(`${API_URL}/generate-mail`, values);
+
+    console.log("Mail sent successfully:", data);
+    Promise.resolve("Mail sent successfully:", data);
+   }catch(err)
+   {
+    console.log("Error in mail verification", err);
+    return Promise.reject(
+      err.response?.data || { error: "Error in mail verification ...!" }
+    ); 
+   }
+}
+
+export async function mailOtpVerify(values) {
+  try {
+    const { data, status } = await axios.post(`${API_URL}/verify-otp`, values);
+
+    console.log("Otp Verified Successfully:", data);
+    if (status === 200) {
+      return Promise.resolve("Otp Verified Successfully:", data);
+    } else {
+      return Promise.reject("Error verifying OTP", data);
+    }
+  } catch (err) {
+    console.log("Invalid OTP", err);
+    return Promise.reject(
+      err.response?.data || { error: "Error verifying OTP ...!" }
+    ); 
+  }
+}
+
+
 
 export async function verifyPassword({ username, password }) {
   console.log({ username, password });
@@ -137,7 +175,33 @@ export async function verifyPassword({ username, password }) {
     const data = await axios.post("/api/login", { username, password });
     return Promise.resolve({ data });
   } catch (error) {
-    return Promise.reject({ error: "Password doesn't Match... !" });
+    return Promise.reject(
+      error.response?.data || { error: "Error Login ...!" }
+    ); 
+  }
+}
+
+export async function otpLogin( values ) {
+  console.log(values);
+  try {
+    const data = await axios.post("/api/login-otp", values );
+    return Promise.resolve({ data });
+  } catch (error) {
+    return Promise.reject(
+      error.response?.data || { error: "Error Login ...!" }
+    );
+  }
+}
+
+export async function getUserByEmail(email){
+  try {
+    console.log("em" , email);
+    const { data } = await axios.get(`/api/user-by-email/${email}`);
+    return Promise.resolve({ data });
+  } catch (error) {
+    return Promise.reject(
+      error.response?.data || { error: "Error Login ...!" }
+    );
   }
 }
 
@@ -422,12 +486,9 @@ export async function verifyOTP({ username, code }) {
   }
 }
 
-export async function resetPassword({ username, password }) {
+export async function resetPassword(values) {
   try {
-    const { data, status } = await axios.put("/api/resetPassword", {
-      username,
-      password,
-    });
+    const { data, status } = await axios.put("/api/resetPassword", values);
     return Promise.resolve({ data, status });
   } catch (error) {
     return Promise.reject({ error });

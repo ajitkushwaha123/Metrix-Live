@@ -186,6 +186,7 @@ const ItemTable = ({ data }) => {
                           handleCategoryChange(index, e.target.value)
                         }
                         type="text"
+                        className="outline-none border-bottom-2 border-primary"
                       />
                     </td>
                     <td className="px-6 py-4">
@@ -195,6 +196,7 @@ const ItemTable = ({ data }) => {
                           handlePriceChange(index, e.target.value)
                         }
                         type="number"
+                        className="outline-none border-bottom-2 border-primary"
                       />
                     </td>
                     <td className="px-6 py-4">
@@ -204,6 +206,7 @@ const ItemTable = ({ data }) => {
                           handleStockChange(index, e.target.value)
                         }
                         type="number"
+                        className="outline-none border-bottom-2 border-primary"
                       />
                     </td>
                     <td className="px-6 py-4">
@@ -212,6 +215,7 @@ const ItemTable = ({ data }) => {
                         onChange={(e) =>
                           handleShortCodeChange(index, e.target.value)
                         }
+                        className="outline-none border-bottom-2 border-primary"
                       />
                     </td>
                     <td className="px-6 py-4">
@@ -221,6 +225,7 @@ const ItemTable = ({ data }) => {
                           handleVariant1Change(index, e.target.value)
                         }
                         type="text"
+                        className="outline-none border-bottom-2 border-primary"
                       />
                     </td>
                     <td className="px-6 py-4">
@@ -230,6 +235,7 @@ const ItemTable = ({ data }) => {
                           handleValue1Change(index, e.target.value)
                         }
                         type="number"
+                        className="outline-none border-bottom-2 border-primary"
                       />
                     </td>
                     <td className="px-6 py-4">
@@ -239,6 +245,7 @@ const ItemTable = ({ data }) => {
                           handleVariant2Change(index, e.target.value)
                         }
                         type="text"
+                        className="outline-none border-bottom-2 border-primary"
                       />
                     </td>
                     <td className="px-6 py-4">
@@ -248,6 +255,7 @@ const ItemTable = ({ data }) => {
                           handleValue2Change(index, e.target.value)
                         }
                         type="number"
+                        className="outline-none border-bottom-2 border-primary"
                       />
                     </td>
                     <td className="px-6 py-4">
@@ -257,6 +265,7 @@ const ItemTable = ({ data }) => {
                           handleVariant3Change(index, e.target.value)
                         }
                         type="text"
+                        className="outline-none border-bottom-2 border-primary"
                       />
                     </td>
                     <td className="px-6 py-4">
@@ -266,6 +275,7 @@ const ItemTable = ({ data }) => {
                           handleValue3Change(index, e.target.value)
                         }
                         type="number"
+                        className="outline-none border-bottom-2 border-primary"
                       />
                     </td>
                   </tr>

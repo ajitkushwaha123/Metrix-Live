@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CustomerSearch from "../../components/CustomerSearch";
-import axios from "axios";
 import { useFormik } from "formik";
-import { CiSearch } from "react-icons/ci";
 import toast, { Toaster } from "react-hot-toast";
 import { createOrderValidate } from "../../helper/validate";
 import { Avatar , Button } from "@nextui-org/react";
@@ -12,8 +10,6 @@ import LoadingButton from "../../components/LoadingButton";
 const NewCustomer = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [newCustomer, setNewCustomer] = useState(false);
-  const [cartProduct, setCartProduct] = useState([]);
-  const [cart, setCart] = useState(false);
   const [image , setImage] = useState('');
   const [selected , setSelected] = useState(false);
   const [color , setColor] = useState('');
@@ -22,8 +18,6 @@ const NewCustomer = () => {
     setIsOpen(!isOpen);
   };
 
-  const [quantities, setQuantities] = useState({});
-  const [query, setQuery] = useState("");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

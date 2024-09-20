@@ -1,5 +1,11 @@
 import { toast } from 'react-hot-toast';
-import { authenticate } from './helper'
+import { authenticate, authenticateEmail } from './helper'
+
+function isValidEmail(email) {
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailPattern.test(email);
+}
+
 export async function passwordReset(values)
 {
     const errors = {};
@@ -15,10 +21,7 @@ export async function passwordReset(values)
     {
         errors.notMatched = toast.error(`Password doesn't not match... !`)
     }
-    else
-    {
-        errors.success = toast.success('OTP Sent Succesfully... !')
-    }
+  
 
     return errors;
 }
@@ -45,6 +48,24 @@ export async function loginValidate(values) {
   }
 
   return errors; 
+}
+
+export async function loginWithOtp(values) {
+  const errors = {};
+
+  if (!values.email) {
+    errors.email = toast.error("Email Required... !");
+  } else if (!isValidEmail(values.email)) {
+    errors.email = toast.error("Invalid Email Format... !");
+  }else if (values.email) {
+    const { status } = await authenticateEmail(values.email);
+
+    if (status !== 200) {
+      errors.exist = toast.error("User Doesn't Exist... !");
+    }
+  }
+
+  return errors;
 }
 
 export async function createOrderValidate(values) {
@@ -132,6 +153,21 @@ export async function addItemValidate(values) {
     errors.productName = toast.error("Item Name Required... !");
   } else if (!values.price) {
     errors.price = toast.error("Price Required ... !");
+  }
+
+  return errors;
+}
+
+export async function emailVerificationValidate(values) {
+  const errors = {};
+
+  if (!values.username) {
+    errors.username = toast.error("Username Required... !");
+  }
+  else if (!values.email) {
+    errors.email = toast.error("Email Required... !");
+  } else if (!isValidEmail(values.email)) {
+    errors.email = toast.error("Invalid Email Format... !");
   }
 
   return errors;

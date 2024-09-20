@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import { IoMailOutline } from "react-icons/io5";
-import { IoKeyOutline } from "react-icons/io5";
-import { NavLink } from "react-router-dom";
 import { useFormik } from "formik";
 import { loginValidate, profileValidate } from "../helper/validate";
 import toast, { Toaster } from "react-hot-toast";
@@ -58,7 +55,7 @@ const Profile = () => {
     setFile(base64);
   };
 
-  // if (isLoading) return <h1 className="text-2xl font-bold">isLoading</h1>;
+  
   if (serverError)
     return <h1 className="text-xl text-red-500">{serverError.message}</h1>;
 
@@ -124,6 +121,7 @@ const Profile = () => {
                     {...formik.getFieldProps("email")}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="Enter Email"
+                    readOnly
                   />
                 </div>
 
