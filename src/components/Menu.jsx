@@ -132,7 +132,7 @@ const Menu = () => {
   const formik = useFormik({
     initialValues: {
       customerName: "",
-      phone: "8178739633",
+      phone: "",
       price: 0,
       paymentType: "Cash",
       orderStatus: "pending",
