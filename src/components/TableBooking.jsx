@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getOrderTable, postOrderTable } from "../helper/helper";
-import { Button } from "@nextui-org/react";
 import { loader } from "../assets";
 import { NavLink } from "react-router-dom";
 import { getOrders } from "../helper/helper";
-import { TbFileInvoice } from "react-icons/tb";
 import toast , {Toaster} from 'react-hot-toast'
 import Invoice from "./Invoice";
 import LoadingButton from "../components/LoadingButton"
@@ -116,7 +114,7 @@ const TableBooking = () => {
     <div className="w-full overflow-x-hidden md:px-[50px] p-[15px] md:py-[50px]">
       <Toaster position="top-center" reverseOrder="false"></Toaster>
       {isLoading && (
-        <div>
+        <div className="flex justify-center items-center">
           <img src={loader} />
         </div>
       )}

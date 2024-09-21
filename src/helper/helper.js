@@ -1003,9 +1003,14 @@ export async function deleteCategory(id, imageUrl) {
     },
   };
 
+  if(!imageUrl)
+  {
+    imageUrl = "-";
+  }
+
   try {
     const res = axios.delete(
-      `${API_URL}/category/?id=${id}&imageUrl${imageUrl}`,
+      `${API_URL}/category/?id=${id}&imageUrl=${imageUrl}`,
       config
     );
 

@@ -114,7 +114,7 @@ const AddAddons = () => {
       <Toaster position="top-center" reverseOrder="false" />
 
       {isLoading && (
-        <div>
+        <div className="flex justify-center items-center"> 
           <img src={loader} />
         </div>
       )}

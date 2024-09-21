@@ -113,9 +113,8 @@ const AddVariant = () => {
       <Toaster position="top-center" reverseOrder="false" />
 
       {isLoading && (
-        <div>
-          {" "}
-          <img src={loader} />{" "}
+        <div className="flex justify-center items-center">
+          <img src={loader} />
         </div>
       )}
       {!isLoading && (

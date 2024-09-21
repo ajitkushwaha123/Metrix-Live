@@ -237,7 +237,7 @@ const AddCategories = () => {
           </div>
         </div>
       )}
-      {isLoading && <div> <img src={loader} /> </div>}
+      {isLoading && <div className="flex justify-center items-center"> <img src={loader} /> </div>}
     </div>
   );
 };

@@ -371,7 +371,7 @@ const AddItems = () => {
         </div>
       )}
       {isLoading && (
-        <div>
+        <div className="flex justify-center items-center">
           <img src={loader} />
         </div>
       )}
