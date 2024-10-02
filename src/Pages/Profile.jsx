@@ -3,7 +3,6 @@ import { useFormik } from "formik";
 import { loginValidate, profileValidate } from "../helper/validate";
 import toast, { Toaster } from "react-hot-toast";
 import { loader } from "../assets";
-import { useAuthStore } from "../store/store";
 import { updateUser } from "../helper/helper";
 import useFetch from "../hooks/fetch.hooks";
 import convertToBase64 from "../helper/convert";
@@ -22,6 +21,9 @@ const Profile = () => {
       address: apiData?.address || "",
       city: apiData?.city || "",
       profile: apiData?.profile || "",
+      gst : apiData?.gst || "",
+      pan : apiData?.pan || "",
+      subscription : apiData?.subscription || "",
     },
     enableReinitialize: true,
     validate: profileValidate,
@@ -68,12 +70,14 @@ const Profile = () => {
       ) : (
         <div className="font-poppin py-[20px] flex items-center justify-center">
           <form
-            onSubmit={formik.handleSubmit}
-            className="max-w-[380px] bg-white mx-[20px] rouned-xl py-[20px] shadow-lg w-[100%] px-[20px]"
+            className="max-w-[380px] max-h-[600px] overflow-y-scroll chalaja sm:max-w-[420px] bg-white mx-[20px] rouned-xl py-[20px] shadow-lg w-[100%] px-[20px]"
           >
             <Toaster position="top-center" reverseOrder="false"></Toaster>
             <div className="">
-              <div className="rounded-xl w-[100%] flex items-center flex-col justify-center">
+              <div className="relative rounded-xl w-[100%] flex items-center flex-col justify-center">
+
+                <button className="absolute bg-primary text-white px-[20px] py-2 rounded-xl font-medium top-0 right-0"> {apiData?.subscription} </button>
+
                 <div className="w-[150px] md:w-[170px] md:h-[170px] h-[150px]">
                   <label htmlFor="profile">
                     <img
@@ -99,7 +103,7 @@ const Profile = () => {
                     htmlFor="name"
                     className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Name
+                    Restaurant Name
                   </label>
                   <input
                     type="text"
@@ -170,6 +174,36 @@ const Profile = () => {
                   />
                 </div>
 
+                <div className=" w-full sm:col-span-1 mt-[15px]">
+                  <label
+                    htmlFor="gst"
+                    className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Gst
+                  </label>
+                  <input
+                    type="text"
+                    {...formik.getFieldProps("gst")}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    placeholder="Enter Gst no."
+                  />
+                </div>
+
+                <div className=" w-full sm:col-span-1 mt-[15px]">
+                  <label
+                    htmlFor="pan"
+                    className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Pan
+                  </label>
+                  <input
+                    type="text"
+                    {...formik.getFieldProps("pan")}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    placeholder="Enter Pan no."
+                  />
+                </div>
+
                 {!loading && (
                   <button
                     onClick={() => {
@@ -183,7 +217,7 @@ const Profile = () => {
                 )}
                 {loading && (
                   <div className="mt-[20px]">
-                    <Button color="primary" isLoading>
+                    <Button onClick={formik.handleSubmit()} color="primary" isLoading>
                       Loading
                     </Button>
                   </div>
