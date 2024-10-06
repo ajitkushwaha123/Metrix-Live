@@ -61,62 +61,87 @@ const EditMenu = () => {
   const [shortCodeQuery, setShortCodeQuery] = useState("");
   const [{ apiData, serverError }] = useFetch();
   const [finalValue, setFinalValue] = useState(0);
-  const [orderDetail , setOrderDetail] = useState([]); 
 
-  const { orderId , invId } = useParams();
+  const { orderId, invId } = useParams();
 
- const fetchOrders = async () => {
-   try {
-     const orders = await getSingleOrders(`orders/find/${orderId}`);
+  const fetchOrders = async () => {
+    try {
+      const orders = await getSingleOrders(`orders/find/${orderId}`);
 
-     console.log("Orders:", orders);
-     formik.setFieldValue("customerName", orders?.customerName || "");
-     formik.setFieldValue("phone", orders?.phone || "");
-     orders.products.forEach((orderItem) => {
-       setCartProduct((prevCartProduct) => {
-         const existingProduct = prevCartProduct.find(
-           (product) =>
-             product._id === orderItem.product._id &&
-             product.price === orderItem.product.price
-         );
+      console.log("Orders:", orders);
+      formik.setFieldValue("customerName", orders?.customerName || "");
+      formik.setFieldValue("phone", orders?.phone || "");
+      formik.setFieldValue("price", orders?.price || 0);
+      formik.setFieldValue("paymentType", orders?.paymentType || "Cash");
+      formik.setFieldValue("orderStatus", orders?.orderStatus || "pending");
+      formik.setFieldValue("orderNote", orders?.orderNote || "");
+      formik.setFieldValue("products", orders?.products || []);
+      formik.setFieldValue("quantity", orders?.quantity || 0);
+      formik.setFieldValue("customerImage", orders?.customerImage || "");
+      formik.setFieldValue("imageColor", orders?.imageColor || "tertiary");
+      formik.setFieldValue("customerId", orders?.customerId || "");
+      formik.setFieldValue("orderType", orders?.orderType || "dineIn");
+      formik.setFieldValue("tableId", orders?.tableId || "");
+      formik.setFieldValue("invoiceId", orders?.invoiceId || "");
+      formik.setFieldValue("customerSince", orders?.customerSince || "");
+      formik.setFieldValue("newCustomer", orders?.newCustomer || true);
+      formik.setFieldValue("discount", orders?.discount || 0);
+      formik.setFieldValue("tax", orders?.tax || 0);
+      formik.setFieldValue(
+        "discountType",
+        orders?.discountType || "percentage"
+      );
+      formik.setFieldValue("totalAmount", orders?.totalAmount || "");
 
-         if (existingProduct) {
-           return prevCartProduct.map((product) =>
-             product._id === orderItem.product._id &&
-             product.price === orderItem.product.price
-               ? { ...product, quantity: product.quantity + orderItem.quantity }
-               : product
-           );
-         } else {
-           return [
-             ...prevCartProduct,
-             { ...orderItem.product, quantity: orderItem.quantity },
-           ];
-         }
-       });
+      // Update state after setting formik values
+      setDiscount(orders?.discount || 0);
+      setTax(orders?.tax || 0);
+      setDiscountType(orders?.discountType || "percentage");
+      setFinalValue(orders?.totalAmount || 0);
 
-       setQuantities((prevQuantities) => {
-         const newQuantities = {
-           ...prevQuantities,
-           [`${orderItem.product._id}-${orderItem.product.price}`]:
-             orderItem.quantity,
-         };
-         return newQuantities;
-       });
-     });
-   } catch (error) {
-     console.error("Error fetching orders:", error);
-   }
- };
+      orders.products.forEach((orderItem) => {
+        setCartProduct((prevCartProduct) => {
+          const existingProduct = prevCartProduct.find(
+            (product) =>
+              product._id === orderItem.product._id &&
+              product.price === orderItem.product.price
+          );
 
- useEffect(() => {
-   fetchOrders();
- }, [orderId]);
+          if (existingProduct) {
+            return prevCartProduct.map((product) =>
+              product._id === orderItem.product._id &&
+              product.price === orderItem.product.price
+                ? {
+                    ...product,
+                    quantity: product.quantity + orderItem.quantity,
+                  }
+                : product
+            );
+          } else {
+            return [
+              ...prevCartProduct,
+              { ...orderItem.product, quantity: orderItem.quantity },
+            ];
+          }
+        });
 
+        setQuantities((prevQuantities) => {
+          const newQuantities = {
+            ...prevQuantities,
+            [`${orderItem.product._id}-${orderItem.product.price}`]:
+              orderItem.quantity,
+          };
+          return newQuantities;
+        });
+      });
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
 
- useEffect(() => {
-   fetchOrders();
- }, [orderId]);
+  useEffect(() => {
+    fetchOrders();
+  }, [orderId, discount, tax, discountType]);
 
   const items = [];
   const invoice = {
@@ -164,12 +189,11 @@ const EditMenu = () => {
     }
   };
 
-
   const handleOrder = async (orderId, values) => {
     setChangeBtn(true);
     console.log("Order Added", values);
 
-    const response = await updateOrder(orderId , values);
+    const response = await updateOrder(orderId, values);
 
     console.log("Order Added", response);
     console.log("Invoice:", invId);
@@ -218,6 +242,7 @@ const EditMenu = () => {
     onSubmit: async (values) => {
       setAddingOrder(true);
       values.tableId = id;
+      values.products = AddedProduct;
       console.log("Form Values:", values);
       values.customerSince = selectCustomerSince;
 
@@ -273,7 +298,7 @@ const EditMenu = () => {
         console.log("values", values);
 
         try {
-          let orderPromise = handleOrder(orderId ,values);
+          let orderPromise = handleOrder(orderId, values);
           toast.promise(orderPromise, {
             loading: "Creating...",
             success: <b>Order Created Successfully... !</b>,
@@ -300,7 +325,7 @@ const EditMenu = () => {
 
   const generateKOT = async () => {
     try {
-      console.log("items" , items);
+      console.log("items", items);
       invoice.items = items;
       invoice.tax = (tax * finalValue) / 100 || 0;
       if (discountType == "percentage") {
@@ -312,7 +337,7 @@ const EditMenu = () => {
       invoice.orderTime = new Date().toLocaleTimeString();
       const response = await generateInvoice(invoice);
 
-      console.log("Invoice ID:", response); 
+      console.log("Invoice ID:", response);
       setKotGenerated(true);
       toast.success("KOT Generated... !");
       console.log(response);
@@ -784,33 +809,13 @@ const EditMenu = () => {
                       Discount
                     </label>
 
-                    <select
-                      className="pl-[15px] chalaja outline-none py-2 rounded-xl"
-                      id="discount"
-                      onChange={(e) => {
-                        const selectedItem = fetchDiscount.find(
-                          (item) => item.name === e.target.value
-                        );
-                        setDiscount(
-                          selectedItem ? selectedItem.couponValue : ""
-                        );
-
-                        setDiscountType(
-                          selectedItem ? selectedItem.couponType : ""
-                        );
-                      }}
-                    >
-                      <option selected>Apply Coupon</option>
-                      {fetchDiscount?.map((item) => (
-                        <option
-                          className="py-2 flex justify-between items-center rounded-md chalaja"
-                          key={item.name}
-                          value={item.name}
-                        >
-                          <div>{item.name}</div>
-                        </option>
-                      ))}
-                    </select>
+                    {discount
+                      ? `Applied: ${
+                          fetchDiscount.find(
+                            (item) => item.couponValue === discount
+                          )?.name || "No Coupon Applied"
+                        }`
+                      : "No Coupon Applied"}
                   </div>
 
                   <div className="w-[50%] mx-[10px]">
@@ -821,33 +826,20 @@ const EditMenu = () => {
                       Tax
                     </label>
 
-                    <select
-                      className="pl-[15px] chalaja outline-none py-2 rounded-xl"
-                      id="tax"
-                      onChange={(e) => {
-                        const selectedItem = fetchTax.find(
-                          (item) => item.name === e.target.value
-                        );
-                        setTax(selectedItem ? selectedItem.taxPercentage : "");
-                      }}
-                    >
-                      <option selected>Add Tax</option>
-                      {fetchTax?.map((item) => (
-                        <option
-                          className="py-2 rounded-md chalaja"
-                          key={item.name}
-                          value={item.name}
-                        >
-                          {item.name}
-                        </option>
-                      ))}
-                    </select>
+                  
+                        {tax
+                          ? `Applied: ${
+                              fetchTax.find(
+                                (item) => item.taxPercentage === tax
+                              )?.name || "No taxes applied"
+                            }`
+                          : "No taxes applied"}
                   </div>
                 </div>
               </div>
               <div className="w-[100%] h-[50px] flex justify-center items-center">
                 <button className="bg-primary w-[33%] mx-[10px] text-white px-[15px] py-3 rounded-md">
-                  <PriceFormatter price={finalValue} />
+                  <PriceFormatter price={formik.values.price} />
                 </button>
 
                 {cartProduct?.length > 0 && (
@@ -910,7 +902,7 @@ const EditMenu = () => {
         <div>
           {cartProduct?.length > 0 &&
             cartProduct.map((product) => {
-              console.log("Product", product);  
+              console.log("Product", product);
               const itemKey = `${product._id}-${product.price}`;
               if (quantities[itemKey] > 0) {
                 AddedProduct.push({ product, quantity: quantities[itemKey] });
@@ -1158,7 +1150,7 @@ const EditMenu = () => {
                     onClick={(e) => formik.handleSubmit(e)}
                     className="bg-primary px-[10px] py-[5px] text-white rounded-md"
                   >
-                    Add Order
+                    Update Order
                   </button>
                 ) : (
                   <LoadingButton />
