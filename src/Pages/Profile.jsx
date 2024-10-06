@@ -61,6 +61,12 @@ const Profile = () => {
   if (serverError)
     return <h1 className="text-xl text-red-500">{serverError.message}</h1>;
 
+  const handleProfileUpdate = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    formik.handleSubmit();
+  }
+
   return (
     <>
       {isLoading ? (
@@ -206,8 +212,8 @@ const Profile = () => {
 
                 {!loading && (
                   <button
-                    onClick={() => {
-                      setLoading(true), formik.handleSubmit();
+                    onClick={(e) => {
+                      handleProfileUpdate(e);
                     }}
                     type="submit"
                     className="bg-primary mt-[20px] rounded-lg text-white px-6 text-[18px] py-2"
@@ -217,7 +223,7 @@ const Profile = () => {
                 )}
                 {loading && (
                   <div className="mt-[20px]">
-                    <Button onClick={formik.handleSubmit()} color="primary" isLoading>
+                    <Button color="primary" isLoading>
                       Loading
                     </Button>
                   </div>

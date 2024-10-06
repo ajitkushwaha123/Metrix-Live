@@ -7,6 +7,9 @@ import toast , {Toaster} from 'react-hot-toast'
 import Invoice from "./Invoice";
 import LoadingButton from "../components/LoadingButton"
 import PriceFormatter from "../helper/priceFormatter"
+import { PiNotePencilBold } from "react-icons/pi";
+
+
 
 const TableBooking = () => {
   const [rows, setRows] = useState([{ id: 1, tables: 1, title: "Row 1" }]);
@@ -210,6 +213,13 @@ const TableBooking = () => {
                             <div
                               className={`relative flex flex-col bg-secondary relative border-2 border-dashed border-slate-200 w-[60px] sm:w-[80px] h-[60px] sm:h-[80px] text-[20px] font-semibold flex justify-center items-center`}
                             >
+                              <NavLink
+                                to={`/menu/${row.id}${i}/${bookedItem._id}/${bookedItem.invoiceId}`}
+                              >
+                                <p className="top-0 right-0 absolute">
+                                  <PiNotePencilBold />
+                                </p>
+                              </NavLink>
                               <button className="bg-success text-[14px] text-white px-[10px] py-1 rounded-xl">
                                 <PriceFormatter price={bookedItem.price} />
                               </button>

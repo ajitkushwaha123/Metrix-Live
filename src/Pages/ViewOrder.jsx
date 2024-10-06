@@ -8,6 +8,7 @@ import BreadCrum from "../components/BreadCrum";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import { CiUser } from "react-icons/ci";
 import { MdOutlinePayment } from "react-icons/md";
+import RejectionModal from "../Modals/RejectionModal";
 import { CiLocationOn } from "react-icons/ci";
 import SingleOrderTable from "../DataTable/SingleOrderTable";
 import { useFormik } from "formik";
@@ -28,13 +29,15 @@ const ViewOrder = () => {
   const [quantity, setQuantity] = useState(0);
   const [orderType, setOrderType] = useState("");
   const [orderedStatus, setOrderedStatus] = useState("pending");
-  const [orderDate , setOrderDate] = useState("");
-  const [customerSince , setCustomerSince] = useState();
-  const [customerStatus , setCustomerStatus] = useState("True");
-  const [invoiceId ,setInvoiceId] = useState('');
-  const [discount , setDiscount] = useState(0);
-  const [tax , setTax] = useState(0);
-  const [discountType , setDiscountType] = useState("percentage");
+  const [orderDate, setOrderDate] = useState("");
+  const [customerSince, setCustomerSince] = useState();
+  const [customerStatus, setCustomerStatus] = useState("True");
+  const [invoiceId, setInvoiceId] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [tax, setTax] = useState(0);
+  const [discountType, setDiscountType] = useState("percentage");
+  const [cancelOrder, setCancelOrder] = useState(false);
+  const [rejectionReason, setRejectionReason] = useState("");
 
   const fetchProduct = async () => {
     try {
@@ -62,10 +65,9 @@ const ViewOrder = () => {
         options
       );
 
-      const formateCustomerSince = new Date(product.customerSince).toLocaleDateString(
-        "en-US",
-        option
-      );
+      const formateCustomerSince = new Date(
+        product.customerSince
+      ).toLocaleDateString("en-US", option);
 
       setCustomerName(product.customerName);
       setPhone(product.phone);
@@ -83,18 +85,15 @@ const ViewOrder = () => {
       setDiscount(product.discount);
       setTax(product.tax);
       setDiscountType(product.discountType);
+      setRejectionReason(product.orderRejectionReason);
     } catch (error) {
       console.error("Error fetching product:", error);
     }
   };
 
-
-  const updateOrder = async (id, orderStatus) => {
+  const updateOrder = async (id, values) => {
     try {
-      const { data } = await updateOrderHelper(
-        `orders/${id}`,
-        orderStatus
-      );
+      const { data } = await updateOrderHelper(`${id}`, values);
       console.log("Updated order data:", data);
     } catch (error) {
       console.error("Error updating order:", error);
@@ -107,8 +106,12 @@ const ViewOrder = () => {
 
   const handleCancelOrder = (e) => {
     e.preventDefault();
-    setOrderedStatus("cancelled");
-    formik.handleSubmit();
+    if (orderedStatus === "cancelled") {
+      toast("Order is Already Cancelled");
+      return;
+    }
+    setCancelOrder(true);
+    // formik.handleSubmit();
   };
 
   const handleCompleteOrder = (e) => {
@@ -120,18 +123,19 @@ const ViewOrder = () => {
   const formik = useFormik({
     initialValues: {
       orderStatus: "published",
+      orderRejectionReason: "Testing Bro",
     },
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
       if (orderedStatus === "cancelled") {
         values.orderStatus = "cancelled";
-        toast.success("Order Cancelled Successfully ...!");
+        // toast.success("Order Cancelled Successfully ...!");
       }
 
       if (orderedStatus === "completed") {
         values.orderStatus = "completed";
-        toast.success("Order completed Successfully ...!");
+        // toast.success("Order completed Successfully ...!");
       }
       console.log("Formik values:", values);
       console.log("Ordered status:", id);
@@ -168,6 +172,7 @@ const ViewOrder = () => {
             <button
               onClick={(e) => {
                 handleCancelOrder(e);
+                // addRejectionReason(e);
               }}
               className="bg-black mx-[15px] rounded-lg flex justify-center items-center text-white px-6 text-[18px] py-2"
             >
@@ -176,8 +181,7 @@ const ViewOrder = () => {
                 <p>Cancelled</p>
               ) : (
                 <p>
-                  {" "}
-                  <span>Mark as Cancel</span>{" "}
+                  <span>Mark as Cancel</span>
                 </p>
               )}
             </button>
@@ -208,13 +212,12 @@ const ViewOrder = () => {
                   </p>
                   <div className="text-start text-slate-500">
                     <h2 className="text-black">
-                      {customerName || <Skeleton width={80} />}
+                      {customerName || "Not Added"}
                     </h2>
                     <h3>
                       Customer since :
                       <span className="font-medium text-black">
-                        {" "}
-                        {customerSince}{" "}
+                        {customerSince}
                       </span>
                     </h3>
                   </div>
@@ -232,9 +235,7 @@ const ViewOrder = () => {
                   <div className="w-[50%]">
                     <h2 className="text-slate-400">
                       Phone : <br />
-                      <span className="text-black">
-                        {phone || <Skeleton width={100} />}
-                      </span>
+                      <span className="text-black">{phone || "Not added"}</span>
                     </h2>
                   </div>
 
@@ -262,12 +263,19 @@ const ViewOrder = () => {
                 <div className="flex w-[100%] text-start px-[18px]">
                   <div className="w-[50%]">
                     <h2 className="text-slate-400">
-                      Order Status : <br />
-                      <span className="text-black text-medium text-[17px] px-[3px]">
-                        {orderedStatus.toLocaleUpperCase() || (
-                          <Skeleton width={20} />
-                        )}
-                      </span>
+                      {orderedStatus === "cancelled" ? (
+                        <div>
+                          Rejection Reason : <br />
+                          <p className="text-red-400">{rejectionReason}</p>
+                        </div>
+                      ) : (
+                        <div>
+                          Order Status : <br />
+                          <p className="text-medium text-black">
+                            {orderedStatus.toLocaleUpperCase()}
+                          </p>
+                        </div>
+                      )}
                     </h2>
                   </div>
                   <div className="w-[50%]">
@@ -321,6 +329,7 @@ const ViewOrder = () => {
           <SingleOrderTable invoice={invoiceId} />
         </div>
       </div>
+      {cancelOrder ? <RejectionModal orderId={id} isOpen={true} /> : null}
     </div>
   );
 };

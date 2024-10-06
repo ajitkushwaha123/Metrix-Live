@@ -46,6 +46,7 @@ const columns = [
   { name : "ORDER TYPE" , uid : "orderType"},
   { name: "ORDER NOTE", uid: "orderNote" },
   { name: "ACTIONS", uid: "actions" },
+  { name : "REJECTION REASON" , uid : "rejectionReason"}
 ];
 
 const statusOptions = [
@@ -160,6 +161,7 @@ export default function OrderTable() {
           orderType: order.orderType,
           orderDate: orderDate.toLocaleDateString(),
           invoice: order.invoice,
+          rejectionReason: order.orderRejectionReason,
         };
       });
 
@@ -329,6 +331,15 @@ export default function OrderTable() {
                 Download Bill
               </DropdownMenu>
             </Dropdown>
+          </div>
+        );
+        case "rejectionReason":
+        return (
+          <div className="flex font-poppins flex-col">
+            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-tiny capitalize text-default-500">
+              {user.team}
+            </p>
           </div>
         );
       default:

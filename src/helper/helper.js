@@ -621,7 +621,7 @@ export async function getCustomerDetail() {
   }
 }
 
-export async function updateOrder(orderAPI, values) {
+export async function updateOrder(orderId, values) {
   console.log("values:", values);
 
   const token = localStorage.getItem("token");
@@ -634,10 +634,10 @@ export async function updateOrder(orderAPI, values) {
     },
   };
 
-  console.log("Order API:", orderAPI);
+  console.log("Order API:", orderId);
 
   try {
-    const res = await axios.put(`${API_URL}/${orderAPI}`, values, config);
+    const res = await axios.put(`${API_URL}/orders/${orderId}`, values, config);
     console.log("Updated order:", res.data);
     return res.data; // Return the response data directly
   } catch (error) {
@@ -1420,6 +1420,35 @@ export async function invoiceEdit(id , values) {
   try {
     const { data } = await axios.put(
       `${API_URL}/invoice/edit/${id}`,
+      values,
+      config
+    );
+    console.log("Invoice Edited", values);
+    console.log("Invoice Generated:", data);
+    return Promise.resolve(data);
+  } catch (err) {
+    console.log("Error Generating Invoice:", err);
+    return Promise.reject({ error: "Couldn't generate invoice" });
+  }
+}
+
+export async function kotEdit(id, values) {
+  const token = localStorage.getItem("token");
+  console.log("token", token);
+
+  console.log("id", id);
+  console.log("val", values);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  try {
+    const { data } = await axios.put(
+      `${API_URL}/invoice/kot/edit/${id}`,
       values,
       config
     );

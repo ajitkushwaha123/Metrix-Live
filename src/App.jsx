@@ -35,6 +35,7 @@ import Support from './Pages/Support/Support'
 import ItemTable from './Pages/UploadMenu/ItemTable'
 import { useState ,  useEffect } from 'react'
 import Internet from './Modals/Internet'
+import EditMenu from './components/EditMenu'
 
 function App() {
 
@@ -91,6 +92,7 @@ function App() {
                   path="/menu/:id"
                   element={<Protected component={Menu} />}
                 />
+                <Route path="/menu/:id/:orderId/:invId" element={<Protected component={EditMenu} />} />
                 <Route
                   path="/upload-menu"
                   element={<Protected component={UploadMenu} />}
