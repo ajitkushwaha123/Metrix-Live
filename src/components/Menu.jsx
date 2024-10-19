@@ -494,7 +494,7 @@ const Menu = () => {
   return (
     <div className="flex w-full bg-[#EEF0FA] px-[15px] md:px-[0px] md:ml-[15px] flex-col md:flex-row my-[20px] text-[16px]">
       <Toaster position="top-center" reverseOrder="false"></Toaster>
-      <div className="flex w-[100%] h-screen chalaja md:w-[80%]">
+      <div className="flex w-[100%] h-[90vh] chalaja md:w-[80%]">
         <div className="w-[50%] bg-white md:w-[30%] h-[100%] chalaja overflow-y-scroll">
           <div className="h-[50px] cursor-pointer border-b-2 border-slate-200 bg-secondary flex justify-center items-center">
             Categories
@@ -535,7 +535,7 @@ const Menu = () => {
         </div>
         <div className="w-[50%] mx-3 my-[-10px] h-[100%] md:w-[70%]">
           <div className="flex justify-center items-center">
-            <div className="w-[50%] px-[10px] h-[50px] flex rounded-md bg-white items-center ml-[10px]">
+            <div className="w-[50%] hidden  px-[10px] h-[50px] md:flex rounded-md bg-white items-center ml-[10px]">
               <input
                 placeholder="Search Product Name"
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -551,7 +551,7 @@ const Menu = () => {
                 <CiSearch className="text-[20px] mx-[10px]" />
               </button>
             </div>
-            <div className="w-[50%] px-[10px] h-[50px] flex rounded-md bg-white items-center ml-[10px]">
+            <div className="w-[50%] px-[10px] h-[50px] hidden md:flex rounded-md bg-white items-center ml-[10px]">
               <input
                 placeholder="Search By short Code"
                 onChange={(e) => setShortCodeQuery(e.target.value)}
@@ -570,7 +570,7 @@ const Menu = () => {
           </div>
 
           {!isLoading && (
-            <div className="mx-3 my-3 h-[92%] w-[100%] overflow-y-scroll chalaja rounded-md">
+            <div className="mx-3 my-3 h-[100%] md:h-[92%] w-[100%] overflow-y-scroll chalaja rounded-md">
               {product?.length > 0 ? (
                 <div className="grid cursor-pointer grid-cols-1 md:grid-cols-4 gap-4">
                   {product?.map((item, index) =>
@@ -632,22 +632,22 @@ const Menu = () => {
         </div>
       </div>
 
-      <div className="w-full md:mx-[15px] h-screen my-[20px] md:my-[0px] mb-[40px] md:mb-[0px] md:w-[40%] md:block md:relative">
+      <div className="w-full md:mx-[15px] h-[90vh] mt-[20px] md:my-[0px] mb-[40px] md:mb-[0px] bg-white md:w-[40%] md:block">
         {!checkout && (
-          <div className="text-start h-[100%] h-[100%] bg-white p-4 mt-[-50px] md:mt-[0px] rounded-md">
-            <div className="flex justify-between items-center">
+          <div className="text-start w-full flex flex-col justify-between items-center h-[100%]  p-4 md:mt-[0px] rounded-md">
+            <div className="flex w-[100%] justify-between text-start items-center">
               <div className="w-[50%]">
                 <p>Product Name</p>
               </div>
 
-              <div className="w-[30%]">Qunatity</div>
+              <div className="w-[30%]">Quantity</div>
               <div className="w-[20%]">Amount</div>
             </div>
 
-            <div className="overflow-y-scroll mt-[10px] chalaja bg-white h-[440px]">
+            <div className="overflow-y-scroll w-[100%] mt-[10px] chalaja bg-white h-[500px]">
               {cartProduct?.length == 0 && (
                 <div className="flex py-[40px] justify-center items-center flex-col">
-                  <img width={"200px"} src={productImg} />
+                  <img width={"180px"} src={productImg} />
                   <p className="font-medium my-[20px] font-poppins text-[22px]">
                     No Products Yet
                   </p>
@@ -663,7 +663,7 @@ const Menu = () => {
                   return (
                     <div
                       key={index}
-                      className="flex py-3 cursor-pointer overflow-y-scroll chalaja border-2 border-slate-100 rounded-md my-[10px] px-[10px] justify-between items-center"
+                      className="flex py-3 w-[100%] cursor-pointer overflow-y-scroll chalaja border-2 border-slate-100 rounded-md my-[10px] px-[10px] justify-between items-center"
                     >
                       <div className="w-[50%]">
                         <p>{item.productName}</p>
@@ -709,17 +709,10 @@ const Menu = () => {
                 })}
             </div>
 
-            <div className="py-[10px]">
-              <div className="w-[100%] py-[10px] h-[50px] mb-[20px] flex justify-center items-center">
+            <div className="w-[100%]">
+              <div className="w-[100%] pt-[10px] h-[30px] mb-[20px] flex justify-center items-center">
                 <div className="w-[100%] h-[50px] flex justify-center items-center">
                   <div className="w-[50%] mx-[10px]">
-                    <label
-                      htmlFor="discount"
-                      className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Discount
-                    </label>
-
                     <select
                       className="pl-[15px] chalaja outline-none py-2 rounded-xl"
                       id="discount"
@@ -750,13 +743,6 @@ const Menu = () => {
                   </div>
 
                   <div className="w-[50%] mx-[10px]">
-                    <label
-                      htmlFor="tax"
-                      className="block text-primary text-start mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Tax
-                    </label>
-
                     <select
                       className="pl-[15px] chalaja outline-none py-2 rounded-xl"
                       id="tax"
@@ -781,8 +767,8 @@ const Menu = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-[100%] h-[50px] flex justify-center items-center">
-                <button className="bg-primary w-[33%] mx-[10px] text-white px-[15px] py-3 rounded-md">
+              <div className="w-[100%] h-[50px] flex justify-between items-center">
+                <button className="bg-primary w-[33%] mx-[10px] text-white py-3 rounded-md">
                   <PriceFormatter price={finalValue} />
                 </button>
 
@@ -860,7 +846,7 @@ const Menu = () => {
         {checkout && (
           <form
             onSubmit={formik.handleSubmit}
-            className="p-4 -mt-[50px] md:mt-[0px] bg-white mx-[10px] mb-[10px] flex flex-col md:flex-row md:p-5"
+            className="p-4 md:mt-[0px] bg-white mx-[10px] mb-[10px] flex flex-col md:flex-row md:p-5"
           >
             <div className="flex hidden md:block flex-col w-[100%] justify-center item-center ">
               <div className="flex justify-between items-center">

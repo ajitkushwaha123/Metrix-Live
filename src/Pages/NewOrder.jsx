@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { insert, useFormik } from "formik";
 import { CiSearch } from "react-icons/ci";
 import toast , {Toaster} from 'react-hot-toast';
-import { createOrderValidate } from "../helper/validate";
 import { addCustomers, getAllProducts, insertOrders } from "../helper/helper";
 import { Select, SelectItem, Avatar } from "@nextui-org/react";
 import { getAllCustomers , searchProduct } from "../helper/helper";
-import { Button } from "@nextui-org/react";
+
 
 const NewOrder = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -797,7 +795,7 @@ const formik = useFormik({
                             )}
                           </button>
 
-                          <div className="flex bg-gray-50 pr-[20px] border outline-none text-sm rounded-lg dark:border-gray-500 dark:placeholder-gray-400 dark:text-white justify-center items-center">
+                          <div className="md:flex hidden  bg-gray-50 pr-[20px] border outline-none text-sm rounded-lg dark:border-gray-500 dark:placeholder-gray-400 dark:text-white justify-center items-center">
                             <input
                               type="text"
                               value={query}

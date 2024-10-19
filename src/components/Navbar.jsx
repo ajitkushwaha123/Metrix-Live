@@ -81,7 +81,7 @@ const Navbar = ({ title }) => {
   };
   return (
     <>
-      <div className="w-[100%] font-poppins h-[70px] border-b-2 border-secondary bg-[white] flex justify-between items-center sm:px-[40px]">
+      <div className="w-[100%] Z-100 font-poppins h-[70px] border-b-2 border-secondary bg-[white] flex justify-between items-center sm:px-[40px]">
         <div className="flex justify-between items-center">
           <RxHamburgerMenu
             onClick={(e) => {
