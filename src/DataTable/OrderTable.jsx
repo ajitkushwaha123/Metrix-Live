@@ -2,6 +2,8 @@ import React , {useState , useEffect} from "react";
 import { useProductContext } from "../context/productContext";
 import { loader } from "../assets";
 
+const API_URL = `${process.env.REACT_APP_API_URL}/api`;
+
 import {
   Table,
   TableHeader,
@@ -27,7 +29,7 @@ import {SearchIcon} from "./SearchIcon";
 import {ChevronDownIcon} from "./ChevronDownIcon";
 // import {columns, statusOptions} from "./data";
 import {capitalize} from "./utils";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { deleteAPI, getOrders } from "../helper/helper";
 import toast from "react-hot-toast";
 import PriceFormatter from "../helper/priceFormatter";
@@ -87,6 +89,7 @@ const INITIAL_VISIBLE_COLUMNS = [
 ];
 
 export default function OrderTable() {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [users, setUsers] = useState([]);
 
@@ -96,6 +99,19 @@ export default function OrderTable() {
     setIsOpen((prevState) => !prevState);
     console.log(isOpen); 
   };
+
+  const viewOrderDetails = (e, id) => {
+    e.preventDefault();
+    console.log("View Order Details");
+    navigate(`/order-view/${id}`);
+  };
+
+  const downloadInvoice = (e, id) => {
+    e.preventDefault();
+    console.log("View Order Details");
+    window.location.href = `${API_URL}/invoice/invoice/${id}`;
+  };
+
 
   const deleteOrder = async (id) => {
     // alert("Are you sure you want to delete this order... ?");
@@ -162,6 +178,7 @@ export default function OrderTable() {
           orderDate: orderDate.toLocaleDateString(),
           invoice: order.invoice,
           rejectionReason: order.orderRejectionReason,
+          invoiceId : order.invoiceId
         };
       });
 
@@ -321,14 +338,16 @@ export default function OrderTable() {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
-                <DropdownItem>
-                  <NavLink to={`/order-view/${user.id}`}>View</NavLink>
+                <DropdownItem onClick={(e) => viewOrderDetails(e, user.id)}>
+                  View
                 </DropdownItem>
                 {/* <DropdownItem>Edit</DropdownItem> */}
                 <DropdownItem onClick={() => deleteOrder(user.id)}>
                   Delete
                 </DropdownItem>
-                Download Bill
+                <DropdownItem onClick={(e) => downloadInvoice(e, user.invoiceId)}>
+                  Donwload View
+                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>

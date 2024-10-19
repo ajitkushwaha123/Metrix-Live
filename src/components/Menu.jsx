@@ -225,6 +225,8 @@ const Menu = () => {
           if(values.tableId !== "-1")
           {
             navigate("/table-booking");
+          }else{
+            navigate("/order");
           }
         } catch (err) {
           console.error("Error handling order:", err);
