@@ -36,6 +36,7 @@ import ItemTable from './Pages/UploadMenu/ItemTable'
 import { useState ,  useEffect } from 'react'
 import Internet from './Modals/Internet'
 import EditMenu from './components/EditMenu'
+import SubscriptionAlert from './Banners/SubscriptionAlert'
 
 function App() {
 
@@ -48,12 +49,11 @@ function App() {
 
   return (
     <BrowserRouter>
+      {/* <SubscriptionAlert /> */}
       <div className="flex w-[100%]">
         {/* {online ? "Online" : "offfline"} */}
         <div>
-          {online ? (
-            null
-          ) : (
+          {online ? null : (
             <div className="w-full h-screen flex jsutify-center items-center">
               <Internet isOpen={true} />
             </div>
@@ -92,7 +92,10 @@ function App() {
                   path="/menu/:id"
                   element={<Protected component={Menu} />}
                 />
-                <Route path="/menu/:id/:orderId/:invId" element={<Protected component={EditMenu} />} />
+                <Route
+                  path="/menu/:id/:orderId/:invId"
+                  element={<Protected component={EditMenu} />}
+                />
                 <Route
                   path="/upload-menu"
                   element={<Protected component={UploadMenu} />}

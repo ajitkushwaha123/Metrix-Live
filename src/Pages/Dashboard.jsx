@@ -15,6 +15,7 @@ import { BsCart3 } from "react-icons/bs";
 import RecentOrders from '../components/RecentOrders';
 import { getProductDetail , getCustomerDetail } from '../helper/helper';
 import {logo} from "../assets"
+import SubscriptionAlert from '../Banners/SubscriptionAlert';
 
 const Dashboard = () => {
   const [totalCustomer, setTotalCustomer] = useState(0);
@@ -59,6 +60,7 @@ const Dashboard = () => {
 
   return (
     <div className="w-full overflow-x-hidden">
+      <SubscriptionAlert />
       <BreadCrum />
 
       {/* <img src={logo}/> */}
