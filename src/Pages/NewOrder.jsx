@@ -74,7 +74,7 @@ const formik = useFormik({
   initialValues: {
     customerName: "",
     phone: "",
-    price: 2999,
+    price: 0,
     paymentType: "Cash",
     orderStatus: "pending",
     orderNote: "",
