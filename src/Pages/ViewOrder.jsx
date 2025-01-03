@@ -38,6 +38,7 @@ const ViewOrder = () => {
   const [discountType, setDiscountType] = useState("percentage");
   const [cancelOrder, setCancelOrder] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
+  const [orderNumber , setOrderNumber] = useState(0);
 
   const fetchProduct = async () => {
     try {
@@ -60,32 +61,33 @@ const ViewOrder = () => {
         day: "numeric",
       };
 
-      const formattedDate = new Date(product.createdAt).toLocaleDateString(
+      const formattedDate = new Date(product?.createdAt).toLocaleDateString(
         "en-US",
         options
       );
 
       const formateCustomerSince = new Date(
-        product.customerSince
+        product?.customerSince
       ).toLocaleDateString("en-US", option);
 
-      setCustomerName(product.customerName);
-      setPhone(product.phone);
-      setPaymentType(product.paymentType);
-      setPrice(product.price);
-      setStatus(product.status);
-      setOrderNote(product.orderNote);
-      setQuantity(product.quantity);
-      setOrderType(product.orderType);
+      setCustomerName(product?.customerName);
+      setPhone(product?.phone);
+      setPaymentType(product?.paymentType);
+      setPrice(product?.price);
+      setStatus(product?.status);
+      setOrderNote(product?.orderNote);
+      setQuantity(product?.quantity);
+      setOrderType(product?.orderType);
       setOrderDate(formattedDate);
-      setOrderedStatus(product.orderStatus);
+      setOrderedStatus(product?.orderStatus);
       setCustomerSince(formateCustomerSince);
-      setCustomerStatus(product.newCustomer.toString());
-      setInvoiceId(product.invoiceId);
-      setDiscount(product.discount);
-      setTax(product.tax);
-      setDiscountType(product.discountType);
-      setRejectionReason(product.orderRejectionReason);
+      setCustomerStatus(product?.newCustomer.toString());
+      setInvoiceId(product?.invoiceId);
+      setDiscount(product?.discount);
+      setTax(product?.tax);
+      setDiscountType(product?.discountType);
+      setRejectionReason(product?.orderRejectionReason);
+      setOrderNumber(product?.orderNumber);
     } catch (error) {
       console.error("Error fetching product:", error);
     }
@@ -158,7 +160,7 @@ const ViewOrder = () => {
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="flex">
             <p className="mr-[30px] font-medium">
-              Order :<span className="text-slate-500 ml-[10px]">#2806</span>
+              Order No. :<span className="text-slate-500 ml-[10px]"># {orderNumber} </span>
             </p>
             <p className="mr-[30px] text-[18px] text-slate-500">
               <span className="font-medium text-black text-[18px]">

@@ -342,11 +342,11 @@ export default function OrderTable() {
                   View
                 </DropdownItem>
                 {/* <DropdownItem>Edit</DropdownItem> */}
-                <DropdownItem onClick={() => deleteOrder(user.id)}>
+                {/* <DropdownItem onClick={() => deleteOrder(user.id)}>
                   Delete
-                </DropdownItem>
+                </DropdownItem> */}
                 <DropdownItem onClick={(e) => downloadInvoice(e, user.invoiceId)}>
-                  Donwload View
+                  Donwload Bill
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>

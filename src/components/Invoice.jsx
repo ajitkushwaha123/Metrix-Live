@@ -29,6 +29,7 @@ const Invoice = ({ btnText = "Inovice", orderId }) => {
   const [taxes, setTaxes] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [discountType, setDiscountType] = useState("absolute");
+  const [invoiceNumber , setInvoiceNumber] = useState(0);
 
   const fetchProduct = async (id) => {
     try {
@@ -62,6 +63,7 @@ const Invoice = ({ btnText = "Inovice", orderId }) => {
       setTaxes(product.tax || 0);
       console.log("df", product.tax);
       setTotalAmount(product.totalAmount || 0);
+      setInvoiceNumber(product.orderNumber || 0);
     } catch (error) {
       console.error("Error fetching product:", error);
     }
@@ -91,7 +93,7 @@ const Invoice = ({ btnText = "Inovice", orderId }) => {
   const handleDownload = (e) => {
     e.preventDefault();
     const url = `${process.env.REACT_APP_API_URL}/api/invoice/invoice/${invoiceId}`;
-    alert(url);
+    // alert(url);
     window.open(url, "_blank");
   };
 
@@ -195,7 +197,7 @@ const Invoice = ({ btnText = "Inovice", orderId }) => {
                           Invoice from {apiData?.name || "Nancy Shop"}
                         </h3>
                         <p className="text-sm text-gray-500 dark:text-neutral-500">
-                          Invoice #3682303
+                          {/* Invoice #{invoiceNumber} */}
                         </p>
                       </div>
 
