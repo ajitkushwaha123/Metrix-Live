@@ -496,8 +496,8 @@ const Menu = () => {
   return (
     <div className="flex w-full bg-[#EEF0FA] px-[15px] md:px-[0px] md:ml-[15px] flex-col md:flex-row my-[20px] text-[16px]">
       <Toaster position="top-center" reverseOrder="false"></Toaster>
-      <div className="flex w-[100%] h-[90vh] chalaja md:w-[80%]">
-        <div className="w-[50%] bg-white md:w-[30%] h-[100%] chalaja overflow-y-scroll">
+      <div className="flex w-[100%] max-h-[90vh] chalaja md:w-[80%]">
+        <div className="w-[50%] bg-white md:w-[30%] max-h-[100%] chalaja overflow-y-scroll">
           <div className="h-[50px] cursor-pointer border-b-2 border-slate-200 bg-secondary flex justify-center items-center">
             Categories
           </div>
@@ -524,14 +524,14 @@ const Menu = () => {
           ) : (
             <div className="py-[20px]">
               <img src={noCategory} />
-              <p className="text-[20px] my-[15px] font-medium font-poppins">
+              {/* <p className="text-[16px] md:text-[20px] my-[15px] font-medium font-poppins">
                 No Category found ! Add more
-              </p>
-              <NavLink to="/upload-menu">
+              </p> */}
+              {/* <NavLink to="/upload-menu">
                 <button className="px-[15px] py-2 bg-primary text-white rounded-xl my-[15px]">
-                  Add Category
+                  Add Categoryf
                 </button>
-              </NavLink>
+              </NavLink> */}
             </div>
           )}
         </div>
@@ -613,14 +613,14 @@ const Menu = () => {
                     src={noProduct}
                     alt="No products available"
                   />
-                  <p className="text-[20px] font-medium font-poppins">
+                  {/* <p className="text-[20px] font-medium font-poppins">
                     No Products Added!
                   </p>
                   <NavLink to="/upload-menu">
                     <button className="px-[15px] py-2 bg-primary text-white rounded-xl my-[15px]">
                       Add Product
                     </button>
-                  </NavLink>
+                  </NavLink> */}
                 </div>
               )}
             </div>
@@ -650,12 +650,12 @@ const Menu = () => {
               {cartProduct?.length == 0 && (
                 <div className="flex py-[40px] justify-center items-center flex-col">
                   <img width={"180px"} src={productImg} />
-                  <p className="font-medium my-[20px] font-poppins text-[22px]">
+                  {/* <p className="font-medium my-[20px] font-poppins text-[22px]">
                     No Products Yet
                   </p>
                   <p className="text-center px-[40px]">
                     Add products to Cart to see products here.
-                  </p>
+                  </p> */}
                 </div>
               )}
               {cartProduct?.length > 0 &&

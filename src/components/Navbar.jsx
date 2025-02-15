@@ -120,11 +120,11 @@ const Navbar = ({ title }) => {
       </div>
 
       {toggle && (
-        <div className="w-[100%] z-auto h-screen absolute shadow-lg shadow-indigo-500/40 backdrop-blur-sm bg-indigo-500/10">
+        <div className="w-[100%] z-[9999] h-[100%] absolute shadow-lg shadow-indigo-500/40 backdrop-blur-sm bg-indigo-500/10">
           <div
             className={`${
               !toggle ? "hidden" : "flex"
-            } p-6 bg-white absolute top-20 z-auto right-0 mx-4 my-2 min-w-[140px] rounded-xl sidebar`}
+            } p-6 bg-white absolute top-20 z-[9999] right-0 mx-4 my-2 min-w-[140px] rounded-xl sidebar`}
           >
             <ul className="list-none bg-white flex justify-end items-start flex-1 flex-col">
               {navLinks.map((nav, index) => (
@@ -142,9 +142,7 @@ const Navbar = ({ title }) => {
                 </li>
               ))}
 
-              <li
-                className={`font-poppins text-red-400 flex justify-center items-center font-medium cursor-pointer text-[16px]`}
-              >
+              <li className="font-poppins text-red-400 flex justify-center items-center font-medium cursor-pointer text-[16px]">
                 <p className="mr-[10px]">
                   <FiLogOut />
                 </p>

@@ -146,16 +146,16 @@ const AddItems = () => {
       {!isLoading && (
         <div
           onSubmit={formik.handleSubmit}
-          className="flex justify-center items-center w-full"
+          className="flex justify-center items-center w-[100%]"
         >
           <div
             id="crud-modal"
             tabindex="-1"
             aria-hidden="true"
-            class="overflow-y-auto overflow-x-hidden flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+            class="overflow-y-auto flex justify-center max-w-lg items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
           >
-            <div class="p-4 max-w-2xl max-h-full">
-              <div class="bg-white rounded-lg shadow dark:bg-gray-700">
+            <div class="p-4  w-full overflow-x-hidden min-w-[340px] max-h-full">
+              <div class="bg-white overflow-x-hidden rounded-lg shadow dark:bg-gray-700">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                   <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                     Create New Product
@@ -194,7 +194,7 @@ const AddItems = () => {
                         name="price"
                         id="price"
                         className="bg-gray-50 outline-none hover:border-2-primary border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        placeholder="₹0" 
+                        placeholder="₹0"
                         required
                         {...formik.getFieldProps("price")}
                       />
